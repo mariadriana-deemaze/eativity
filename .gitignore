@@ -1,0 +1,10 @@
+/node_modules
+.env
+
+# app
+/app/node_modules
+/app/.expo
+
+# backend
+/backend/node_modules
+/backend/.env

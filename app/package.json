@@ -1,0 +1,35 @@
+{
+  "name": "rn-trello-app",
+  "version": "1.0.0",
+  "main": "node_modules/expo/AppEntry.js",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web",
+    "lint": "yarn eslint",
+    "format": "prettier --write .",
+    "types": "tsc --pretty --noEmit"
+  },
+  "dependencies": {
+    "@types/react": "~18.0.27",
+    "expo": "~48.0.10",
+    "expo-status-bar": "~1.4.4",
+    "nativewind": "^2.0.11",
+    "react": "18.2.0",
+    "react-native": "0.71.6",
+    "typescript": "*"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.0",
+    "@typescript-eslint/eslint-plugin": "^5.43.0",
+    "eslint": "^8.0.1",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-config-standard-with-typescript": "^34.0.1",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react": "^7.32.2",
+    "prettier": "^2.8.7",
+    "tailwindcss": "^3.3.1"
+  },
+  "private": true
+}

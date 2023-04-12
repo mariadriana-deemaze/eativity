@@ -1,0 +1,11 @@
+{
+  "name": "rn-trello",
+  "author": "mariadriana-deemaze",
+  "version": "1.0.0",
+  "devDependencies": {
+    "husky": "^8.0.3"
+  },
+  "scripts": {
+    "prepare": "husky install"
+  }
+}
