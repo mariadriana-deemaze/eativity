@@ -1,5 +1,4 @@
 /node_modules
-.env
 
 # app
 /app/node_modules
@@ -8,3 +7,4 @@
 # backend
 /backend/node_modules
 /backend/.env
+/backend/dist
