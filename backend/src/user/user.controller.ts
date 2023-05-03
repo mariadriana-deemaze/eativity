@@ -1,29 +1,25 @@
 import { UserService } from "./user.service";
 
-import { Controller, Post, Body, Delete, Param, Get } from "@nestjs/common";
+import { Controller, Body, Delete, Param, Get, Patch, UseGuards, Req } from "@nestjs/common";
 
-import { User as UserModel } from "@prisma/client";
+import { JwtGuard } from "src/auth/guard";
 
-@Controller("user")
+import { User, User as UserModel } from "@prisma/client";
+
+import { GetUser } from "src/auth/decorator";
+
+@UseGuards(JwtGuard)
+@Controller("users")
 export class UserController {
   constructor(private userService: UserService) {}
 
-  // Create user
-  @Post("sign-up")
-  async signUp(
-    @Body() userData: { name: string; email: string; password_hash: string }
-  ): Promise<UserModel> {
-    return this.userService.createUser(userData);
-  }
-
-  // Login user
-  @Post("sign-in")
-  async signIn(@Body() userData: { email: string; password_hash: string }) {
-    return this.userService.authenticateUser(userData);
+  @Get("me")
+  async getMe(@GetUser() user:User) {
+    return user
   }
 
   // Update user
-  @Post(":id/update")
+  @Patch(":id")
   async editUser(
     @Param("id") id: string,
     @Body()

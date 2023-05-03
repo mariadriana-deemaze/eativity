@@ -8,16 +8,6 @@ import { PrismaService } from "src/prisma/prisma.service";
 export class UserService {
   constructor(private prisma: PrismaService) {}
 
-  async createUser(data: Prisma.UserCreateInput): Promise<User> {
-    return this.prisma.user.create({
-      data,
-    });
-  }
-
-  async authenticateUser(data: any) {
-    // TODO: Session logic
-  }
-
   async editUser(params: {
     data: Prisma.UserUpdateInput;
     where: Prisma.UserWhereUniqueInput;
