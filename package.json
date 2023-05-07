@@ -6,6 +6,9 @@
     "husky": "^8.0.3"
   },
   "scripts": {
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "frontend:lint":"cd app && yarn lint",
+    "frontend:format":"cd app && yarn format",
+    "backend:e2e": "cd backend && yarn test:e2e"
   }
 }

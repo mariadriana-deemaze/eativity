@@ -1,0 +1,25 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo '🏗️👷 Styling, testing and building your project before committing'
+
+# Check Prettier standards on frontend folder
+yarn frontend:lint ||
+(
+    echo '🤢🤮🤢🤮 Prettier Check Failed. Run yarn format, add changes and try to commit again.';
+    false;
+)
+
+# Check ESLint Standards on app folder
+yarn frontend:format ||
+(
+    echo '😤🏀👋😤 ESLint Check Failed. Make the required changes listed above and try to commit again.'
+    false; 
+)
+
+# Run BE tests
+yarn backend:e2e ||
+(
+    echo "😤🏀👋😤 Test Failed, buggy code. I ain't going to commit this, the hell! - Try again."
+    false; 
+)
