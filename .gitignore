@@ -7,4 +7,5 @@
 # backend
 /backend/node_modules
 /backend/.env
+/backend/.env.test
 /backend/dist

@@ -25,7 +25,7 @@ model Board {
   name      String
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
-  createdBy User     @relation(fields: [userId], references: [id])
+  createdBy User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    Int
   lists     List[]
   tasks     Task[]
@@ -38,7 +38,7 @@ model List {
   updatedAt DateTime @default(now())
   order     Int      @default(autoincrement())
   tasks     Task[]
-  board     Board    @relation(fields: [boardId], references: [id])
+  board     Board    @relation(fields: [boardId], references: [id], onDelete: Cascade)
   boardId   Int
 }
 
@@ -49,8 +49,8 @@ model Task {
   order       Int      @default(autoincrement())
   createdAt   DateTime @default(now())
   updatedAt   DateTime @default(now())
-  list        List     @relation(fields: [listId], references: [id])
-  board       Board    @relation(fields: [boardId], references: [id])
+  list        List     @relation(fields: [listId], references: [id], onDelete: Cascade)
+  board       Board    @relation(fields: [boardId], references: [id], onDelete: Cascade)
   listId      Int
   boardId     Int
 }
