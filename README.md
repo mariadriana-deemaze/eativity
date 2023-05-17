@@ -1,6 +1,6 @@
-# Project Name
+# Eativity
 
-This is a full-stack mobile application built with React Native, Expo, Typescript, NestJS, and Prisma. It is a clone of Trello, with features such as user authentication, project creation, board creation, and task/card creation.
+This is a full-stack mobile application built with React Native, Expo, Typescript, NestJS, and Prisma.
 
 ## Tech Stack
 
@@ -22,9 +22,6 @@ To get started with the project, follow these steps:
 ## Features
 
 - User authentication
-- Project creation
-- Board creation
-- Task card creation
 
 ## Dependencies
 
