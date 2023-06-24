@@ -2,8 +2,6 @@ import { AuthService } from "./auth.service";
 
 import { Controller, Post, Body, HttpCode, HttpStatus } from "@nestjs/common";
 
-import { User as UserModel } from "@prisma/client";
-
 import { AuthDto } from "./dto";
 
 @Controller("auth")

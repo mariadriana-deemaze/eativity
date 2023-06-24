@@ -1,6 +1,6 @@
 import { UserService } from "./user.service";
 
-import { Controller, Body, Delete, Param, Get, Patch, UseGuards, Req } from "@nestjs/common";
+import { Controller, Body, Delete, Param, Get, Patch, UseGuards } from "@nestjs/common";
 
 import { JwtGuard } from "../auth/guard";
 
@@ -26,13 +26,13 @@ export class UserController {
     userData: {
       name: string;
       email: string;
-      password_hash: string;
+      password: string;
     }
   ): Promise<UserModel> {
-    const { name, email, password_hash } = userData;
+    const { name, email, password } = userData;
     return this.userService.editUser({
       where: { id: Number(id) },
-      data: { name, email, password_hash },
+      data: { name, email, password_hash: password },
     });
   }
 

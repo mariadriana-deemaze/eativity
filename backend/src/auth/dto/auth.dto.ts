@@ -11,5 +11,5 @@ export class AuthDto {
 
     @IsString()
     @IsNotEmpty()
-    password_hash: string;
+    password: string;
 }

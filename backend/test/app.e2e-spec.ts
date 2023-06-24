@@ -50,7 +50,7 @@ describe("App e2e", () => {
     const dto: AuthDto = {
       name: 'Adriana',
       email: 'hello@maria-adriana.com',
-      password_hash: '123',
+      password: '123',
     };
 
     describe('Sign-up', () => {
@@ -59,7 +59,7 @@ describe("App e2e", () => {
           .spec()
           .post('/auth/sign-up')
           .withBody({
-            password_hash: dto.password_hash,
+            password_hash: dto.password,
           })
           .expectStatus(400);
       });
@@ -96,7 +96,7 @@ describe("App e2e", () => {
           .spec()
           .post('/auth/sign-in')
           .withBody({
-            password: dto.password_hash,
+            password: dto.password,
           })
           .expectStatus(400);
       });

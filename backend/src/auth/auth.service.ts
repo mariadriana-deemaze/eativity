@@ -19,7 +19,7 @@ export class AuthService {
   ) {}
 
   async createUser(dto: AuthDto) {
-    const password_hash = await argon.hash(dto.password_hash);
+    const password_hash = await argon.hash(dto.password);
 
     try {
       const user = await this.prisma.user.create({
@@ -55,7 +55,7 @@ export class AuthService {
 
     const passwordMatch = await argon.verify(
       user.password_hash,
-      dto.password_hash,
+      dto.password,
     );
    
     if (!passwordMatch)
