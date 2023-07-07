@@ -1,12 +1,21 @@
-import { StatusBar } from "expo-status-bar";
-
-import { Text, View } from "react-native";
+import { Box, Text } from "native-base";
 
 export const Dashboard = () => {
   return (
-    <View tw="flex-1 items-center justify-center bg-slate-900">
-      <StatusBar style="light" />
-      <Text tw="text-white">Dashboard</Text>
-    </View>
+    <Box
+      flex="1"
+      alignItems="center"
+      _text={{
+        fontSize: "md",
+        fontWeight: "medium",
+        color: "warmGray.50",
+        letterSpacing: "lg",
+      }}
+      bg="red.400"
+    >
+      <Text isTruncated maxW="300" w="80%" fontSize="lg">
+        Dashboard
+      </Text>
+    </Box>
   );
 };

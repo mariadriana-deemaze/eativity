@@ -2,7 +2,7 @@ import { Text, View } from "react-native";
 
 export default function CustomDrawer() {
   return (
-    <View tw="border">
+    <View>
       <Text>My drawer</Text>
     </View>
   );

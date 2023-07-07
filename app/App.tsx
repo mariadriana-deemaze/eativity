@@ -1,5 +1,7 @@
 import { Provider } from "react-redux";
 
+import { NativeBaseProvider } from "native-base";
+
 import Navigation from "./routes/navigation";
 
 import store from "./stores";
@@ -7,7 +9,9 @@ import store from "./stores";
 export default function App() {
   return (
     <Provider store={store}>
-      <Navigation />
+      <NativeBaseProvider>
+        <Navigation />
+      </NativeBaseProvider>
     </Provider>
   );
 }

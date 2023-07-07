@@ -1,8 +1,8 @@
-import { StatusBar } from "expo-status-bar";
+import { Box, Button, Text } from "native-base";
 
 import { Controller, useForm } from "react-hook-form";
 
-import { Text, View, TextInput, Button } from "react-native";
+import { TextField } from "../../components/textField";
 
 import { useAppDispatch } from "../../stores";
 
@@ -22,44 +22,61 @@ export const SignIn = ({ navigation }) => {
   const onSubmit = (data: SignInInputs) => dispatch(authenticateUser(data));
 
   return (
-    <View tw="flex-1 items-center justify-center bg-slate-900">
-      <StatusBar style="light" />
-      <Text tw="text-red-500">Sign In</Text>
-      <Text>E-mail</Text>
+    <Box
+      flex="1"
+      alignItems="center"
+      justifyContent="center"
+      _text={{
+        fontSize: "md",
+        fontWeight: "medium",
+        color: "warmGray.50",
+        letterSpacing: "lg",
+      }}
+      bg="red.400"
+    >
+      <Text isTruncated maxW="300" w="80%">
+        Sign in
+      </Text>
       <Controller
         control={control}
         render={({ field: { onChange, onBlur, value } }) => (
-          <TextInput
+          <TextField
+            label="E-mail"
             onBlur={onBlur}
             onChangeText={(value) => onChange(value)}
             value={value}
-            tw="bg-white border w-100"
           />
         )}
         name="email"
         rules={{ required: true }}
       />
 
-      <Text>Password</Text>
       <Controller
         control={control}
         render={({ field: { onChange, onBlur, value } }) => (
-          <TextInput
+          <TextField
+            label="Password"
+            type="password"
             onBlur={onBlur}
             onChangeText={(value) => onChange(value)}
             value={value}
-            tw="bg-white border w-100"
           />
         )}
         name="password"
         rules={{ required: true }}
       />
 
-      <Button onPress={handleSubmit(onSubmit)} title="Sign In" />
+      <Button
+        size="sm"
+        colorScheme="secondary"
+        onPress={handleSubmit(onSubmit)}
+      >
+        Sign In
+      </Button>
 
-      <Text tw="color-white" onPress={() => navigation.navigate("Sign Up")}>
+      <Text onPress={() => navigation.navigate("Sign Up")}>
         Don't have an account? Sign up now.
       </Text>
-    </View>
+    </Box>
   );
 };
