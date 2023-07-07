@@ -10,11 +10,84 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum Goal {
+  GAIN
+  LOSS
+  MAINTENANCE
+}
+
+enum GoalDiff {
+  QUARTER // 0.25
+  HALF // 0.5
+  HALF_AND_QUARTER // 0.75
+  ONE // 1
+}
+
 model User {
-  id            Int      @id @default(autoincrement())
+  id            Int        @id @default(autoincrement())
   name          String
-  email         String   @unique
+  email         String     @unique
   password_hash String
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @default(now())
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @default(now())
+  birthdate     DateTime?
+  gender        Gender?
+  height        Int?
+  weight        Weight[]
+  meals         UserMeal[]
+  plan          Plan?
+}
+
+model UserMeal {
+  id     Int    @id @default(autoincrement())
+  userId Int
+  user   User   @relation(fields: [userId], references: [id])
+  meals  Meal[]
+}
+
+model Food {
+  id            Int    @id @default(autoincrement())
+  name          String
+  barcode       String @unique
+  calories      Int
+  carbohydrates Int
+  proteins      Int
+  fats          Int
+  meals         Meal[] @relation("FoodToMeal")
+}
+
+model Meal {
+  id            Int       @id @default(autoincrement())
+  name          String
+  calories      Int
+  carbohydrates Int
+  proteins      Int
+  fats          Int
+  foods         Food[]    @relation("FoodToMeal")
+  UserMeal      UserMeal? @relation(fields: [userMealId], references: [id])
+  userMealId    Int?
+}
+
+model Weight {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id])
+  weight    Int
+  createdAt DateTime @default(now())
+  userId    Int
+}
+
+model Plan {
+  id                                   Int      @id @default(autoincrement())
+  user                                 User     @relation(fields: [userId], references: [id])
+  userId                               Int      @unique
+  goal                                 Goal
+  goal_diff                            GoalDiff
+  weekly_training_amount               Int
+  average_minutes_per_training_session Int
 }
