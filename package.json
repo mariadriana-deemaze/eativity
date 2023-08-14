@@ -8,7 +8,7 @@
   "scripts": {
     "prepare": "husky install",
     "dev:app":"cd app && yarn start",
-    "dev:be":"cd backend && yarn start",
+    "dev:be":"cd backend && yarn start:dev",
     "frontend:lint":"cd app && yarn lint",
     "frontend:format":"cd app && yarn format",
     "backend:e2e": "cd backend && yarn test:e2e"

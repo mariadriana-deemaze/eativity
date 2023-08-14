@@ -1,13 +1,13 @@
 # Eativity
 
-This is a full-stack mobile application built with React Native, Expo, Typescript, NestJS, and Prisma.
+This is a full-stack TypeScript mobile application developed using React Native and wrapped within the Expo SDK. For the app's user interface, I am utilizing the NativeBase library, while on the backend, I am leveraging ORM Prisma services through a NestJS application.
 
 ## Tech Stack
 
 - React Native
 - Expo
 - Typescript
-- NativeWind
+- NativeBase
 - NestJS
 - Prisma
 
@@ -16,8 +16,10 @@ This is a full-stack mobile application built with React Native, Expo, Typescrip
 To get started with the project, follow these steps:
 
 1. Clone this repository.
-2. Install dependencies by running `npm install`.
-3. Start the app with `npm start`.
+2. Install dependencies by running `yarn i` on each `/app` and `/backend` folders.
+3. To start the app with a quick dev start, run the commands: 
+- `yarn dev:be` 
+- `yarn dev:app`
 
 ## Features
 
@@ -31,24 +33,23 @@ To get started with the project, follow these steps:
 - `nestJS`
 - `prisma`
 
-## Running the backend
+## Running the app UI
 
 To run the app, use the following command:
 
 ```shell
-cd app && //
+yarn dev:app
 ```
-
-## Running the app
-
-To run the app, use the following command:
-
-```shell
-cd backend && //
-```
-
 
 This will start the Expo development server and open the app in your default browser. You can then use the Expo client app to run the app on your mobile device.
+
+## Running the app backend
+
+To run the app backend services, use the following command:
+
+```shell
+yarn dev:be
+```
 
 ## License
 
