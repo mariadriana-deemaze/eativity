@@ -4,8 +4,16 @@ import { UserController } from './user.controller';
 
 import { UserService } from './user.service';
 
+import { WeightController } from './../weight/weight.controller';
+
+import { WeightService } from './../weight/weight.service';
+
+import { PlanService } from './../plan/plan.service';
+
+import { PlanController } from './../plan/plan.controller';
+
 @Module({
-  controllers: [UserController],
-  providers:   [UserService]
+  controllers: [UserController, WeightController, PlanController],
+  providers:   [UserService, WeightService, PlanService]
 })
 export class UserModule {}

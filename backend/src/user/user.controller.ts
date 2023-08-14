@@ -1,54 +1,77 @@
 import { UserService } from "./user.service";
 
-import { Controller, Body, Delete, Param, Get, Patch, UseGuards } from "@nestjs/common";
+import { WeightService } from "../weight/weight.service";
+
+import { PlanService } from "../plan/plan.service";
+
+import {
+  Controller,
+  Body,
+  Delete,
+  Param,
+  Get,
+  Patch,
+  UseGuards,
+} from "@nestjs/common";
 
 import { JwtGuard } from "../auth/guard";
 
-import { User, User as UserModel } from "@prisma/client";
+import { User, User as UserModel, Prisma, Weight } from "@prisma/client";
 
 import { GetUser } from "../auth/decorator";
 
 @UseGuards(JwtGuard)
 @Controller("users")
 export class UserController {
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService, 
+    private weightService: WeightService,
+    private planService: PlanService,
+    ) {}
 
   @Get("me")
-  async getMe(@GetUser() user:User) {
-    return user
+  async getMe(@GetUser() user: User) {
+    return user;
   }
 
-  // Update user
-  @Patch(":id")
+  @Patch("me")
   async editUser(
-    @Param("id") id: string,
+    @GetUser() user: User,
     @Body()
-    userData: {
-      name: string;
-      email: string;
-      password: string;
-    }
+    userData: Prisma.UserUpdateInput
   ): Promise<UserModel> {
-    const { name, email, password } = userData;
     return this.userService.editUser({
-      where: { id: Number(id) },
-      data: { name, email, password_hash: password },
-    });
-  }
-
-  // Get user details
-  @Get(":id")
-  async getUser(@Param("id") id: string): Promise<UserModel> {
-    return this.userService.getUser({
-      id: Number(id),
+      where: { id: user.id },
+      // @ts-ignore
+      data: {
+        ...userData,
+        height: Number(userData.height),
+        // @ts-ignore
+        password_hash: userData.password,
+      },
     });
   }
 
   // Delete user
-  @Delete(":id")
-  async deleteUser(@Param("id") id: string): Promise<UserModel> {
+  @Delete("me")
+  async deleteUser(@GetUser() user: User): Promise<UserModel> {
+    // Delete the related records in the Weight table
+    await this.weightService.deleteUserWeights({
+      where: {
+        id: user.id,
+      },
+    });
+    
+    // Delete the related records in the Plans table
+    await this.planService.deleteUserPlans({
+      where: {
+        id: user.id,
+      },
+    });
+
+    // Finally delete the user record
     return this.userService.deleteUser({
-      id: Number(id),
+      where: { id: user.id },
     });
   }
 }

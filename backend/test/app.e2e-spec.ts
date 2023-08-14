@@ -127,7 +127,7 @@ describe("App e2e", () => {
   });
 
   describe('User', () => {
-    describe('Get me', () => {
+    describe('Get user', () => {
       it('should get current user', () => {
         return pactum
           .spec()
@@ -138,28 +138,62 @@ describe("App e2e", () => {
           .expectStatus(200);
       });
     });
+    
+    const dto: EditUserDto = {
+      name: 'Adriana',
+      email: 'hello@maria-adriana.com',
+      height: 170,
+      weight: 66,
+      gender: "FEMALE",
+      birthdate: new Date('1994-05-05'),
+      measurementUnit: 'METRIC',
+      plan:{
+        goal: "LOSS",
+        goal_diff: "QUARTER",
+        weekly_training_amount:3,
+        average_minutes_per_training_session: 30
+      }
+    };
 
     describe('Edit user', () => {
-      it('should edit user', () => {
-        const id =  1;
-
-        const dto: EditUserDto = {
-          name: 'Adriana',
-          email: 'hello@maria-adriana.com',
-        };
+      it('should edit current user', () => {
         
         return pactum
           .spec()
-          .patch(`/users/${id}`)
+          .patch(`/users/me`)
           .withHeaders({
             Authorization: 'Bearer $S{userAt}',
           })
           .withBody(dto)
           .expectStatus(200)
           .expectBodyContains(dto.name)
-          .expectBodyContains(dto.email);
+          .expectBodyContains(dto.email)
+          .expectBodyContains(dto.birthdate)
+          .expectBodyContains(dto.height)
+          .expectBodyContains(dto.weight)
+          .expectBodyContains(dto.plan.goal)
+          .expectBodyContains(dto.plan.goal_diff)
+          .expectBodyContains(dto.plan.average_minutes_per_training_session)
+          .expectBodyContains(dto.plan.weekly_training_amount);
       });
     });
+
+
+    describe('Delete user', () => {
+      it('should delete current user', () => {
+       
+        return pactum
+          .spec()
+          .delete(`/users/me`)
+          .withHeaders({
+            Authorization: 'Bearer $S{userAt}',
+          })
+          .withBody(dto)
+          .expectStatus(200)
+          .inspect();
+      });
+    });
+
   });
 
 });

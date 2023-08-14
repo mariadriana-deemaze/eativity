@@ -10,6 +10,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum MeasurementUnit {
+  IMPERIAL
+  METRIC
+}
+
 enum Gender {
   MALE
   FEMALE
@@ -30,18 +35,19 @@ enum GoalDiff {
 }
 
 model User {
-  id            Int        @id @default(autoincrement())
-  name          String
-  email         String     @unique
-  password_hash String
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @default(now())
-  birthdate     DateTime?
-  gender        Gender?
-  height        Int?
-  weight        Weight[]
-  meals         UserMeal[]
-  plan          Plan?
+  id              Int             @id @default(autoincrement())
+  name            String
+  email           String          @unique
+  password_hash   String
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @default(now())
+  measurementUnit MeasurementUnit @default(METRIC)
+  birthdate       DateTime?
+  gender          Gender?
+  height          Int?
+  weight          Weight[]
+  meals           UserMeal[]
+  plan            Plan?
 }
 
 model UserMeal {

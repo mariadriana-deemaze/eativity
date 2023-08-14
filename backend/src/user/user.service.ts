@@ -9,22 +9,45 @@ export class UserService {
   constructor(private prisma: PrismaService) {}
 
   async editUser(params: {
-    data: Prisma.UserUpdateInput;
+    data: Prisma.UserUpdateInput & { plan: Prisma.PlanCreateWithoutUserInput };
     where: Prisma.UserWhereUniqueInput;
   }): Promise<User> {
     const { data, where } = params;
 
-    return this.prisma.user.update({
-      data,
-      where,
-    });
+    const weightCreateData = data.weight
+      ? { create: { weight: Number(data.weight) } }
+      : undefined;
+
+    const planCreateData = data.plan ? { create: { ...data.plan } } : undefined;
+
+    return this.prisma.user
+      .update({
+        where,
+        data: {
+          ...data,
+          weight: weightCreateData,
+          plan: planCreateData,
+        },
+        include: {
+          weight: true,
+          plan: true,
+        },
+      })
+      .then((user) => {
+        delete user.password_hash;
+        return user;
+      });
   }
 
   async getUser(where: Prisma.UserWhereUniqueInput): Promise<User> {
-    return this.prisma.user.findUnique({where});
+    return this.prisma.user.findUnique({ where });
   }
 
-  async deleteUser(where: Prisma.UserWhereUniqueInput): Promise<User> {
+  async deleteUser({
+    where,
+  }: {
+    where: Prisma.UserWhereUniqueInput;
+  }): Promise<User> {
     return this.prisma.user.delete({
       where,
     });
