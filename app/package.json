@@ -37,7 +37,7 @@
     "typescript": "^5.1.6"
   },
   "devDependencies": {
-    "@babel/core": "^7.22.10",
+    "@babel/core": "^7.22.11",
     "@types/react-native": "^0.72.0",
     "@typescript-eslint/eslint-plugin": "^5.43.0",
     "eslint": "^8.0.1",
