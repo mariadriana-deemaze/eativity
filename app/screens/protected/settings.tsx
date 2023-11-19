@@ -18,7 +18,7 @@ import { IRootState, useAppDispatch } from "../../stores";
 
 import { updateUserInfo } from "../../stores/user/actions";
 
-import { Gender, MeasurementUnit } from "../../../types/user";
+import { User, Gender, MeasurementUnit } from "../../types/user";
 
 export const Settings = () => {
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
@@ -30,8 +30,7 @@ export const Settings = () => {
     handleSubmit,
     getValues,
     formState: { isDirty },
-    // @ts-ignore
-  } = useForm<UserSettingsInputs>({
+  } = useForm<User>({
     defaultValues: {
       ...user,
     },
@@ -181,7 +180,7 @@ export const Settings = () => {
           {/* 
           TODO: Return user.weight
           */}
-          <Controller
+          {/* <Controller
             control={control}
             render={({ field: { onChange, onBlur, value } }) => (
               <TextField
@@ -193,7 +192,7 @@ export const Settings = () => {
             )}
             name="weight"
             rules={{ required: true }}
-          />
+          /> */}
 
           {/* 
           <Controller
