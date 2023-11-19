@@ -7,7 +7,8 @@ import * as SecureStore from "expo-secure-store";
 const initialState = {
   loading: false,
   userInfo: null,
-  userToken: SecureStore.getItemAsync("secure_token"),
+  //userToken: SecureStore.getItemAsync("secure_token").then((t)=> t),
+  userToken: null,
   error: null,
   success: false,
 };
@@ -26,7 +27,9 @@ const authSlice = createSlice({
         state.loading = false;
         state.success = true;
         state.userToken = payload.access_token;
-        SecureStore.setItemAsync("secure_token", payload.access_token);
+
+        if (payload.access_token)
+          SecureStore.setItemAsync("secure_token", payload.access_token);
       })
       .addCase(registerUser.rejected, (state, { payload }) => {
         state.loading = false;
@@ -40,7 +43,8 @@ const authSlice = createSlice({
         state.loading = false;
         state.success = true;
         state.userToken = payload.access_token;
-        SecureStore.setItemAsync("secure_token", payload.access_token);
+        if (payload.access_token)
+          SecureStore.setItemAsync("secure_token", payload.access_token);
       })
       .addCase(authenticateUser.rejected, (state, { payload }) => {
         state.loading = false;

@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-import { apiSignUpUser, apiSignInUser } from "../../api";
+import { signInUser, signUpUser } from "../../api";
 
 export type SignInInputs = {
   name: string;
@@ -19,7 +19,7 @@ export const authenticateUser = createAsyncThunk(
   "auth/signin",
   async ({ name, email, password }: SignInInputs, { rejectWithValue }) => {
     try {
-      return await apiSignInUser({
+      return await signInUser({
         name,
         email,
         password,
@@ -36,12 +36,9 @@ export const authenticateUser = createAsyncThunk(
 
 export const registerUser = createAsyncThunk(
   "auth/signup",
-  async (
-    { name, email, password, password_repeat }: SignUpInputs,
-    { rejectWithValue }
-  ) => {
+  async ({ name, email, password }: SignUpInputs, { rejectWithValue }) => {
     try {
-      return await apiSignUpUser({
+      return await signUpUser({
         name,
         email,
         password,

@@ -4,7 +4,9 @@ import { useDispatch } from "react-redux";
 
 import authReducer from "./auth/slices";
 
-const rootReducer = combineReducers({ auth: authReducer });
+import userReducer from "./user/slices";
+
+const rootReducer = combineReducers({ auth: authReducer, user: userReducer });
 
 const store = configureStore({
   reducer: rootReducer,
