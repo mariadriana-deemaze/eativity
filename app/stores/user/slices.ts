@@ -2,9 +2,18 @@ import { createSlice } from "@reduxjs/toolkit";
 
 import { getUserInfo, updateUserInfo } from "./actions";
 
-const initialState = {
+import { User } from "../../types/user";
+
+interface InitialState {
+  loading: boolean;
+  user: User | null;
+  error: string | null | unknown;
+  success: boolean;
+}
+
+const initialState: InitialState = {
   loading: false,
-  user: {}, // TODO: Correct types
+  user: null,
   error: null,
   success: false,
 };

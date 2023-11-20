@@ -3,12 +3,13 @@ import { WeightService } from "./weight.service";
 import {
   Controller,
   Delete,
+  Get,
   UseGuards,
 } from "@nestjs/common";
 
 import { JwtGuard } from "../auth/guard";
 
-import { User } from "@prisma/client";
+import { User, Weight } from "@prisma/client";
 
 import { GetUser } from "../auth/decorator";
 
@@ -16,6 +17,12 @@ import { GetUser } from "../auth/decorator";
 @Controller("weight")
 export class WeightController {
   constructor(private weightService: WeightService) {}
+
+  @Get('/latest')
+  async getLatestWeight(@GetUser() user: User): Promise<Weight> {
+    // Get latest inserted record of a user weight
+    return this.weightService.getLatestWeight({ id: user.id });
+  }
 
   // Delete weights
   @Delete()

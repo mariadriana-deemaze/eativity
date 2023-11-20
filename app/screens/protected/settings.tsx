@@ -177,22 +177,19 @@ export const Settings = () => {
             rules={{ required: true }}
           />
 
-          {/* 
-          TODO: Return user.weight
-          */}
-          {/* <Controller
+          <Controller
             control={control}
             render={({ field: { onChange, onBlur, value } }) => (
               <TextField
                 label="Weight"
                 onBlur={onBlur}
                 onChangeText={(value) => onChange(value)}
-                value={value}
+                value={String(value)}
               />
             )}
             name="weight"
             rules={{ required: true }}
-          /> */}
+          />
 
           {/* 
           <Controller

@@ -9,11 +9,10 @@ import { getUserInfo } from "../../stores/user/actions";
 import { useSelector } from "react-redux";
 
 export const Dashboard = () => {
-  const user = useSelector((state: IRootState) => state.user.user);
-
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    // @ts-ignore
     dispatch(getUserInfo("test"));
   }, []);
 
@@ -30,7 +29,7 @@ export const Dashboard = () => {
       bg="red.400"
     >
       <Text isTruncated maxW="300" w="80%" fontSize="lg">
-        Dashboard User: {user.name}
+      -
       </Text>
     </Box>
   );

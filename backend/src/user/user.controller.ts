@@ -24,14 +24,26 @@ import { GetUser } from "../auth/decorator";
 @Controller("users")
 export class UserController {
   constructor(
-    private userService: UserService, 
+    private userService: UserService,
     private weightService: WeightService,
-    private planService: PlanService,
-    ) {}
+    private planService: PlanService
+  ) {}
 
   @Get("me")
   async getMe(@GetUser() user: User) {
-    return user;
+    const where: Prisma.WeightWhereInput = { userId: user.id };
+
+    const latestWeightRecord = await this.weightService.getLatestWeight(where);
+
+    let response: User & { weight?: number } = {
+      ...user,
+    };
+
+    if (latestWeightRecord) {
+      response.weight = latestWeightRecord.weight;
+    }
+
+    return response;
   }
 
   @Patch("me")
@@ -61,7 +73,7 @@ export class UserController {
         id: user.id,
       },
     });
-    
+
     // Delete the related records in the Plans table
     await this.planService.deleteUserPlans({
       where: {

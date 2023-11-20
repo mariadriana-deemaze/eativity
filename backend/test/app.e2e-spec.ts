@@ -4,21 +4,24 @@ import { Test } from "@nestjs/testing";
 
 import { AppModule } from "../src/app.module";
 
-import * as pactum from 'pactum';
+import { WeightService } from "../src/weight/weight.service";
 
-import { PrismaService } from '../src/prisma/prisma.service';
+import * as pactum from "pactum";
+
+import { PrismaService } from "../src/prisma/prisma.service";
 
 import { AuthDto } from "../src/auth/dto";
 
 import { EditUserDto } from "src/user/dto";
 
-describe("App e2e", () => {
+describe('App e2e', () => {
   let app: INestApplication;
   let prisma: PrismaService;
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule],
+      providers: [PrismaService, WeightService],
     }).compile();
 
     app = moduleRef.createNestApplication();
@@ -37,9 +40,7 @@ describe("App e2e", () => {
 
     await prisma.cleanDb();
 
-    pactum.request.setBaseUrl(
-      'http://localhost:3333',
-    );
+    pactum.request.setBaseUrl('http://localhost:3333');
   });
 
   afterAll(() => {
@@ -75,10 +76,7 @@ describe("App e2e", () => {
       });
 
       it('should throw if no body provided', () => {
-        return pactum
-          .spec()
-          .post('/auth/sign-up')
-          .expectStatus(400);
+        return pactum.spec().post('/auth/sign-up').expectStatus(400);
       });
 
       it('should sign-up', () => {
@@ -110,10 +108,7 @@ describe("App e2e", () => {
           .expectStatus(400);
       });
       it('should throw if no body provided', () => {
-        return pactum
-          .spec()
-          .post('/auth/sign-in')
-          .expectStatus(400);
+        return pactum.spec().post('/auth/sign-in').expectStatus(400);
       });
       it('should sign-in', () => {
         return pactum
@@ -135,29 +130,54 @@ describe("App e2e", () => {
           .withHeaders({
             Authorization: 'Bearer $S{userAt}',
           })
-          .expectStatus(200);
+          .expectStatus(200)
+          .inspect();
+      });
+
+      it('should get current user with the latest weight', async () => {
+        const MOCKED_LATEST_WEIGHT_RECORD = 66;
+
+        jest
+          .spyOn(app.get(WeightService), 'getLatestWeight')
+          .mockResolvedValue({
+            id: 1,
+            userId: 0,
+            weight: MOCKED_LATEST_WEIGHT_RECORD,
+            createdAt: new Date(),
+          });
+
+        return pactum
+          .spec()
+          .get('/users/me')
+          .withHeaders({
+            Authorization: 'Bearer $S{userAt}',
+          })
+          .expectStatus(200)
+          .inspect()
+          .expectJsonLike({
+            weight: 66,
+          });
       });
     });
-    
+
     const dto: EditUserDto = {
       name: 'Adriana',
       email: 'hello@maria-adriana.com',
       height: 170,
       weight: 66,
-      gender: "FEMALE",
+      gender: 'FEMALE',
       birthdate: new Date('1994-05-05'),
       measurementUnit: 'METRIC',
-      plan:{
-        goal: "LOSS",
-        goal_diff: "QUARTER",
-        weekly_training_amount:3,
-        average_minutes_per_training_session: 30
-      }
+      plan: {
+        goal: 'LOSS',
+        goal_diff: 'QUARTER',
+        weekly_training_amount: 3,
+        average_minutes_per_training_session: 30,
+      },
     };
 
     describe('Edit user', () => {
       it('should edit current user', () => {
-        
         return pactum
           .spec()
           .patch(`/users/me`)
@@ -178,10 +198,8 @@ describe("App e2e", () => {
       });
     });
 
-
     describe('Delete user', () => {
       it('should delete current user', () => {
-       
         return pactum
           .spec()
           .delete(`/users/me`)
@@ -192,7 +210,5 @@ describe("App e2e", () => {
           .expectStatus(200);
       });
     });
-
   });
-
 });

@@ -9,6 +9,7 @@ export type User = {
   birthdate: Date | null;
   gender: Gender | null;
   height: number | null;
+  weight?: number | null;
 };
 
 export enum Gender {
