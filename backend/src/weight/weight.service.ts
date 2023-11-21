@@ -23,7 +23,7 @@ export class WeightService {
     where
   }: {
     where: Prisma.WeightWhereUniqueInput;
-  }): Promise<any> {
+  }) {
     return this.prisma.weight.deleteMany({
       where,
     });

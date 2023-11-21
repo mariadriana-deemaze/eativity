@@ -8,7 +8,6 @@ import {
   Controller,
   Body,
   Delete,
-  Param,
   Get,
   Patch,
   UseGuards,
@@ -16,7 +15,7 @@ import {
 
 import { JwtGuard } from "../auth/guard";
 
-import { User, User as UserModel, Prisma, Weight } from "@prisma/client";
+import { User, User as UserModel, Prisma } from "@prisma/client";
 
 import { GetUser } from "../auth/decorator";
 
@@ -35,7 +34,7 @@ export class UserController {
 
     const latestWeightRecord = await this.weightService.getLatestWeight(where);
 
-    let response: User & { weight?: number } = {
+    const response: User & { weight?: number } = {
       ...user,
     };
 

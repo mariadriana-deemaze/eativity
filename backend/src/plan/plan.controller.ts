@@ -19,7 +19,7 @@ export class PlanController {
 
   // Delete plans
   @Delete()
-  async deletePlans(@GetUser() user: User): Promise<any> {
+  async deletePlans(@GetUser() user: User) {
     // Delete the related records in the Plans table
     return this.planService.deleteUserPlans({
       where: { id: user.id },

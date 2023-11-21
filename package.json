@@ -9,8 +9,10 @@
     "prepare": "husky install",
     "dev:app":"cd app && yarn start",
     "dev:be":"cd backend && yarn start:dev",
-    "frontend:lint":"cd app && yarn lint",
-    "frontend:format":"cd app && yarn format",
-    "backend:e2e": "cd backend && yarn test:e2e"
+    "fe:lint":"cd app && yarn lint",
+    "fe:format":"cd app && yarn format",
+    "be:lint":"cd backend && yarn lint",
+    "be:format":"cd backend && yarn format",
+    "be:e2e": "cd backend && yarn test:e2e"
   }
 }

@@ -26,7 +26,7 @@ export class WeightController {
 
   // Delete weights
   @Delete()
-  async deleteWeights(@GetUser() user: User): Promise<any> {
+  async deleteWeights(@GetUser() user: User) {
     // Delete the related records in the Weight table
     return this.weightService.deleteUserWeights({
       where: { id: user.id },

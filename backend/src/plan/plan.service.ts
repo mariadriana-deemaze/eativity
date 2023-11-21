@@ -12,7 +12,7 @@ export class PlanService {
     where
   }: {
     where: Prisma.PlanWhereUniqueInput;
-  }): Promise<any> {
+  }) {
     return this.prisma.plan.deleteMany({
       where,
     });
