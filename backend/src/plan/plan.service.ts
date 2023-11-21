@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 
-import { Prisma} from "@prisma/client";
+import { Prisma } from "@prisma/client";
 
 import { PrismaService } from "../prisma/prisma.service";
 
@@ -8,11 +8,7 @@ import { PrismaService } from "../prisma/prisma.service";
 export class PlanService {
   constructor(private prisma: PrismaService) {}
 
-  async deleteUserPlans({
-    where
-  }: {
-    where: Prisma.PlanWhereUniqueInput;
-  }) {
+  async deleteUserPlans({ where }: { where: Prisma.PlanWhereUniqueInput }) {
     return this.prisma.plan.deleteMany({
       where,
     });

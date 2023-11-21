@@ -1,11 +1,6 @@
 import { WeightService } from "./weight.service";
 
-import {
-  Controller,
-  Delete,
-  Get,
-  UseGuards,
-} from "@nestjs/common";
+import { Controller, Delete, Get, UseGuards } from "@nestjs/common";
 
 import { JwtGuard } from "../auth/guard";
 
@@ -18,7 +13,7 @@ import { GetUser } from "../auth/decorator";
 export class WeightController {
   constructor(private weightService: WeightService) {}
 
-  @Get('/latest')
+  @Get("/latest")
   async getLatestWeight(@GetUser() user: User): Promise<Weight> {
     // Get latest inserted record of a user weight
     return this.weightService.getLatestWeight({ id: user.id });

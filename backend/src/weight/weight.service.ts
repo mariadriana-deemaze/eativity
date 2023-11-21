@@ -9,21 +9,15 @@ export class WeightService {
   constructor(private prisma: PrismaService) {}
 
   // Get latest inserted record of a user weight
-  async getLatestWeight(
-    where:Prisma.WeightWhereInput
-  ): Promise<Weight> {
+  async getLatestWeight(where: Prisma.WeightWhereInput): Promise<Weight> {
     const userWeights = await this.prisma.weight.findMany({
-      orderBy: { id: 'desc' },
-      where
+      orderBy: { id: "desc" },
+      where,
     });
-    return userWeights[0]
+    return userWeights[0];
   }
-  
-  async deleteUserWeights({
-    where
-  }: {
-    where: Prisma.WeightWhereUniqueInput;
-  }) {
+
+  async deleteUserWeights({ where }: { where: Prisma.WeightWhereUniqueInput }) {
     return this.prisma.weight.deleteMany({
       where,
     });

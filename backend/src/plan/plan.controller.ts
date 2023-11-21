@@ -1,10 +1,6 @@
 import { PlanService } from "./plan.service";
 
-import {
-  Controller,
-  Delete,
-  UseGuards,
-} from "@nestjs/common";
+import { Controller, Delete, UseGuards } from "@nestjs/common";
 
 import { JwtGuard } from "../auth/guard";
 

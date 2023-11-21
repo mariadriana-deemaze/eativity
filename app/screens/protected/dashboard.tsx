@@ -29,7 +29,7 @@ export const Dashboard = () => {
       bg="red.400"
     >
       <Text isTruncated maxW="300" w="80%" fontSize="lg">
-      -
+        -
       </Text>
     </Box>
   );

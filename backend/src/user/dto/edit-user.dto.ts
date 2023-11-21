@@ -1,46 +1,46 @@
-import { Gender, Goal, GoalDiff, MeasurementUnit } from '@prisma/client';
+import { Gender, Goal, GoalDiff, MeasurementUnit } from "@prisma/client";
 
 import {
-    IsDate,
-    IsEmail,
-    IsNumber,
-    IsOptional,
-    IsString,
-} from 'class-validator';
+  IsDate,
+  IsEmail,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from "class-validator";
 
 export class EditUserDto {
-    @IsEmail()
-    @IsOptional()
-    email?: string;
+  @IsEmail()
+  @IsOptional()
+  email?: string;
 
-    @IsString()
-    @IsOptional()
-    name?: string;
-    
-    @IsString()
-    @IsOptional()
-    gender?: Gender;
+  @IsString()
+  @IsOptional()
+  name?: string;
 
-    @IsDate()
-    @IsOptional()
-    birthdate?: Date;
+  @IsString()
+  @IsOptional()
+  gender?: Gender;
 
-    @IsNumber()
-    @IsOptional()
-    height?: number;
-    
-    @IsNumber()
-    @IsOptional()
-    weight?: number; 
+  @IsDate()
+  @IsOptional()
+  birthdate?: Date;
 
-    @IsOptional()
-    measurementUnit?: MeasurementUnit
+  @IsNumber()
+  @IsOptional()
+  height?: number;
 
-    @IsOptional()
-    plan?:{
-        goal?: Goal;
-        goal_diff?: GoalDiff;
-        weekly_training_amount?: number;
-        average_minutes_per_training_session?: number;
-    }
+  @IsNumber()
+  @IsOptional()
+  weight?: number;
+
+  @IsOptional()
+  measurementUnit?: MeasurementUnit;
+
+  @IsOptional()
+  plan?: {
+    goal?: Goal;
+    goal_diff?: GoalDiff;
+    weekly_training_amount?: number;
+    average_minutes_per_training_session?: number;
+  };
 }
