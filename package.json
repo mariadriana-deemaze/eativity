@@ -1,4 +1,8 @@
 {
+  "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
   "name": "eativity",
   "author": "mariadriana-deemaze",
   "version": "1.0.0",
@@ -7,12 +11,12 @@
   },
   "scripts": {
     "prepare": "husky install",
-    "dev:app":"cd app && yarn start",
-    "dev:be":"cd backend && yarn start:dev",
-    "fe:lint":"cd app && yarn lint",
-    "fe:format":"cd app && yarn format",
-    "be:lint":"cd backend && yarn lint",
-    "be:format":"cd backend && yarn format",
-    "be:e2e": "cd backend && yarn test:e2e"
+    "dev:app": "cd apps/expo && yarn start",
+    "dev:be": "cd apps/backend && yarn start:dev",
+    "fe:lint": "cd apps/expo && yarn lint",
+    "fe:format": "cd apps/expo && yarn format",
+    "be:lint": "cd apps/backend && yarn lint",
+    "be:format": "cd apps/backend && yarn format",
+    "be:e2e": "cd apps/backend && yarn test:e2e"
   }
 }
