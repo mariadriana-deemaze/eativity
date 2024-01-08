@@ -11,9 +11,9 @@ import { authenticateUser, SignInInputs } from "../../stores/auth/actions";
 export const SignIn = ({ navigation }) => {
   const { control, handleSubmit } = useForm<SignInInputs>({
     defaultValues: {
-      name: "adriana",
-      email: "maria.adriana4@gmail.com",
-      password: "123a",
+      name: "Maria Adriana",
+      email: "m@gmail.com",
+      password: "123",
     },
   });
 
