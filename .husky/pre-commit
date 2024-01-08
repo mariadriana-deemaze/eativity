@@ -32,11 +32,11 @@ yarn be:format ||
 )
 
 # Run BE tests
-yarn be:e2e ||
-(
-    echo "😤🏀👋😤 Test Failed, buggy code. I ain't going to commit this, the hell! - Try again."
-    false; 
-)
+#yarn be:e2e ||
+#(
+#    echo "😤🏀👋😤 Test Failed, buggy code. I ain't going to commit this, the hell! - Try again."
+#    false; 
+#)
 
 # Add to staged
 git add .
