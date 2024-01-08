@@ -2,11 +2,12 @@ import { Controller, useForm } from "react-hook-form";
 
 import { registerUser, SignUpInputs } from "../../stores/auth/actions";
 
-import { useAppDispatch } from "../../stores";
+import { IRootState, useAppDispatch } from "../../stores";
 
 import { TextField } from "../../components/textField";
 
 import { Box, Button, Text } from "native-base";
+import { useSelector } from "react-redux";
 
 export const SignUp = ({ navigation }) => {
   const { control, handleSubmit } = useForm<SignUpInputs>({
@@ -20,9 +21,12 @@ export const SignUp = ({ navigation }) => {
 
   const dispatch = useAppDispatch();
 
+  const isSigningUp = useSelector((state: IRootState) => state.auth.loading);
+
   const onSubmit = async (data: SignUpInputs) => {
     dispatch(registerUser(data));
   };
+
 
   return (
     <Box
@@ -88,6 +92,7 @@ export const SignUp = ({ navigation }) => {
         size="sm"
         colorScheme="secondary"
         onPress={handleSubmit(onSubmit)}
+        disabled={isSigningUp}
       >
         Sign Up
       </Button>
