@@ -10,7 +10,17 @@
     "preview": {
       "distribution": "internal"
     },
-    "production": {}
+    "production": {},
+    "test": {
+      "android": {
+        "gradleCommand": ":app:assembleRelease :app:assembleAndroidTest -DtestBuildType=release",
+        "withoutCredentials": true
+      },
+      "ios": {
+        "simulator": true
+      },
+      "buildArtifactPaths": ["artifacts/**/*.png"]
+    }
   },
   "submit": {
     "production": {}

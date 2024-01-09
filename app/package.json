@@ -1,15 +1,16 @@
 {
   "name": "eativity-app",
   "version": "1.0.0",
-  "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
+    "start": "expo start --dev-client",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
     "web": "expo start --web",
     "lint": "yarn eslint",
     "format": "prettier --write .",
-    "types": "tsc --pretty --noEmit"
+    "types": "tsc --pretty --noEmit",
+    "build:android:local": "npx expo run:android --variant release",
+    "build:ios:local": "npx expo run:ios --configuration Release"
   },
   "dependencies": {
     "@expo/vector-icons": "^13.0.0",
@@ -23,7 +24,7 @@
     "@types/react": "~18.0.27",
     "axios": "^1.6.0",
     "date-fns": "^2.30.0",
-    "expo": "~48.0.10",
+    "expo": "~48.0.21",
     "expo-secure-store": "~12.1.1",
     "expo-status-bar": "~1.4.4",
     "expo-updates": "~0.16.4",
@@ -37,7 +38,8 @@
     "react-native-screens": "~3.20.0",
     "react-native-svg": "13.4.0",
     "react-redux": "^8.0.5",
-    "typescript": "^4.9.4"
+    "typescript": "^4.9.4",
+    "expo-splash-screen": "~0.18.2"
   },
   "devDependencies": {
     "@babel/core": "^7.22.10",

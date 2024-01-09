@@ -37,7 +37,7 @@ export const SignUp = ({ navigation }) => {
       }}
       bg="red.400"
     >
-      <Text isTruncated maxW="300" w="80%">
+      <Text id="sign_up" isTruncated maxW="300" w="80%">
         Sign up
       </Text>
 
