@@ -32,6 +32,9 @@ jobs:
 
       - name: Install Expo App dependencies
         run:  cd app && yarn
+      
+      - name: Run ESLint on app folder
+        run:  yarn fe:lint
 
       - name: Publish update
         run: cd app && eas update --auto
