@@ -9,6 +9,7 @@ import { PrismaModule } from "./prisma/prisma.module";
 import { AuthModule } from "./auth/auth.module";
 
 import { UserModule } from "./user/user.module";
+import { FatSecretModule } from './fat-secret/fat-secret.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { UserModule } from "./user/user.module";
     UserModule,
     AuthModule,
     PrismaModule,
+    FatSecretModule,
   ],
 })
 export class AppModule {}
