@@ -10,6 +10,10 @@ import { PrismaService } from "../prisma/prisma.service";
 
 import { AuthDto } from "./dto";
 
+import { render } from "@react-email/render";
+
+import { WelcomeEmail } from "../../templates/welcome";
+
 import * as argon from "argon2";
 
 @Injectable()
@@ -21,25 +25,27 @@ export class AuthService {
     private mailerService: MailerService
   ) {}
 
-  async createUser(dto: AuthDto) {
-    const password_hash = await argon.hash(dto.password);
+  async createUser({ email, name, password }: AuthDto) {
+    const password_hash = await argon.hash(password);
 
     try {
       const user = await this.prisma.user.create({
         data: {
-          email: dto.email,
-          name: dto.name,
+          email,
+          name,
           password_hash,
         },
       });
 
       const token = await this.signToken(user.id, user.email);
 
+      const html = render(WelcomeEmail({ name, email }));
+
       await this.mailerService.sendMail({
-        to: dto.email,
+        to: email,
         from: "info@eativity.com",
-        subject: "Testing nestJS e-mail",
-        html: `<h3 style="color: red">Congrats bro, best decision of your life!</h3>`,
+        subject: `Welcome to Eativity ${name}`,
+        html,
       });
 
       return token;
