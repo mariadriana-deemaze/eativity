@@ -4,30 +4,30 @@
 echo '🏗️👷 Styling, testing and building your project before committing'
 
 # Check Prettier standards on `/app` folder
-#yarn fe:lint ||
-#(
-#    echo '🤢🤮🤢🤮 Prettier Check Failed. Run yarn format, add changes and try to commit again.';
-#    false;
-#)
+yarn fe:lint ||
+(
+    echo '🤢🤮🤢🤮 Prettier Check Failed. Run yarn format, add changes and try to commit again.';
+    false;
+)
 
 # Check ESLint Standards on `/app` folder
-#yarn fe:format ||
-#(
-#    echo '😤🏀👋😤 ESLint Check Failed. Make the required changes listed above and try to commit again.'
-#    false; 
-#)
+yarn fe:format ||
+(
+    echo '😤🏀👋😤 ESLint Check Failed. Make the required changes listed above and try to commit again.'
+    false; 
+)
 
 # Check Prettier standards on `/backend` folder
 #yarn be:lint ||
 #(
-#    echo '🤢🤮🤢🤮 Prettier Check Failed. Run yarn format, add changes and try to commit again.';
+#    echo '😤🏀👋😤 ESLint Check Failed. Make the required changes listed above and try to commit again.'
 #    false; 
 #)
 
 # Check ESLint Standards on `/backend` folder
 yarn be:format ||
 (
-    echo '😤🏀👋😤 ESLint Check Failed. Make the required changes listed above and try to commit again.'
+    echo '🤢🤮🤢🤮 Prettier Check Failed. Run yarn format, add changes and try to commit again.';
     false; 
 )
 
