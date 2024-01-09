@@ -2,6 +2,8 @@ import { ForbiddenException, Injectable } from "@nestjs/common";
 
 import { ConfigService } from "@nestjs/config";
 
+import { MailerService } from "@nestjs-modules/mailer";
+
 import { JwtService } from "@nestjs/jwt";
 
 import { PrismaService } from "../prisma/prisma.service";
@@ -15,7 +17,8 @@ export class AuthService {
   constructor(
     private prisma: PrismaService,
     private jwt: JwtService,
-    private config: ConfigService
+    private config: ConfigService,
+    private mailerService: MailerService
   ) {}
 
   async createUser(dto: AuthDto) {
@@ -30,7 +33,16 @@ export class AuthService {
         },
       });
 
-      return this.signToken(user.id, user.email);
+      const token = await this.signToken(user.id, user.email);
+
+      await this.mailerService.sendMail({
+        to: dto.email,
+        from: "info@eativity.com",
+        subject: "Testing nestJS e-mail",
+        html: `<h3 style="color: red">Congrats bro, best decision of your life!</h3>`,
+      });
+
+      return token;
     } catch (error) {
       if (error.code === "P2002") {
         throw new ForbiddenException("Credentials taken");
