@@ -37,6 +37,7 @@
     },
     "updates": {
       "url": "https://u.expo.dev/1501e44e-6c57-480d-98ac-aeb661099c86"
-    }
+    },
+    "plugins": ["@config-plugins/detox"]
   }
 }
