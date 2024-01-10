@@ -4,18 +4,29 @@ import { ConfigModule } from "@nestjs/config";
 
 import { MailerModule } from "@nestjs-modules/mailer";
 
+import { CacheModule } from "@nestjs/cache-manager";
+
+import { DevtoolsModule } from "@nestjs/devtools-integration";
+
 import { PrismaModule } from "./prisma/prisma.module";
 
 import { AuthModule } from "./auth/auth.module";
 
 import { UserModule } from "./user/user.module";
-import { FatSecretModule } from './fat-secret/fat-secret.module';
+
+import { FatSecretModule } from "./fat-secret/fat-secret.module";
+
+import { NO_REPLY_EMAIL_SENDER } from "utils";
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    DevtoolsModule.register({
+      http: process.env.NODE_ENV !== "production",
+    }),
+    CacheModule.register({ isGlobal: true }),
     MailerModule.forRoot({
       transport: {
         host: "localhost",
@@ -24,17 +35,9 @@ import { FatSecretModule } from './fat-secret/fat-secret.module';
         secure: false,
       },
       defaults: {
-        from: '"No Reply" <no-reply@localhost>',
+        from: `"No Reply" <${NO_REPLY_EMAIL_SENDER}>`,
       },
-      preview: true, // preview e-mail in browser
-      // TODO: React e-mail <-> https://react.email/docs/integrations/nodemailer
-      /*  template: {
-        dir: __dirname + '/templates',
-        //adapter: new PugAdapter(),
-        options: {
-          strict: true,
-        },
-      }, */
+      preview: true,
     }),
     UserModule,
     AuthModule,

@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable } from "@nestjs/common";
+import { ForbiddenException, Inject, Injectable } from "@nestjs/common";
 
 import { ConfigService } from "@nestjs/config";
 
@@ -6,7 +6,13 @@ import { MailerService } from "@nestjs-modules/mailer";
 
 import { JwtService } from "@nestjs/jwt";
 
+import { CACHE_MANAGER } from "@nestjs/cache-manager";
+
+import { Cache } from "cache-manager";
+
 import { PrismaService } from "../prisma/prisma.service";
+
+import { FatSecretService } from "../fat-secret/fat-secret.service";
 
 import { AuthDto } from "./dto";
 
@@ -16,13 +22,19 @@ import { WelcomeEmail } from "../../templates/welcome";
 
 import * as argon from "argon2";
 
+import { EMAIL_SENDER } from "utils";
+
+import { FatSecretApiTokenResponse } from "types";
+
 @Injectable()
 export class AuthService {
   constructor(
     private prisma: PrismaService,
     private jwt: JwtService,
     private config: ConfigService,
-    private mailerService: MailerService
+    private mailerService: MailerService,
+    private fatSecretService: FatSecretService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache
   ) {}
 
   async createUser({ email, name, password }: AuthDto) {
@@ -43,7 +55,7 @@ export class AuthService {
 
       await this.mailerService.sendMail({
         to: email,
-        from: "info@eativity.com",
+        from: EMAIL_SENDER,
         subject: `Welcome to Eativity ${name}`,
         html,
       });
@@ -69,6 +81,21 @@ export class AuthService {
     const passwordMatch = await argon.verify(user.password_hash, dto.password);
 
     if (!passwordMatch) throw new ForbiddenException("Credentials incorrect");
+
+    // Check for FAT SECRET API existant access token
+    const accessToken = await this.cacheManager.get("access_token");
+
+    if (!accessToken) {
+      const response =
+        (await this.fatSecretService.getAppToken()) as unknown as FatSecretApiTokenResponse;
+
+      // Store it in app cache
+      await this.cacheManager.set(
+        "access_token",
+        response.access_token,
+        response.expires_in * 1000 // seconds -> milliseconds
+      );
+    }
 
     return this.signToken(user.id, user.email);
   }

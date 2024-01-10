@@ -1,81 +1,105 @@
-import https from "https";
-import crypto from "crypto";
+import { FAT_SECRET_API_ENDPOINT } from "utils";
+
+// @ts-ignore
+const { createHmac, randomBytes } = require("node:crypto");
+// import { createHmac, randomBytes } from "node:crypto";
+
+type FatSecretAPIMethods =
+  | "foods.search"
+  | "food.get"
+  | "recipes.search"
+  | "recipe.get"
+  | "recipe_types.get";
 
 type OAuth1Parameters = {
-  format: string; // json
+  format: "json";
   oauth_version: "1.0";
   oauth_signature_method: "HMAC-SHA1";
-  oauth_timestamp: number; // The date and time, expressed in the number of seconds since January 1, 1970 00:00:00 GMT. The timestamp value must be a positive integer and must be equal or greater than the timestamp used in previous requests
+  oauth_nonce: string;
+  oauth_timestamp: number;
   oauth_consumer_key: string;
+};
+
+type RequestParameters = {
+  method: FatSecretAPIMethods;
+  access_token?: string;
+  search_expression?: string;
+  max_results?: number;
 };
 
 export class FatSecret {
   #accessKey: string;
   #sharedSecret: string;
 
-  static get API_BASE() {
-    return "https://platform.fatsecret.com/rest/server.api";
-  }
-
-  constructor(accessKey: string, sharedSecret: string) {
-    if (!accessKey || !sharedSecret) {
+  constructor(accessKey: string) {
+    if (!accessKey) {
       throw new Error("FAT_SECRET ENV not found");
     }
     this.#accessKey = accessKey;
-    this.#sharedSecret = sharedSecret;
+    //this.#sharedSecret = parameters.access_token;
   }
 
-  request(parameters: OAuth1Parameters) {
+  request<T>(parameters: RequestParameters) {
+    this.#sharedSecret = parameters.access_token;
+
     const query = this._createQuery(parameters);
-    const signature = this._createSignature(query);
-    return new Promise((resolve, reject) => {
-      https
-        .request({
-          host: "platform.fatsecret.com",
-          method: "GET",
-          path: `${FatSecret.API_BASE}?${query}&oauth_signature=${signature}`,
-        })
-        .on("error", (error) => reject(error))
-        .on("response", (response) => {
-          let data = "";
-          response
-            .on("error", (error) => reject(error))
-            .on("data", (chunk) => (data += chunk))
-            .on("end", () => {
-              try {
-                resolve(JSON.parse(data.toString()));
-              } catch (error) {
-                reject(error);
-              }
-            });
-        })
-        .end();
-    });
+    const signature = this._createSignature(query, parameters.access_token);
+    const path = `${FAT_SECRET_API_ENDPOINT}?${query}&oauth_signature=${signature}`;
+    const authorization: string = `Bearer ${parameters.access_token}`;
+
+    return fetch(path, {
+      method: "GET",
+      headers: {
+        Authorization: authorization,
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((response: Promise<T>) => {
+        console.log("JSON response ->", response);
+        return response;
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        return error;
+      });
   }
 
-  _createSignature(query: string) {
-    const mac = crypto.createHmac("sha1", this.#sharedSecret + "&");
-    mac.update(
-      `GET&${encodeURIComponent(FatSecret.API_BASE)}&${encodeURIComponent(
-        query
-      )}`
-    );
-    return encodeURIComponent(mac.digest("base64"));
+  _createSignature(query: string, secret: string | undefined) {
+    this.#sharedSecret = secret;
+
+    const hmac = createHmac("sha1", this.#sharedSecret + "&");
+
+    const enconded_path = `GET&${encodeURIComponent(
+      FAT_SECRET_API_ENDPOINT
+    )}&${encodeURIComponent(query)}`;
+
+    hmac.update(enconded_path);
+
+    return encodeURIComponent(hmac.digest("base64"));
   }
 
-  _createQuery(parameters: OAuth1Parameters) {
-    parameters["format"] = "json";
-    parameters["oauth_version"] = "1.0";
-    parameters["oauth_signature_method"] = "HMAC-SHA1";
-    parameters["oauth_nonce"] = crypto.randomBytes(10).toString("HEX");
-    parameters["oauth_timestamp"] = Math.floor(new Date().getTime() / 1000);
-    parameters["oauth_consumer_key"] = this.#accessKey;
+  _createQuery(parameters: RequestParameters) {
+    const reqParams: OAuth1Parameters = {
+      ...parameters,
+      format: "json",
+      oauth_version: "1.0",
+      oauth_signature_method: "HMAC-SHA1",
+      oauth_nonce: randomBytes(10).toString("HEX"),
+      oauth_timestamp: Math.floor(new Date().getTime() / 1000),
+      oauth_consumer_key: this.#accessKey,
+    };
 
-    return Object.keys(parameters)
+    // @ts-ignore
+    delete reqParams.access_token;
+
+    return Object.keys(reqParams)
       .sort()
       .reduce((accumulator, parameter) => {
         const data = `&${parameter}=${encodeURIComponent(
-          parameters[parameter]
+          reqParams[parameter]
         )}`;
         return accumulator + data;
       }, "")

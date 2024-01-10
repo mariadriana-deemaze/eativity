@@ -1,22 +1,50 @@
-import { Controller } from '@nestjs/common';
+import { FatSecretService } from "./fat-secret.service";
+import {
+  Controller,
+  Get,
+  Param,
+  Post,
+  Query /* UseGuards */,
+} from "@nestjs/common";
+// import { JwtGuard } from "../auth/guard";
 
-@Controller('fat-secret')
+// @UseGuards(JwtGuard)
+@Controller("fat-secret")
 export class FatSecretController {
+  constructor(private fatSecretService: FatSecretService) {}
 
-    // Get food by search string
-    // https://platform.fatsecret.com/docs/v1/foods.search
-    
-    // Get food by id search
-    // https://platform.fatsecret.com/docs/v3/food.get
-    
+  // FIX-ME: Remove - Only here for testing purposes
+  @Post("get-token")
+  async getAppToken() {
+    return this.fatSecretService.getAppToken();
+  }
 
-    // Get recipes by search string
-    // https://platform.fatsecret.com/docs/v3/recipes.search
-    
-    // Get recipe by id search
-    // https://platform.fatsecret.com/docs/v2/recipe.get
-    
-    // Get recipe types
-    // https://platform.fatsecret.com/docs/v2/recipe_types.get
+  @Get("food/search?")
+  async getFoodBySearchString(@Query("name") query) {
+    return this.fatSecretService.getFoodFromFatSecretBySearchString({ query });
+  }
 
+  @Get("food/:id")
+  async getFoodBySearchId(@Param() { id }: { id: string }) {
+    return this.fatSecretService.getFoodFromFatSecretBySearchId({ id });
+  }
+
+  @Get("recipe/search?")
+  async getRecipesBySearchString(@Query("name") query) {
+    return this.fatSecretService.getRecipesFromFatSecretBySearchString({
+      query,
+    });
+  }
+
+  @Get("recipe/:id")
+  async getRecipesBySearchId(@Param() { id }: { id: string }) {
+    return this.fatSecretService.getRecipesFromFatSecretBySearchId({
+      id,
+    });
+  }
+
+  @Get("recipe/types")
+  async getRecipesTypes() {
+    return this.fatSecretService.getRecipesTypesFromFatSecret();
+  }
 }
