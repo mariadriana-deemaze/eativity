@@ -10,8 +10,6 @@ import { AuthRoutes } from "./auth";
 
 import { ProtectedRoutes } from "./protected";
 
-import { Text } from "native-base";
-
 export enum Screens {
   SIGN_IN = "SignIn",
   SIGN_UP = "SignUp",

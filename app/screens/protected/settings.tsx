@@ -12,7 +12,7 @@ import { Controller, useForm, UseFormReturn } from "react-hook-form";
 
 import { format } from "date-fns";
 
-import { TextField } from "../../components/textField";
+import { TextField } from "../../components/atoms/textField";
 
 import { IRootState, useAppDispatch } from "../../stores";
 

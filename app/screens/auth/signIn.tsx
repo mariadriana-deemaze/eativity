@@ -13,7 +13,7 @@ import { Controller, useForm } from "react-hook-form";
 
 import { useSelector } from "react-redux";
 
-import { TextField } from "../../components/textField";
+import { TextField } from "../../components/atoms/textField";
 
 import { ToastAlert } from "../../components/toastAlert";
 

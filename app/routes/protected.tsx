@@ -4,7 +4,7 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 
 import { createStackNavigator } from "@react-navigation/stack";
 
-import { Dashboard, Settings, Recipes } from "../screens";
+import { Dashboard, Settings, Recipes, Recipe } from "../screens";
 
 import CustomDrawer from "../components/drawer";
 
@@ -56,6 +56,20 @@ const AppBottomStack = () => {
       <BottomStack.Screen
         name={Screens.RECIPES}
         component={Recipes}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ focused }) => (
+            <Ionicons
+              name="md-checkmark-circle"
+              size={32}
+              color={focused ? "blue" : "gray"}
+            />
+          ),
+        }}
+      />
+      <BottomStack.Screen
+        name="Recipe"
+        component={Recipe}
         options={{
           headerShown: false,
           tabBarIcon: ({ focused }) => (
