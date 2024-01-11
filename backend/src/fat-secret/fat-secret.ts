@@ -1,15 +1,13 @@
-import { FAT_SECRET_API_ENDPOINT } from "utils";
+import { createHmac, randomBytes } from "crypto";
 
-// @ts-ignore
-const { createHmac, randomBytes } = require("node:crypto");
-// import { createHmac, randomBytes } from "node:crypto";
+import { FAT_SECRET_API_ENDPOINT } from "utils";
 
 type FatSecretAPIMethods =
   | "foods.search"
   | "food.get"
   | "recipes.search"
   | "recipe.get"
-  | "recipe_types.get";
+  | "recipe_types.get.v2";
 
 type OAuth1Parameters = {
   format: "json";
@@ -47,6 +45,8 @@ export class FatSecret {
     const path = `${FAT_SECRET_API_ENDPOINT}?${query}&oauth_signature=${signature}`;
     const authorization: string = `Bearer ${parameters.access_token}`;
 
+    console.log("path ->", path);
+
     return fetch(path, {
       method: "GET",
       headers: {
@@ -82,18 +82,17 @@ export class FatSecret {
   }
 
   _createQuery(parameters: RequestParameters) {
-    const reqParams: OAuth1Parameters = {
-      ...parameters,
+    const reqParams: OAuth1Parameters & Partial<RequestParameters> = {
+      method: parameters.method,
+      search_expression: parameters.search_expression,
       format: "json",
       oauth_version: "1.0",
       oauth_signature_method: "HMAC-SHA1",
+      // @ts-ignore
       oauth_nonce: randomBytes(10).toString("HEX"),
       oauth_timestamp: Math.floor(new Date().getTime() / 1000),
       oauth_consumer_key: this.#accessKey,
     };
-
-    // @ts-ignore
-    delete reqParams.access_token;
 
     return Object.keys(reqParams)
       .sort()

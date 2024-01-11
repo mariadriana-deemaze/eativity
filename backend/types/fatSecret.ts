@@ -33,7 +33,7 @@ export type FatSecretRecipe = {
   };
 };
 
-export type FatSecretRecipeTypes = string[];
+export type FatSecretRecipeTypes = { recipe_types: { recipe_type: string[] } };
 
 export type FatSecretPaginatedParams = {
   max_results: string;

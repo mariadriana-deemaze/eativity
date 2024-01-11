@@ -43,7 +43,7 @@ export class FatSecretController {
     });
   }
 
-  @Get("recipe/types")
+  @Get("recipe-types")
   async getRecipesTypes() {
     return this.fatSecretService.getRecipesTypesFromFatSecret();
   }

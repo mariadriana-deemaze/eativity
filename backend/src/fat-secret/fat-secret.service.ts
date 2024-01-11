@@ -80,32 +80,56 @@ export class FatSecretService {
   }
 
   async getFoodFromFatSecretBySearchId({ id }: { id: string }) {
+    // Get from cache
+    const SHARED_SECRET: string | undefined = await this.cacheManager.get(
+      "access_token"
+    );
+
     return FatSecretService.API.request<FatSecretFoodsPage>({
       method: "food.get",
       search_expression: id,
+      access_token: SHARED_SECRET,
       //max_results: 1,
     });
   }
 
   async getRecipesFromFatSecretBySearchString({ query }: { query: string }) {
+    // Get from cache
+    const SHARED_SECRET: string | undefined = await this.cacheManager.get(
+      "access_token"
+    );
+
     return FatSecretService.API.request<FatSecretRecipesPage>({
       method: "recipes.search",
       search_expression: query,
+      access_token: SHARED_SECRET,
       //max_results: 1,
     });
   }
 
   async getRecipesFromFatSecretBySearchId({ id }: { id: string }) {
+    // Get from cache
+    const SHARED_SECRET: string | undefined = await this.cacheManager.get(
+      "access_token"
+    );
+
     return FatSecretService.API.request<FatSecretRecipesPage>({
       method: "recipe.get",
       search_expression: id,
+      access_token: SHARED_SECRET,
       //max_results: 1,
     });
   }
 
   async getRecipesTypesFromFatSecret() {
+    // Get from cache
+    const SHARED_SECRET: string | undefined = await this.cacheManager.get(
+      "access_token"
+    );
+
     return FatSecretService.API.request<FatSecretRecipeTypes>({
-      method: "recipe_types.get",
+      method: "recipe_types.get.v2",
+      access_token: SHARED_SECRET,
       //search_expression: id,
       //max_results: 1,
     });
