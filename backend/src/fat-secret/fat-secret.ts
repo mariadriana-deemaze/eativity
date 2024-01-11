@@ -17,6 +17,7 @@ type RequestParameters = {
   access_token: string;
   search_expression?: string;
   max_results?: number;
+  page_number?: number;
 };
 
 export class FatSecret {
@@ -51,14 +52,14 @@ export class FatSecret {
       .then((response) => {
         return response.json();
       })
-      .then((response: Promise<T>) => {
+      .then((response) => {
         console.log("JSON response ->", response);
-        return response;
+        return response as Promise<T>;
       })
       .catch((error) => {
         console.error("Error:", error);
         return error;
-      });
+      }) as Promise<T>;
   }
 
   _createSignature(query: string, secret: string | undefined) {

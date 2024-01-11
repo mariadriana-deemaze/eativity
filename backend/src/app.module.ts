@@ -16,6 +16,8 @@ import { UserModule } from "./user/user.module";
 
 import { FatSecretModule } from "./fat-secret/fat-secret.module";
 
+import { FoodModule } from "./food/food.module";
+
 import { NO_REPLY_EMAIL_SENDER } from "utils";
 
 @Module({
@@ -43,6 +45,7 @@ import { NO_REPLY_EMAIL_SENDER } from "utils";
     AuthModule,
     PrismaModule,
     FatSecretModule,
+    FoodModule,
   ],
 })
 export class AppModule {}

@@ -31,7 +31,7 @@ export class FatSecretService {
   ) {}
 
   static get API() {
-    return new FatSecret(process.env.FAT_SECRET_1_CONSUMER_KEY);
+    return new FatSecret(process.env.FAT_SECRET_CONSUMER_KEY);
   }
 
   async getAppToken() {
