@@ -1,13 +1,7 @@
 import { createHmac, randomBytes } from "crypto";
+import { IntegratedFatSecretMethods } from "types";
 
 import { FAT_SECRET_API_ENDPOINT } from "utils";
-
-type FatSecretAPIMethods =
-  | "foods.search"
-  | "food.get"
-  | "recipes.search"
-  | "recipe.get"
-  | "recipe_types.get.v2";
 
 type OAuth1Parameters = {
   format: "json";
@@ -19,7 +13,7 @@ type OAuth1Parameters = {
 };
 
 type RequestParameters = {
-  method: FatSecretAPIMethods;
+  method: IntegratedFatSecretMethods;
   access_token?: string;
   search_expression?: string;
   max_results?: number;

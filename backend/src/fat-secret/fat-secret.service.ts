@@ -17,6 +17,7 @@ import {
   FatSecretRecipesPage,
   FatSecretApiTokenResponse,
   FatSecretRecipeTypes,
+  IntegratedFatSecretMethods,
 } from "types";
 
 import { FAT_SECRET_OAUTH_ENDPOINT } from "utils";
@@ -32,7 +33,7 @@ export class FatSecretService {
   static get API() {
     return new FatSecret(process.env.FAT_SECRET_1_CONSUMER_KEY);
   }
-  
+
   async getAppToken() {
     const user: string = this.config.get("FAT_SECRET_ID");
     const password: string = this.config.get("FAT_SECRET_CONSUMER_SECRET");
@@ -67,7 +68,7 @@ export class FatSecretService {
     );
 
     return FatSecretService.API.request<FatSecretFoodsPage>({
-      method: "foods.search",
+      method: IntegratedFatSecretMethods.FOODS_SEARCH,
       search_expression: query,
       access_token: SHARED_SECRET,
       //max_results: 1,
@@ -86,7 +87,7 @@ export class FatSecretService {
     );
 
     return FatSecretService.API.request<FatSecretFoodsPage>({
-      method: "food.get",
+      method: IntegratedFatSecretMethods.FOOD_GET,
       search_expression: id,
       access_token: SHARED_SECRET,
       //max_results: 1,
@@ -100,7 +101,7 @@ export class FatSecretService {
     );
 
     return FatSecretService.API.request<FatSecretRecipesPage>({
-      method: "recipes.search",
+      method: IntegratedFatSecretMethods.RECIPES_SEARCH,
       search_expression: query,
       access_token: SHARED_SECRET,
       //max_results: 1,
@@ -114,7 +115,7 @@ export class FatSecretService {
     );
 
     return FatSecretService.API.request<FatSecretRecipesPage>({
-      method: "recipe.get",
+      method: IntegratedFatSecretMethods.RECIPE_GET,
       search_expression: id,
       access_token: SHARED_SECRET,
       //max_results: 1,
@@ -128,7 +129,7 @@ export class FatSecretService {
     );
 
     return FatSecretService.API.request<FatSecretRecipeTypes>({
-      method: "recipe_types.get.v2",
+      method: IntegratedFatSecretMethods.RECIPE_TYPES,
       access_token: SHARED_SECRET,
       //search_expression: id,
       //max_results: 1,

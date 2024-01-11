@@ -1,3 +1,11 @@
+export enum IntegratedFatSecretMethods {
+  FOODS_SEARCH = "foods.search",
+  FOOD_GET = "food.get",
+  RECIPES_SEARCH = "recipes.search",
+  RECIPE_GET = "recipe.get",
+  RECIPE_TYPES = "recipe_types.get.v2",
+}
+
 export type FatSecretApiTokenResponse = {
   access_token: string;
   expires_in: number;
