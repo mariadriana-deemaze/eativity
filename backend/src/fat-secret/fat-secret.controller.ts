@@ -1,24 +1,11 @@
 import { FatSecretService } from "./fat-secret.service";
-import {
-  Controller,
-  Get,
-  Param,
-  Post,
-  Query /* UseGuards */,
-} from "@nestjs/common";
+import { Controller, Get, Param, Query /* UseGuards */ } from "@nestjs/common";
 // import { JwtGuard } from "../auth/guard";
 
 // @UseGuards(JwtGuard)
 @Controller("fat-secret")
 export class FatSecretController {
   constructor(private fatSecretService: FatSecretService) {}
-
-  // FIX-ME: Remove - Only here for testing purposes
-  /*   @Post("get-token")
-  async getAppToken() {
-    return this.fatSecretService.getAppToken();
-  }
-  */
 
   @Get("food/search?")
   async getFoodBySearchString(@Query("name") query) {

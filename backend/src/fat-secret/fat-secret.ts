@@ -76,7 +76,7 @@ export class FatSecret {
   }
 
   _createQuery(parameters: RequestParameters) {
-    let reqParams: OAuth1Parameters & Partial<RequestParameters> = {
+    const reqParams: OAuth1Parameters & Partial<RequestParameters> = {
       method: parameters.method,
       format: "json",
       oauth_version: "1.0",
