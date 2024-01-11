@@ -14,10 +14,11 @@ export class FatSecretController {
   constructor(private fatSecretService: FatSecretService) {}
 
   // FIX-ME: Remove - Only here for testing purposes
-  @Post("get-token")
+  /*   @Post("get-token")
   async getAppToken() {
     return this.fatSecretService.getAppToken();
   }
+  */
 
   @Get("food/search?")
   async getFoodBySearchString(@Query("name") query) {

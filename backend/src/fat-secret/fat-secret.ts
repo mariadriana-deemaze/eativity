@@ -14,7 +14,7 @@ type OAuth1Parameters = {
 
 type RequestParameters = {
   method: IntegratedFatSecretMethods;
-  access_token?: string;
+  access_token: string;
   search_expression?: string;
   max_results?: number;
 };
@@ -76,9 +76,8 @@ export class FatSecret {
   }
 
   _createQuery(parameters: RequestParameters) {
-    const reqParams: OAuth1Parameters & Partial<RequestParameters> = {
+    let reqParams: OAuth1Parameters & Partial<RequestParameters> = {
       method: parameters.method,
-      search_expression: parameters.search_expression,
       format: "json",
       oauth_version: "1.0",
       oauth_signature_method: "HMAC-SHA1",
@@ -87,6 +86,12 @@ export class FatSecret {
       oauth_timestamp: Math.floor(new Date().getTime() / 1000),
       oauth_consumer_key: this.#accessKey,
     };
+
+    // Optional parameters
+    if (parameters.search_expression)
+      reqParams.search_expression = parameters.search_expression;
+
+    if (parameters.max_results) reqParams.max_results = parameters.max_results;
 
     return Object.keys(reqParams)
       .sort()
