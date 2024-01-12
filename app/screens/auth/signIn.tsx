@@ -1,25 +1,61 @@
-import { Box, Button, Text } from "native-base";
+import {
+  Alert,
+  Box,
+  Button,
+  HStack,
+  Text,
+  useToast,
+  VStack,
+} from "native-base";
+import { useEffect } from "react";
 
 import { Controller, useForm } from "react-hook-form";
 
+import { useSelector } from "react-redux";
+
 import { TextField } from "../../components/textField";
 
-import { useAppDispatch } from "../../stores";
+import { ToastAlert } from "../../components/toastAlert";
+
+import { Screens } from "../../routes/navigation";
+
+import { IRootState, useAppDispatch } from "../../stores";
 
 import { authenticateUser, SignInInputs } from "../../stores/auth/actions";
 
+import { signInDefaultDevData } from "../../utils";
+
 export const SignIn = ({ navigation }) => {
+  const authStateSlice = useSelector((state: IRootState) => state.auth);
+
   const { control, handleSubmit } = useForm<SignInInputs>({
-    defaultValues: {
-      name: "adriana",
-      email: "maria.adriana4@gmail.com",
-      password: "123a",
-    },
+    defaultValues: signInDefaultDevData,
   });
 
   const dispatch = useAppDispatch();
 
+  const toast = useToast();
+
   const onSubmit = (data: SignInInputs) => dispatch(authenticateUser(data));
+
+  useEffect(() => {
+    if (authStateSlice.error) {
+      toast.show({
+        id: "signInError",
+        render: () => {
+          return (
+            <ToastAlert
+              id="signInError"
+              title={authStateSlice.error.title || "Erro"}
+              description={authStateSlice.error.message || "Erro"}
+              status="error"
+              onClose={() => toast.close("signInError")}
+            />
+          );
+        },
+      });
+    }
+  }, [authStateSlice.error]);
 
   return (
     <Box
@@ -32,7 +68,7 @@ export const SignIn = ({ navigation }) => {
         color: "warmGray.50",
         letterSpacing: "lg",
       }}
-      bg="red.400"
+      bg="coolGray.100"
     >
       <Text isTruncated maxW="300" w="80%">
         Sign in
@@ -50,7 +86,6 @@ export const SignIn = ({ navigation }) => {
         name="email"
         rules={{ required: true }}
       />
-
       <Controller
         control={control}
         render={({ field: { onChange, onBlur, value } }) => (
@@ -65,16 +100,16 @@ export const SignIn = ({ navigation }) => {
         name="password"
         rules={{ required: true }}
       />
-
       <Button
         size="sm"
         colorScheme="secondary"
         onPress={handleSubmit(onSubmit)}
+        isLoading={authStateSlice.loading}
       >
         Sign In
       </Button>
 
-      <Text onPress={() => navigation.navigate("Sign Up")}>
+      <Text onPress={() => navigation.navigate(Screens.SIGN_UP)}>
         Don't have an account? Sign up now.
       </Text>
     </Box>

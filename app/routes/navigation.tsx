@@ -9,15 +9,42 @@ import { IRootState } from "../stores";
 import { AuthRoutes } from "./auth";
 
 import { ProtectedRoutes } from "./protected";
+import { Text } from "native-base";
+
+export enum Screens {
+  SIGN_IN = "SignIn",
+  SIGN_UP = "SignUp",
+  ONBOARDING = "Onboarding",
+  DASHBOARD = "Dashboard",
+  SETTINGS = "Settings",
+  RECIPES = "Recipes",
+  RECIPE = "Recipe",
+  FOODS = "Foods",
+  FOOD = "Food",
+}
 
 export default function Navigation() {
-  const { userToken } = useSelector((state: IRootState) => state.auth);
+  const authStateSlice = useSelector((state: IRootState) => state.auth);
 
-  const isAuth = !!userToken;
+  const userStateSlice = useSelector((state: IRootState) => state.user);
+
+  const isAuth = !!authStateSlice.userToken;
+
+  const enterOnboardingFlow =
+    isAuth &&
+    (!userStateSlice?.user?.height ||
+      !userStateSlice?.user?.weight ||
+      !userStateSlice?.user?.birthdate ||
+      !userStateSlice?.user?.gender);
 
   return (
     <NavigationContainer>
-      {!isAuth ? <AuthRoutes /> : <ProtectedRoutes />}
+      <Text>{String(enterOnboardingFlow)}</Text>
+      {!isAuth || enterOnboardingFlow ? (
+        <AuthRoutes onboarding={enterOnboardingFlow} />
+      ) : (
+        <ProtectedRoutes />
+      )}
     </NavigationContainer>
   );
 }

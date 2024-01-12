@@ -8,7 +8,9 @@ export const getUser = async () =>
     .then(({ data }) => {
       return data;
     })
-    .catch((err) => err);
+    .catch((err) => {
+      throw new Error(err);
+    });
 
 export const patchUser = async (user: User) => {
   return await api
@@ -16,5 +18,7 @@ export const patchUser = async (user: User) => {
     .then(({ data }) => {
       return data;
     })
-    .catch((err) => err);
+    .catch((err) => {
+      throw new Error(err);
+    });
 };

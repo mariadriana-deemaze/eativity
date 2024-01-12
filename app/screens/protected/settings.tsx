@@ -8,7 +8,7 @@ import { Box, Button, Text, Select, CheckIcon } from "native-base";
 
 import DateTimePicker from "@react-native-community/datetimepicker";
 
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useForm, UseFormReturn } from "react-hook-form";
 
 import { format } from "date-fns";
 
@@ -25,20 +25,22 @@ export const Settings = () => {
   const user = useSelector((state: IRootState) => state.user.user);
   const isLoading = useSelector((state: IRootState) => state.user.loading);
 
-  const {
-    control,
-    handleSubmit,
-    getValues,
-    formState: { isDirty },
-  } = useForm<User>({
+  const formInstance = useForm<User>({
     defaultValues: {
       ...user,
     },
   });
 
+  const {
+    control,
+    handleSubmit,
+    getValues,
+    formState: { isDirty },
+  } = formInstance;
+
   const dispatch = useAppDispatch();
 
-  const onSubmit = (data: any) => dispatch(updateUserInfo(data));
+  const onSubmit = (data: User) => dispatch(updateUserInfo(data));
 
   return (
     <ScrollView>

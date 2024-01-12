@@ -6,7 +6,7 @@ import { User } from "../../types/user";
 
 export const getUserInfo = createAsyncThunk(
   "getUser",
-  async (_user: User, { rejectWithValue }) => {
+  async (_, { rejectWithValue }) => {
     try {
       return await getUser();
     } catch (error) {

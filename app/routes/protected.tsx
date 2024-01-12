@@ -10,6 +10,8 @@ import CustomDrawer from "../components/drawer";
 
 import Ionicons from "@expo/vector-icons/Ionicons";
 
+import { Screens } from "./navigation";
+
 const Drawer = createDrawerNavigator();
 
 const BottomStack = createBottomTabNavigator();
@@ -24,7 +26,7 @@ const AppBottomStack = () => {
       }}
     >
       <BottomStack.Screen
-        name="Dashboard"
+        name={Screens.DASHBOARD}
         component={Dashboard}
         options={{
           headerShown: false,
@@ -38,7 +40,7 @@ const AppBottomStack = () => {
         }}
       />
       <BottomStack.Screen
-        name="Settings"
+        name={Screens.SETTINGS}
         component={Settings}
         options={{
           headerShown: false,
@@ -52,7 +54,7 @@ const AppBottomStack = () => {
         }}
       />
       <BottomStack.Screen
-        name="Recipes"
+        name={Screens.RECIPES}
         component={Recipes}
         options={{
           headerShown: false,
