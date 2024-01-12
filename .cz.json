@@ -1,9 +1,88 @@
 {
   "commitizen": {
-    "name": "cz_conventional_commits",
+    "name": "cz_customize",
     "tag_format": "$version",
     "version_scheme": "semver",
     "version": "0.1.0",
-    "update_changelog_on_bump": true
+    "update_changelog_on_bump": true,
+    "customize": {
+      "message_template": "{{change_type}}:{% if show_message %} {{message}}{% endif %}",
+      "example": "feat: this feature enable customize through config file",
+      "schema": "<type>: <body>",
+      "schema_pattern": "(feat|fix|refactor|perf|test|chore(deps)|chore(config)):(\\s.*)",
+      "bump_pattern": "^(break|new|fix|hotfix)",
+      "bump_map": {
+        "break": "MAJOR",
+        "new": "MINOR",
+        "fix": "PATCH"
+      },
+      "change_type_order": [
+        "BREAKING CHANGE",
+        "feat",
+        "fix",
+        "refactor",
+        "perf",
+        "chore"
+      ],
+      "info_path": "cz_customize_info.txt",
+      "info": "This is customized info",
+      "commit_parser": "^(?P<change_type>feat|fix|refactor|perf|test|chore(deps)|chore(config)):\\s(?P<message>.*)?",
+      "changelog_pattern": "^(feature|fix)?(!)?",
+      "change_type_map": {
+        "feature": "Feat",
+        "fix": "Fix",
+        "refactor": "Refactor",
+        "perf": "Performance",
+        "test": "Test",
+        "chore": "Chore"
+      },
+      "questions": [
+        {
+          "type": "list",
+          "name": "change_type",
+          "choices": [
+            {
+              "value": "feat",
+              "name": "feat: added a new feature."
+            },
+            {
+              "value": "fix",
+              "name": "fix: added a bug fix."
+            },
+            {
+              "value": "refactor",
+              "name": "refactor: refactored code that does not affect feature."
+            },
+            {
+              "value": "perf",
+              "name": "perf: made a performance inprovement."
+            },
+            {
+              "value": "test",
+              "name": "test: added tests."
+            },
+            {
+              "value": "chore(deps)",
+              "name": "chore(deps): added or bumped dependencies."
+            },
+            {
+              "value": "chore(config)",
+              "name": "chore(config): changed project configuration."
+            }
+          ],
+          "message": "Select the type of change you are committing"
+        },
+        {
+          "type": "input",
+          "name": "message",
+          "message": "Body."
+        },
+        {
+          "type": "confirm",
+          "name": "show_message",
+          "message": "Do you want to add body message in commit?"
+        }
+      ]
+    }
   }
 }
