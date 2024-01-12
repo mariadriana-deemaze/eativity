@@ -1,4 +1,4 @@
-import { api, API_URL } from ".";
+import { api, API_URL } from "./api";
 
 import { User } from "../types/user";
 

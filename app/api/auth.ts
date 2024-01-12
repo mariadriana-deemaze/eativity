@@ -1,4 +1,4 @@
-import { api, API_URL } from ".";
+import { api, API_URL } from "./api";
 
 import { SignInInputs, SignUpInputs } from "../stores/auth/actions";
 

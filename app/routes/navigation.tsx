@@ -9,6 +9,7 @@ import { IRootState } from "../stores";
 import { AuthRoutes } from "./auth";
 
 import { ProtectedRoutes } from "./protected";
+
 import { Text } from "native-base";
 
 export enum Screens {
