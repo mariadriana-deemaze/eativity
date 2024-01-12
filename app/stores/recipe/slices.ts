@@ -8,8 +8,7 @@ interface InitialState {
   loading: boolean;
   recipe: Recipe | null;
   recipes: Recipe[] | null;
-  error: string | null | unknown;
-  success: boolean;
+  error: string | null;
 }
 
 const initialState: InitialState = {
@@ -17,7 +16,6 @@ const initialState: InitialState = {
   recipes: null,
   loading: false,
   error: null,
-  success: false,
 };
 
 const recipeSlice = createSlice({
@@ -34,14 +32,17 @@ const recipeSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(getRecipesFromSearch.fulfilled, (state, { payload: recipe }) => {
+      .addCase(
+        getRecipesFromSearch.fulfilled,
+        (state, { payload: recipes }) => {
+          state.loading = false;
+          state.recipes = recipes;
+        }
+      )
+      .addCase(getRecipesFromSearch.rejected, (state, { payload: error }) => {
         state.loading = false;
-        state.success = true;
-        state.recipe = recipe;
-      })
-      .addCase(getRecipesFromSearch.rejected, (state, { payload }) => {
-        state.loading = false;
-        state.error = payload;
+        // @ts-ignore
+        state.error = error;
       })
       .addCase(getRecipeInfo.pending, (state) => {
         state.loading = true;
@@ -49,12 +50,12 @@ const recipeSlice = createSlice({
       })
       .addCase(getRecipeInfo.fulfilled, (state, { payload: recipe }) => {
         state.loading = false;
-        state.success = true;
         state.recipe = recipe;
       })
-      .addCase(getRecipeInfo.rejected, (state, { payload }) => {
+      .addCase(getRecipeInfo.rejected, (state, { payload: error }) => {
         state.loading = false;
-        state.error = payload;
+        // @ts-ignore
+        state.error = error;
       });
   },
 });

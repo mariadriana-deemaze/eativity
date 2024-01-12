@@ -7,7 +7,7 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "lint": "yarn eslint",
+    "lint": "eslint ./ --fix",
     "format": "prettier --write .",
     "types": "tsc --pretty --noEmit"
   },

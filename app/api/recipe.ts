@@ -1,27 +1,32 @@
-import { api, API_URL } from ".";
+import { api, API_URL } from "./api";
+import { Recipe } from "../types";
 
-import { Recipe } from "../types/recipe";
-
-// TODO: Remove default
-export const getRecipe = async ({
-  searchName = "Toast",
+export const getRecipes = async ({
+  searchName,
 }: {
   searchName: string;
-}) => {
+}): Promise<Recipe[]> => {
   return await api
     .get(`${API_URL}/recipe/search?name=${searchName}`)
     .then(({ data }) => {
       return data;
     })
-    .catch((err) => err);
+    .catch((err) => {
+      throw new Error(err);
+    });
 };
 
-// TODO: Remove default
-export const getRecipeById = async ({ id = "1" }: { id: string }) => {
+export const getRecipeById = async ({
+  id,
+}: {
+  id: string;
+}): Promise<Recipe> => {
   return await api
     .get(`${API_URL}/recipe/${id}`)
     .then(({ data }) => {
       return data;
     })
-    .catch((err) => err);
+    .catch((err) => {
+      throw new Error(err);
+    });
 };

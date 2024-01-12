@@ -1,6 +1,6 @@
 import { Provider } from "react-redux";
 
-import { extendTheme, NativeBaseProvider } from "native-base";
+import { /* extendTheme, */ NativeBaseProvider } from "native-base";
 
 import Navigation from "./routes/navigation";
 

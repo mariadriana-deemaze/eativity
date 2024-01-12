@@ -6,15 +6,12 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 
 import {
   Box,
-  Slide,
   Spinner,
   useToast,
   Button,
   Select,
   CheckIcon,
   Text,
-  Center,
-  Fade,
 } from "native-base";
 
 import { useSelector } from "react-redux";
@@ -25,13 +22,11 @@ import { format } from "date-fns";
 
 import { ToastAlert } from "../../components/toastAlert";
 
-import { Screens } from "../../routes/navigation";
-
 import { IRootState, useAppDispatch } from "../../stores";
 
 import { getUserInfo, updateUserInfo } from "../../stores/user/actions";
 
-import { TextField } from "../../components/textField";
+import { TextField } from "../../components/atoms/textField";
 
 import { Gender, User } from "../../types/user";
 
@@ -51,18 +46,9 @@ export const Onboarding = () => {
    *
    */
 
-  const authStateSlice = useSelector((state: IRootState) => state.auth);
-
   const userStateSlice = useSelector((state: IRootState) => state.user);
 
-  const {
-    control,
-    getValues,
-    setValue,
-    reset,
-    watch,
-    formState: { errors },
-  } = useForm<User>({
+  const { control, getValues, setValue, reset } = useForm<User>({
     defaultValues: {
       ...userStateSlice.user,
     },
@@ -207,10 +193,9 @@ export const Onboarding = () => {
         >
           <Controller
             control={control}
-            render={({ field: { onChange, value } }) => (
+            render={({ field: { value } }) => (
               <Select
                 selectedValue={value}
-                //onValueChange={onChange}
                 accessibilityLabel="Pick a gender"
                 placeholder="Pick a gender"
                 _selectedItem={{

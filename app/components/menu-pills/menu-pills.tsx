@@ -1,15 +1,10 @@
-import { Box, Skeleton, Text } from "native-base";
+import { Box, Pressable, Skeleton, Text } from "native-base";
+import { GestureResponderEvent } from "react-native";
 
 export const MenuPillsSkeleton = () => {
   return (
-    <Box
-      borderBottomWidth="1"
-      borderColor="muted.800"
-      pl={["0", "4"]}
-      pr={["0", "5"]}
-      py="2"
-    >
-      <Skeleton flex="1" h="80" rounded="md" startColor="coolGray.100" />
+    <Box mx="2" height="8" width="32">
+      <Skeleton rounded="full" bgColor="gray.100" height="8" width="32" />
     </Box>
   );
 };
@@ -17,31 +12,33 @@ export const MenuPillsSkeleton = () => {
 export const MenuPills = ({
   title,
   isActive,
+  onPress,
 }: {
   title;
   isActive: boolean;
+  onPress: (event: GestureResponderEvent) => void;
 }) => {
   return (
-    <Box
-      borderBottomWidth="1"
-      _dark={{
-        borderColor: isActive ? "muted.50" : "amber.300",
-      }}
-      borderColor="muted.800"
-      pl={["0", "4"]}
-      pr={["0", "5"]}
-      py="2"
-    >
-      <Text
-        fontSize="xs"
-        _dark={{
-          color: "warmGray.50",
-        }}
-        color="coolGray.800"
-        alignSelf="flex-start"
+    <Pressable onPress={onPress}>
+      <Box
+        display="flex"
+        justifyItems="center"
+        justifyContent="center"
+        mx="2"
+        px="4"
+        height="8"
+        borderRadius="full"
+        bgColor={isActive ? "violet.600" : "violet.400"}
       >
-        {title}
-      </Text>
-    </Box>
+        <Text
+          fontSize="xs"
+          color="white"
+          fontWeight={isActive ? "bold" : "medium"}
+          alignSelf="flex-start"
+        >
+          {title}
+        </Text>
+      </Box>
+    </Pressable>
   );
 };

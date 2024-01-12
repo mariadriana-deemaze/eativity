@@ -39,7 +39,8 @@ export const recipe: Recipe[] = [
   {
     id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
     name: "Aafreen Khan",
-    description: "Aafreen Khan",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione earum totam, illo, natus, error ea enim nostrum omnis odit laborum blanditiis provident sequi quisquam deleniti odio! Possimus impedit autem quidem?",
     image:
       "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
     ingredients: ["carrots", "onion"],
@@ -54,7 +55,8 @@ export const recipe: Recipe[] = [
   {
     id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
     name: "Sujitha Mathur",
-    description: "Aafreen Khan",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione earum totam, illo, natus, error ea enim nostrum omnis odit laborum blanditiis provident sequi quisquam deleniti odio! Possimus impedit autem quidem?",
     image:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTyEaZqT3fHeNrPGcnjLLX1v_W4mvBlgpwxnA&usqp=CAU",
     ingredients: ["carrots", "onion"],
@@ -69,7 +71,8 @@ export const recipe: Recipe[] = [
   {
     id: "28694a0f-3da1-471f-bd96-142456e29d72",
     name: "Kiara",
-    description: "Aafreen Khan",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione earum totam, illo, natus, error ea enim nostrum omnis odit laborum blanditiis provident sequi quisquam deleniti odio! Possimus impedit autem quidem?",
     image:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBwgu1A5zgPSvfE83nurkuzNEoXs9DMNr8Ww&usqp=CAU",
     ingredients: ["carrots", "onion"],

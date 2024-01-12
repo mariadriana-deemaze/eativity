@@ -18,6 +18,11 @@ const BottomStack = createBottomTabNavigator();
 
 const Stack = createStackNavigator();
 
+export type RoutesParamList = {
+  Recipes: undefined;
+  Recipe: { recipeId: string };
+};
+
 const AppBottomStack = () => {
   return (
     <BottomStack.Navigator
@@ -67,25 +72,11 @@ const AppBottomStack = () => {
           ),
         }}
       />
-      <BottomStack.Screen
-        name="Recipe"
-        component={Recipe}
-        options={{
-          headerShown: false,
-          tabBarIcon: ({ focused }) => (
-            <Ionicons
-              name="md-checkmark-circle"
-              size={32}
-              color={focused ? "blue" : "gray"}
-            />
-          ),
-        }}
-      />
     </BottomStack.Navigator>
   );
 };
 
-const Routes = () => {
+const DrawerRoutes = () => {
   return (
     <Drawer.Navigator drawerContent={() => <CustomDrawer />}>
       <Drawer.Screen name="Eativity" component={AppBottomStack} />
@@ -99,6 +90,7 @@ export const ProtectedRoutes = () => (
       headerShown: false,
     }}
   >
-    <Stack.Screen name="Routes" component={Routes} />
+    <Stack.Screen name="Routes" component={DrawerRoutes} />
+    <Stack.Screen name="Recipe" component={Recipe} />
   </Stack.Navigator>
 );
