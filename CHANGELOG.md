@@ -1,3 +1,5 @@
+## Unreleased
+
 ## 0.1.0 (2024-01-12)
 
 ### Feat
@@ -19,3 +21,7 @@
 ### Refactor
 
 - change from nativewind to use native base
+
+### Test
+
+- Add tests for the auth and user services

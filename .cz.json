@@ -7,7 +7,7 @@
     "update_changelog_on_bump": true,
     "customize": {
       "message_template": "{{change_type}}:{% if show_message %} {{message}}{% endif %}",
-      "example": "feat: this feature enable customize through config file",
+      "example": "feat: add a shiny new feature",
       "schema": "<type>: <body>",
       "schema_pattern": "(feat|fix|refactor|perf|test|chore(deps)|chore(config)):(\\s.*)",
       "bump_pattern": "^(break|new|fix|hotfix)",
@@ -27,9 +27,9 @@
       "info_path": "cz_customize_info.txt",
       "info": "This is customized info",
       "commit_parser": "^(?P<change_type>feat|fix|refactor|perf|test|chore(deps)|chore(config)):\\s(?P<message>.*)?",
-      "changelog_pattern": "^(feature|fix)?(!)?",
+      "changelog_pattern": "^(feat|fix)?(!)?",
       "change_type_map": {
-        "feature": "Feat",
+        "feat": "Feat",
         "fix": "Fix",
         "refactor": "Refactor",
         "perf": "Performance",
