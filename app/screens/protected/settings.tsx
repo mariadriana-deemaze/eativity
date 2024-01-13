@@ -136,8 +136,8 @@ export const Settings = () => {
                 selectedValue={value}
                 onValueChange={onChange}
                 width={"96%"}
-                accessibilityLabel="Choose Service"
-                placeholder="Choose Service"
+                accessibilityLabel="Pick a gender"
+                placeholder="Pick a gender"
                 _selectedItem={{
                   bg: "teal.600",
                   endIcon: <CheckIcon size="5" />,
@@ -252,7 +252,7 @@ export const Settings = () => {
 
           <Button
             size="sm"
-            colorScheme="secondary"
+            colorScheme="green"
             onPress={handleSubmit(onSubmit)}
             isDisabled={!isDirty}
           >

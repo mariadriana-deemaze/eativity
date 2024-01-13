@@ -23,6 +23,7 @@ export const updateUserInfo = createAsyncThunk(
   "updateUser",
   async (user: User, { rejectWithValue }) => {
     try {
+      console.log("user ->", user);
       return await patchUser(user);
     } catch (error) {
       if (error.response && error.response.data.message) {

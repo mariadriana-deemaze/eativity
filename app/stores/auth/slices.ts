@@ -8,6 +8,7 @@ import {
   defaultNetworkErrorMessage,
   ToastInfoProps,
 } from "../../components/toastAlert";
+import { LogBox } from "react-native";
 
 const TOKEN_KEY = "secure_token";
 interface InitialState {
@@ -19,7 +20,7 @@ interface InitialState {
 
 const initialState: InitialState = {
   loading: false,
-  // userToken: await SecureStore.getItemAsync(TOKEN_KEY).then((t) => t),
+  // userToken: SecureStore.getItemAsync(TOKEN_KEY).then((t) => t),
   userToken: null,
   error: null,
   success: false,
@@ -48,17 +49,16 @@ const authSlice = createSlice({
         state.error = null;
       })
       .addCase(authenticateUser.fulfilled, (state, { payload }) => {
-        console.error("authenticateUser payload ->", payload);
+        console.log("authenticateUser payload ->", payload);
 
         state.loading = false;
         state.success = true;
         state.userToken = payload.access_token;
         if (payload.access_token) {
-          debugger;
           SecureStore.setItemAsync(TOKEN_KEY, payload.access_token);
         }
       })
-      .addCase(authenticateUser.rejected, (state) => {
+      .addCase(authenticateUser.rejected, (state, { payload }) => {
         state.loading = false;
         state.error = defaultNetworkErrorMessage;
       });

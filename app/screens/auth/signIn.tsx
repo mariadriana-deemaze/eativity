@@ -70,48 +70,54 @@ export const SignIn = ({ navigation }) => {
       }}
       bg="coolGray.100"
     >
-      <Text isTruncated maxW="300" w="80%">
-        Sign in
-      </Text>
-      <Controller
-        control={control}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <TextField
-            label="E-mail"
-            onBlur={onBlur}
-            onChangeText={(value) => onChange(value)}
-            value={value}
-          />
-        )}
-        name="email"
-        rules={{ required: true }}
-      />
-      <Controller
-        control={control}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <TextField
-            label="Password"
-            type="password"
-            onBlur={onBlur}
-            onChangeText={(value) => onChange(value)}
-            value={value}
-          />
-        )}
-        name="password"
-        rules={{ required: true }}
-      />
-      <Button
-        size="sm"
-        colorScheme="secondary"
-        onPress={handleSubmit(onSubmit)}
-        isLoading={authStateSlice.loading}
+      <Box
+        w="80"
+        // @ts-ignore
+        gap="8"
       >
-        Sign In
-      </Button>
+        <Text isTruncated maxW="300" w="80%">
+          Sign in
+        </Text>
+        <Controller
+          control={control}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextField
+              label="E-mail"
+              onBlur={onBlur}
+              onChangeText={(value) => onChange(value)}
+              value={value}
+            />
+          )}
+          name="email"
+          rules={{ required: true }}
+        />
+        <Controller
+          control={control}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextField
+              label="Password"
+              type="password"
+              onBlur={onBlur}
+              onChangeText={(value) => onChange(value)}
+              value={value}
+            />
+          )}
+          name="password"
+          rules={{ required: true }}
+        />
+        <Button
+          size="sm"
+          colorScheme="green"
+          onPress={handleSubmit(onSubmit)}
+          isLoading={authStateSlice.loading}
+        >
+          Sign In
+        </Button>
 
-      <Text onPress={() => navigation.navigate(Screens.SIGN_UP)}>
-        Don't have an account? Sign up now.
-      </Text>
+        <Text onPress={() => navigation.navigate(Screens.SIGN_UP)}>
+          Don't have an account? Sign up now.
+        </Text>
+      </Box>
     </Box>
   );
 };

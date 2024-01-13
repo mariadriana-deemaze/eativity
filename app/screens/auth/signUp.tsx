@@ -45,69 +45,71 @@ export const SignUp: React.FC = () => {
       }}
       bg="coolGray.100"
     >
-      <Text isTruncated maxW="300" w="80%">
-        Sign up
-      </Text>
-
-      <Controller
-        control={control}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <TextField
-            label="Name"
-            onBlur={onBlur}
-            onChangeText={(value) => onChange(value)}
-            value={value}
-          />
-        )}
-        name="name"
-        rules={{ required: true }}
-      />
-
-      <Controller
-        control={control}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <TextField
-            label="E-mail"
-            onBlur={onBlur}
-            onChangeText={(value) => onChange(value)}
-            value={value}
-          />
-        )}
-        name="email"
-        rules={{ required: true }}
-      />
-
-      <Controller
-        control={control}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <TextField
-            label="Password"
-            type="password"
-            onBlur={onBlur}
-            onChangeText={(value) => onChange(value)}
-            value={value}
-          />
-        )}
-        name="password"
-        rules={{ required: true }}
-      />
-
-      <Button
-        size="sm"
-        colorScheme="secondary"
-        onPress={handleSubmit(onSubmit)}
+      <Box
+        w="80"
+        // @ts-ignore
+        gap="8"
       >
-        Sign Up
-      </Button>
+        <Text isTruncated maxW="300" w="80%">
+          Sign up
+        </Text>
 
-      <Text
-        onPress={() => {
-          // @ts-expect-error
-          navigation.navigate(Screens.SIGN_IN);
-        }}
-      >
-        Already registered? Sign in
-      </Text>
+        <Controller
+          control={control}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextField
+              label="Name"
+              onBlur={onBlur}
+              onChangeText={(value) => onChange(value)}
+              value={value}
+            />
+          )}
+          name="name"
+          rules={{ required: true }}
+        />
+
+        <Controller
+          control={control}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextField
+              label="E-mail"
+              onBlur={onBlur}
+              onChangeText={(value) => onChange(value)}
+              value={value}
+            />
+          )}
+          name="email"
+          rules={{ required: true }}
+        />
+
+        <Controller
+          control={control}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextField
+              label="Password"
+              type="password"
+              onBlur={onBlur}
+              onChangeText={(value) => onChange(value)}
+              value={value}
+            />
+          )}
+          name="password"
+          rules={{ required: true }}
+        />
+
+        <Button size="sm" colorScheme="green" onPress={handleSubmit(onSubmit)}>
+          Sign Up
+        </Button>
+
+        <Text
+          onPress={() => {
+            // @ts-expect-error
+            navigation.navigate(Screens.SIGN_IN);
+          }}
+        >
+          Already registered? Sign in
+        </Text>
+      </Box>
     </Box>
   );
 };

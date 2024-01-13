@@ -13,6 +13,8 @@ import {
   Select,
   CheckIcon,
   Text,
+  Center,
+  Fade,
 } from "native-base";
 
 import { useSelector } from "react-redux";
@@ -53,7 +55,14 @@ export const Onboarding = () => {
 
   const userStateSlice = useSelector((state: IRootState) => state.user);
 
-  const { control, getValues } = useForm<User>({
+  const {
+    control,
+    getValues,
+    setValue,
+    reset,
+    watch,
+    formState: { errors },
+  } = useForm<User>({
     defaultValues: {
       ...userStateSlice.user,
     },
@@ -65,27 +74,19 @@ export const Onboarding = () => {
 
   const toast = useToast();
 
-  const navigateToDashboard = () => {
-    // @ts-ignore
-    navigation.navigate(Screens.DASHBOARD);
-  };
-
   const updateUser = () => {
     const data = getValues();
     dispatch(updateUserInfo(data));
   };
 
-  useEffect(() => {
-    if (onboardingStep === 6) updateUser();
-
-    return () => {
-      setOnboardingStep(1);
-    };
-  }, [onboardingStep]);
+  const nextStep = () => {
+    const nextUp = onboardingStep + 1;
+    setOnboardingStep(nextUp);
+  };
 
   useEffect(() => {
     dispatch(getUserInfo()).then((response) => {
-      // reset()
+      reset(response.payload);
     });
   }, []);
 
@@ -93,7 +94,7 @@ export const Onboarding = () => {
     let navigateUserBack;
 
     if (userStateSlice.error) {
-      // Display network erro toaster
+      // Display network error toaster
       toast.show({
         id: "getUserError",
         render: () => {
@@ -128,87 +129,139 @@ export const Onboarding = () => {
     );
 
   return (
-    <Box>
-      <Slide in={onboardingStep === 1}>
-        <Box>
-          <Text>{`Welcome to eativity ${userStateSlice.user}!`}</Text>
-          <Text>{"Looks like we might be missing some information."}</Text>
-          <Text>{"Please review you data on the next steps."}</Text>
+    <Box
+      borderWidth="3"
+      borderColor="orange.700"
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      height="full"
+    >
+      {onboardingStep === 1 && (
+        <Box
+          w="80"
+          // @ts-ignore
+          gap="8"
+        >
+          <Box>
+            <Text>{`Welcome to eativity ${userStateSlice.user.name}!`}</Text>
+            <Text>{"Looks like we might be missing some information."}</Text>
+            <Text>{"Please review you data on the next steps."}</Text>
+          </Box>
+          <Button colorScheme="green" onPress={nextStep}>
+            Next
+          </Button>
+        </Box>
+      )}
+
+      {onboardingStep === 2 && (
+        <Box
+          w="80"
+          // @ts-ignore
+          gap="8"
+        >
+          <Box>
+            {isDatePickerOpen && (
+              <Controller
+                control={control}
+                render={({ field: { onChange, value } }) => (
+                  <DateTimePicker
+                    value={new Date(value) || new Date()}
+                    mode="date"
+                    display="default"
+                    onChange={(_event, selectedDate) => {
+                      onChange(selectedDate);
+                      setIsDatePickerOpen(false);
+                    }}
+                    is24Hour
+                  />
+                )}
+                name="birthdate"
+                rules={{ required: true }}
+              />
+            )}
+
+            <TextField
+              label="Birthdate"
+              onPressIn={() => setIsDatePickerOpen(true)}
+              value={format(
+                new Date(getValues("birthdate")) || new Date(),
+                "MM/dd/yyyy"
+              )}
+            />
+          </Box>
           <Button
-            onPress={() => {
-              // @ts-ignore
-              navigation.navigate(Screens.ONBOARDING_BIRTHDATE);
-            }}
+            colorScheme="green"
+            isDisabled={!getValues("birthdate")}
+            onPress={nextStep}
           >
             Next
           </Button>
         </Box>
-      </Slide>
-      <Slide in={onboardingStep === 2}>
-        <Box>
-          <Text>Birthdate</Text>
-          {isDatePickerOpen && (
-            <Controller
-              control={control}
-              render={({ field: { onChange, value } }) => (
-                <DateTimePicker
-                  value={new Date(value) || new Date()}
-                  mode="date"
-                  display="default"
-                  onChange={(_event, selectedDate) => {
-                    onChange(selectedDate);
-                    setIsDatePickerOpen(false);
-                  }}
-                  is24Hour
-                />
-              )}
-              name="birthdate"
-              rules={{ required: true }}
-            />
-          )}
-
-          <TextField
-            label="Birthdate"
-            onFocus={() => setIsDatePickerOpen(true)}
-            value={
-              getValues("birthdate")
-                ? format(new Date(getValues("birthdate")), "MM/dd/yyyy")
-                : "Not defined"
-            }
-          />
-        </Box>
-      </Slide>
-      <Slide in={onboardingStep === 3}>
-        <Box>
-          <Text>Gender</Text>
+      )}
+      {onboardingStep === 3 && (
+        <Box
+          w="80"
+          // @ts-ignore
+          gap="8"
+        >
           <Controller
             control={control}
             render={({ field: { onChange, value } }) => (
               <Select
                 selectedValue={value}
-                onValueChange={onChange}
-                width={"96%"}
-                accessibilityLabel="Choose Service"
-                placeholder="Choose Service"
+                //onValueChange={onChange}
+                accessibilityLabel="Pick a gender"
+                placeholder="Pick a gender"
                 _selectedItem={{
-                  bg: "teal.600",
                   endIcon: <CheckIcon size="5" />,
                 }}
-                mt={1}
               >
-                <Select.Item label="Male" value={Gender.MALE} />
-                <Select.Item label="Female" value={Gender.FEMALE} />
-                <Select.Item label="Other" value={Gender.OTHER} />
+                <Select.Item
+                  label="Male"
+                  value={Gender.MALE}
+                  onPress={() =>
+                    setValue("gender", Gender.MALE, { shouldValidate: true })
+                  }
+                />
+                <Select.Item
+                  label="Female"
+                  value={Gender.FEMALE}
+                  onPress={() =>
+                    setValue("gender", Gender.FEMALE, {
+                      shouldValidate: true,
+                    })
+                  }
+                />
+                <Select.Item
+                  label="Other"
+                  value={Gender.OTHER}
+                  onPress={() =>
+                    setValue("gender", Gender.OTHER, { shouldValidate: true })
+                  }
+                />
               </Select>
             )}
             name="gender"
             rules={{ required: true }}
           />
+
+          <Button
+            colorScheme="green"
+            onPress={nextStep}
+            isDisabled={!getValues("gender")}
+          >
+            Next
+          </Button>
         </Box>
-      </Slide>
-      <Slide in={onboardingStep === 4}>
-        <Box>
-          <Text>Weight</Text>
+      )}
+
+      {onboardingStep === 4 && (
+        <Box
+          w="80"
+          // @ts-ignore
+          gap="8"
+        >
           <Controller
             control={control}
             render={({ field: { onChange, onBlur, value } }) => (
@@ -216,17 +269,26 @@ export const Onboarding = () => {
                 label="Weight"
                 onBlur={onBlur}
                 onChangeText={(value) => onChange(value)}
-                value={String(value)}
+                value={value && String(value)}
+                placeholder="Insert your current weight"
               />
             )}
             name="weight"
             rules={{ required: true }}
           />
+
+          <Button colorScheme="green" onPress={nextStep}>
+            Next
+          </Button>
         </Box>
-      </Slide>
-      <Slide in={onboardingStep === 5}>
-        <Box>
-          <Text>Height</Text>
+      )}
+
+      {onboardingStep === 5 && (
+        <Box
+          w="80"
+          // @ts-ignore
+          gap="8"
+        >
           <Controller
             control={control}
             render={({ field: { onChange, onBlur, value } }) => (
@@ -234,20 +296,32 @@ export const Onboarding = () => {
                 label="Height"
                 onBlur={onBlur}
                 onChangeText={(value) => onChange(value)}
-                value={String(value)}
+                value={value && String(value)}
+                placeholder="Insert your current height"
               />
             )}
             name="height"
             rules={{ required: true }}
           />
+
+          <Button colorScheme="green" onPress={nextStep}>
+            Next
+          </Button>
         </Box>
-      </Slide>
-      <Slide in={onboardingStep === 6}>
-        <Box>
+      )}
+
+      {onboardingStep === 6 && (
+        <Box
+          w="80"
+          // @ts-ignore
+          gap="8"
+        >
           <Text>All set, let's go!</Text>
-          <Button onPress={navigateToDashboard}>Concluído</Button>
+          <Button colorScheme="green" onPress={updateUser}>
+            Concluded
+          </Button>
         </Box>
-      </Slide>
+      )}
     </Box>
   );
 };
