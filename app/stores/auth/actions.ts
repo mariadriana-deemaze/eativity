@@ -19,11 +19,15 @@ export const authenticateUser = createAsyncThunk(
   "auth/signin",
   async ({ name, email, password }: SignInInputs, { rejectWithValue }) => {
     try {
-      return await signInUser({
+      const response = await signInUser({
         name,
         email,
         password,
       });
+
+      console.log("response here ->", response);
+
+      return response;
     } catch (error) {
       if (error.response && error.response.data.message) {
         return rejectWithValue(error.response.data.message);
@@ -38,11 +42,15 @@ export const registerUser = createAsyncThunk(
   "auth/signup",
   async ({ name, email, password }: SignUpInputs, { rejectWithValue }) => {
     try {
-      return await signUpUser({
+      const response = await signUpUser({
         name,
         email,
         password,
       });
+
+      console.log("response here ->", response);
+
+      return response;
     } catch (error) {
       if (error.response && error.response.data.message) {
         return rejectWithValue(error.response.data.message);

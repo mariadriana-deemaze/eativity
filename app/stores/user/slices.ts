@@ -2,12 +2,17 @@ import { createSlice } from "@reduxjs/toolkit";
 
 import { getUserInfo, updateUserInfo } from "./actions";
 
+import {
+  defaultNetworkErrorMessage,
+  ToastInfoProps,
+} from "../../components/toastAlert";
+
 import { User } from "../../types/user";
 
 interface InitialState {
   loading: boolean;
   user: User | null;
-  error: string | null | unknown;
+  error: ToastInfoProps | null;
   success: boolean;
 }
 
@@ -33,9 +38,9 @@ const userSlice = createSlice({
         state.success = true;
         state.user = user;
       })
-      .addCase(getUserInfo.rejected, (state, { payload }) => {
+      .addCase(getUserInfo.rejected, (state) => {
         state.loading = false;
-        state.error = payload;
+        state.error = defaultNetworkErrorMessage;
       })
       .addCase(updateUserInfo.pending, (state) => {
         state.loading = true;
@@ -46,9 +51,9 @@ const userSlice = createSlice({
         state.success = true;
         state.user = user;
       })
-      .addCase(updateUserInfo.rejected, (state, { payload }) => {
+      .addCase(updateUserInfo.rejected, (state) => {
         state.loading = false;
-        state.error = payload;
+        state.error = defaultNetworkErrorMessage;
       });
   },
 });

@@ -21,18 +21,16 @@ export const TextField = ({
 }: TextFieldProps) => {
   return (
     <FormControl isRequired={isRequired}>
-      <Stack mx="4">
-        <FormControl.Label>{label}</FormControl.Label>
-        <Input {...rest} />
-        {helperText && (
-          <FormControl.HelperText>{helperText}</FormControl.HelperText>
-        )}
-        {error && (
-          <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
-            {error}
-          </FormControl.ErrorMessage>
-        )}
-      </Stack>
+      <FormControl.Label>{label}</FormControl.Label>
+      <Input {...rest} />
+      {helperText && (
+        <FormControl.HelperText>{helperText}</FormControl.HelperText>
+      )}
+      {error && (
+        <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
+          {error}
+        </FormControl.ErrorMessage>
+      )}
     </FormControl>
   );
 };

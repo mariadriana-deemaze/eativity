@@ -1,27 +1,35 @@
 import { Controller, useForm } from "react-hook-form";
 
+import { useNavigation } from "@react-navigation/native";
+
+import { Box, Button, Text } from "native-base";
+
 import { registerUser, SignUpInputs } from "../../stores/auth/actions";
 
 import { useAppDispatch } from "../../stores";
 
 import { TextField } from "../../components/textField";
 
-import { Box, Button, Text } from "native-base";
+import { Screens } from "../../routes/navigation";
 
-export const SignUp = ({ navigation }) => {
+import { signUpDefaultDevData } from "../../utils";
+
+export const SignUp: React.FC = () => {
   const { control, handleSubmit } = useForm<SignUpInputs>({
-    defaultValues: {
-      name: "Maria Adriana",
-      email: "m@gmail.com",
-      password: "123",
-      password_repeat: "123",
-    },
+    defaultValues: signUpDefaultDevData,
   });
 
   const dispatch = useAppDispatch();
 
+  const navigation = useNavigation();
+
   const onSubmit = async (data: SignUpInputs) => {
-    dispatch(registerUser(data));
+    dispatch(registerUser(data)).then((response) => {
+      if (response.payload) {
+        // @ts-expect-error
+        navigation.navigate(Screens.SIGN_IN);
+      }
+    });
   };
 
   return (
@@ -35,66 +43,73 @@ export const SignUp = ({ navigation }) => {
         color: "warmGray.50",
         letterSpacing: "lg",
       }}
-      bg="red.400"
+      bg="coolGray.100"
     >
-      <Text isTruncated maxW="300" w="80%">
-        Sign up
-      </Text>
-
-      <Controller
-        control={control}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <TextField
-            label="Name"
-            onBlur={onBlur}
-            onChangeText={(value) => onChange(value)}
-            value={value}
-          />
-        )}
-        name="name"
-        rules={{ required: true }}
-      />
-
-      <Controller
-        control={control}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <TextField
-            label="E-mail"
-            onBlur={onBlur}
-            onChangeText={(value) => onChange(value)}
-            value={value}
-          />
-        )}
-        name="email"
-        rules={{ required: true }}
-      />
-
-      <Controller
-        control={control}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <TextField
-            label="Password"
-            type="password"
-            onBlur={onBlur}
-            onChangeText={(value) => onChange(value)}
-            value={value}
-          />
-        )}
-        name="password"
-        rules={{ required: true }}
-      />
-
-      <Button
-        size="sm"
-        colorScheme="secondary"
-        onPress={handleSubmit(onSubmit)}
+      <Box
+        w="80"
+        // @ts-ignore
+        gap="8"
       >
-        Sign Up
-      </Button>
+        <Text isTruncated maxW="300" w="80%">
+          Sign up
+        </Text>
 
-      <Text onPress={() => navigation.navigate("Sign In")}>
-        Already registered? Sign in
-      </Text>
+        <Controller
+          control={control}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextField
+              label="Name"
+              onBlur={onBlur}
+              onChangeText={(value) => onChange(value)}
+              value={value}
+            />
+          )}
+          name="name"
+          rules={{ required: true }}
+        />
+
+        <Controller
+          control={control}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextField
+              label="E-mail"
+              onBlur={onBlur}
+              onChangeText={(value) => onChange(value)}
+              value={value}
+            />
+          )}
+          name="email"
+          rules={{ required: true }}
+        />
+
+        <Controller
+          control={control}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextField
+              label="Password"
+              type="password"
+              onBlur={onBlur}
+              onChangeText={(value) => onChange(value)}
+              value={value}
+            />
+          )}
+          name="password"
+          rules={{ required: true }}
+        />
+
+        <Button size="sm" colorScheme="green" onPress={handleSubmit(onSubmit)}>
+          Sign Up
+        </Button>
+
+        <Text
+          onPress={() => {
+            // @ts-expect-error
+            navigation.navigate(Screens.SIGN_IN);
+          }}
+        >
+          Already registered? Sign in
+        </Text>
+      </Box>
     </Box>
   );
 };
