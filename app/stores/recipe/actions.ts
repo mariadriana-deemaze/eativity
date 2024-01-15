@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-import { getRecipes, getRecipeById, ErrorResponse } from "../../api";
+import { getRecipes, getRecipeById } from "../../api";
 
 export const getRecipesFromSearch = createAsyncThunk(
   "getRecipeNameSearch",
@@ -9,7 +9,7 @@ export const getRecipesFromSearch = createAsyncThunk(
       return await getRecipes({ searchName });
     } catch (error) {
       if (error.response && error.response.data.message) {
-        return rejectWithValue(error.response.data.message as ErrorResponse);
+        return rejectWithValue(error.response.data.message);
       } else {
         return rejectWithValue("An error has ocurred!");
       }
@@ -24,7 +24,7 @@ export const getRecipeInfo = createAsyncThunk(
       return await getRecipeById({ id });
     } catch (error) {
       if (error.response && error.response.data.message) {
-        return rejectWithValue(error.response.data.message as ErrorResponse);
+        return rejectWithValue(error.response.data.message);
       } else {
         return rejectWithValue("An error has ocurred!");
       }

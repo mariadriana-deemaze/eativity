@@ -2,20 +2,31 @@ import { createSlice } from "@reduxjs/toolkit";
 
 import { getRecipesFromSearch, getRecipeInfo } from "./actions";
 
+import {
+  ToastInfoProps,
+  defaultNetworkErrorMessage,
+} from "../../components/toastAlert";
+
 import { Recipe } from "../../types/recipe";
+
+import { recipe } from "../../utils";
 
 interface InitialState {
   loading: boolean;
   recipe: Recipe | null;
   recipes: Recipe[] | null;
-  error: string | null;
+  error: ToastInfoProps | null;
+  category: string;
+  search?: string;
 }
 
 const initialState: InitialState = {
-  recipe: null,
+  recipe: recipe[0],
   recipes: null,
   loading: false,
   error: null,
+  category: "All",
+  search: undefined,
 };
 
 const recipeSlice = createSlice({
@@ -24,6 +35,20 @@ const recipeSlice = createSlice({
   reducers: {
     setRecipeInfo(state) {
       Object.assign(state, null);
+    },
+    setSearch(state, action) {
+      Object.assign(state, {
+        ...state,
+        search: action.payload,
+      });
+      console.log("state ->", state);
+    },
+    setCategory(state, action) {
+      Object.assign(state, {
+        ...state,
+        category: action.payload,
+      });
+      console.log("state ->", state);
     },
   },
   extraReducers: (builder) => {
@@ -39,10 +64,9 @@ const recipeSlice = createSlice({
           state.recipes = recipes;
         }
       )
-      .addCase(getRecipesFromSearch.rejected, (state, { payload: error }) => {
+      .addCase(getRecipesFromSearch.rejected, (state) => {
         state.loading = false;
-        // @ts-ignore
-        state.error = error;
+        state.error = defaultNetworkErrorMessage;
       })
       .addCase(getRecipeInfo.pending, (state) => {
         state.loading = true;
@@ -52,10 +76,9 @@ const recipeSlice = createSlice({
         state.loading = false;
         state.recipe = recipe;
       })
-      .addCase(getRecipeInfo.rejected, (state, { payload: error }) => {
+      .addCase(getRecipeInfo.rejected, (state) => {
         state.loading = false;
-        // @ts-ignore
-        state.error = error;
+        state.error = defaultNetworkErrorMessage;
       });
   },
 });

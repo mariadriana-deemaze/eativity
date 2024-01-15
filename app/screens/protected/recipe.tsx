@@ -18,6 +18,10 @@ import {
 
 import { useSelector } from "react-redux";
 
+import { TouchableOpacity } from "react-native";
+
+import { Ionicons } from "@expo/vector-icons";
+
 import { IRootState, useAppDispatch } from "../../stores";
 
 import { getRecipeInfo } from "../../stores/recipe/actions";
@@ -38,16 +42,18 @@ type RecipeScreenProps = {
   route: RecipeScreenRouteProp;
 };
 
-export const Recipe: React.FC<RecipeScreenProps> = ({ route }) => {
+export const Recipe: React.FC<RecipeScreenProps> = ({ route, navigation }) => {
   const { recipeId } = route.params;
 
   const dispatch = useAppDispatch();
 
   const { setRecipeInfo } = recipeActions;
 
-  const recipeSliceState = useSelector((state: IRootState) => state.recipe);
+  const { recipe, loading, error } = useSelector(
+    (state: IRootState) => state.recipe
+  );
 
-  const { recipe } = recipeSliceState;
+  const navigateBack = () => navigation.goBack();
 
   useEffect(() => {
     dispatch(getRecipeInfo(recipeId));
@@ -58,31 +64,11 @@ export const Recipe: React.FC<RecipeScreenProps> = ({ route }) => {
   }, []);
 
   // TODO: Skeletons for this bizzz
-  if (!recipe && recipeSliceState.loading) return <Spinner />;
+  if (!recipe && loading) return <Spinner />;
 
-  if (!recipe || recipeSliceState.error)
-    return <Text>{recipeSliceState.error ?? "An error has ocurred."}</Text>;
-
-  return (
-    <Box alignItems="center">
-      <Box
-        maxW="80"
-        rounded="lg"
-        overflow="hidden"
-        borderColor="coolGray.200"
-        borderWidth="1"
-        _dark={{
-          borderColor: "coolGray.600",
-          backgroundColor: "gray.700",
-        }}
-        _web={{
-          shadow: 2,
-          borderWidth: 0,
-        }}
-        _light={{
-          backgroundColor: "gray.50",
-        }}
-      >
+  if (recipe)
+    return (
+      <Box alignItems="center">
         <Box>
           <AspectRatio w="100%" ratio={16 / 9}>
             <Image
@@ -92,6 +78,11 @@ export const Recipe: React.FC<RecipeScreenProps> = ({ route }) => {
               alt="image"
             />
           </AspectRatio>
+          <Box position="absolute" top="8" left="4">
+            <TouchableOpacity onPress={navigateBack}>
+              <Ionicons name="arrow-back-outline" size={32} color="white" />
+            </TouchableOpacity>
+          </Box>
           <Center
             bg="violet.500"
             _dark={{
@@ -106,7 +97,7 @@ export const Recipe: React.FC<RecipeScreenProps> = ({ route }) => {
           >
             {recipe?.types.map((type) => (
               <Text
-                key={`recipe_${name}_category_${type}`}
+                key={`recipe_${recipe.name}_category_${type}`}
                 color="warmGray.50"
                 fontWeight="700"
                 fontSize="xs"
@@ -157,6 +148,8 @@ export const Recipe: React.FC<RecipeScreenProps> = ({ route }) => {
           </HStack>
         </Stack>
       </Box>
-    </Box>
-  );
+    );
+
+  if (!recipe && error)
+    return <Text>{error.message ?? "An error has ocurred."}</Text>;
 };
