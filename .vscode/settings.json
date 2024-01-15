@@ -22,7 +22,7 @@
   "explorer.confirmDelete": false,
   "diffEditor.ignoreTrimWhitespace": false,
   "explorer.confirmDragAndDrop": false,
-  "window.zoomLevel": 0.8,
+  "window.zoomLevel": 0.2,
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.patterns": {
     "package.json": ".eslint*, prettier*,.prettier*, eas.json, app.json, tsconfig*, vite*, pnpm-lock*, bun.lockb, nest*, yarn.lock, docker-compose.yml, babel*",

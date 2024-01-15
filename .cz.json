@@ -9,7 +9,7 @@
       "message_template": "{{change_type}}:{% if show_message %} {{message}}{% endif %}",
       "example": "feat: add a shiny new feature",
       "schema": "<type>: <body>",
-      "schema_pattern": "(feat|fix|refactor|perf|test|chore(deps)|chore(config)):(\\s.*)",
+      "schema_pattern": "(feat|fix|styles|refactor|perf|test|chore(deps)|chore(config)):(\\s.*)",
       "bump_pattern": "^(break|new|fix|hotfix)",
       "bump_map": {
         "break": "MAJOR",
@@ -26,7 +26,7 @@
       ],
       "info_path": "cz_customize_info.txt",
       "info": "This is customized info",
-      "commit_parser": "^(?P<change_type>feat|fix|refactor|perf|test|chore(deps)|chore(config)):\\s(?P<message>.*)?",
+      "commit_parser": "^(?P<change_type>feat|fix|styles|refactor|perf|test|chore(deps)|chore(config)):\\s(?P<message>.*)?",
       "changelog_pattern": "^(feat|fix)?(!)?",
       "change_type_map": {
         "feat": "Feat",
@@ -48,6 +48,10 @@
             {
               "value": "fix",
               "name": "fix: added a bug fix."
+            },
+            {
+              "value": "styles",
+              "name": "styles: edited some UI styles or other general styling config."
             },
             {
               "value": "refactor",
