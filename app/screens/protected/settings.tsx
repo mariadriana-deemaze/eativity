@@ -8,11 +8,11 @@ import { Box, Button, Text, Select, CheckIcon } from "native-base";
 
 import DateTimePicker from "@react-native-community/datetimepicker";
 
-import { Controller, useForm, UseFormReturn } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 
 import { format } from "date-fns";
 
-import { TextField } from "../../components/textField";
+import { TextField } from "../../components/atoms/textField";
 
 import { IRootState, useAppDispatch } from "../../stores";
 
@@ -131,7 +131,7 @@ export const Settings = () => {
 
           <Controller
             control={control}
-            render={({ field: { onChange, onBlur, value } }) => (
+            render={({ field: { onChange, value } }) => (
               <Select
                 selectedValue={value}
                 onValueChange={onChange}
@@ -155,7 +155,7 @@ export const Settings = () => {
 
           <Controller
             control={control}
-            render={({ field: { onChange, onBlur, value } }) => (
+            render={({ field: { onChange, value } }) => (
               <Select
                 selectedValue={value}
                 onValueChange={onChange}

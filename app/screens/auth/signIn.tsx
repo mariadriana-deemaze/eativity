@@ -1,19 +1,11 @@
-import {
-  Alert,
-  Box,
-  Button,
-  HStack,
-  Text,
-  useToast,
-  VStack,
-} from "native-base";
+import { Box, Button, Text, useToast } from "native-base";
 import { useEffect } from "react";
 
 import { Controller, useForm } from "react-hook-form";
 
 import { useSelector } from "react-redux";
 
-import { TextField } from "../../components/textField";
+import { TextField } from "../../components/atoms/textField";
 
 import { ToastAlert } from "../../components/toastAlert";
 

@@ -2,13 +2,10 @@ import React from "react";
 
 import {
   Alert,
-  Box,
-  Button,
   CloseIcon,
   HStack,
   IconButton,
   Text,
-  useToast,
   VStack,
 } from "native-base";
 
@@ -33,7 +30,6 @@ export const defaultNetworkErrorMessage: ToastInfoProps = {
 };
 
 export const ToastAlert = ({
-  id,
   status,
   variant,
   title,

@@ -4,7 +4,7 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 
 import { createStackNavigator } from "@react-navigation/stack";
 
-import { Dashboard, Settings, Recipes } from "../screens";
+import { Dashboard, Settings, Recipes, Recipe } from "../screens";
 
 import CustomDrawer from "../components/drawer";
 
@@ -17,6 +17,11 @@ const Drawer = createDrawerNavigator();
 const BottomStack = createBottomTabNavigator();
 
 const Stack = createStackNavigator();
+
+export type RoutesParamList = {
+  Recipes: undefined;
+  Recipe: { recipeId: string };
+};
 
 const AppBottomStack = () => {
   return (
@@ -71,7 +76,7 @@ const AppBottomStack = () => {
   );
 };
 
-const Routes = () => {
+const DrawerRoutes = () => {
   return (
     <Drawer.Navigator drawerContent={() => <CustomDrawer />}>
       <Drawer.Screen name="Eativity" component={AppBottomStack} />
@@ -85,6 +90,7 @@ export const ProtectedRoutes = () => (
       headerShown: false,
     }}
   >
-    <Stack.Screen name="Routes" component={Routes} />
+    <Stack.Screen name="Routes" component={DrawerRoutes} />
+    <Stack.Screen name="Recipe" component={Recipe} />
   </Stack.Navigator>
 );

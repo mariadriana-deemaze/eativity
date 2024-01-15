@@ -8,7 +8,6 @@ import {
   defaultNetworkErrorMessage,
   ToastInfoProps,
 } from "../../components/toastAlert";
-import { LogBox } from "react-native";
 
 const TOKEN_KEY = "secure_token";
 interface InitialState {
@@ -58,7 +57,7 @@ const authSlice = createSlice({
           SecureStore.setItemAsync(TOKEN_KEY, payload.access_token);
         }
       })
-      .addCase(authenticateUser.rejected, (state, { payload }) => {
+      .addCase(authenticateUser.rejected, (state) => {
         state.loading = false;
         state.error = defaultNetworkErrorMessage;
       });

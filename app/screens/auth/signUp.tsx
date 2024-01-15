@@ -8,7 +8,7 @@ import { registerUser, SignUpInputs } from "../../stores/auth/actions";
 
 import { useAppDispatch } from "../../stores";
 
-import { TextField } from "../../components/textField";
+import { TextField } from "../../components/atoms/textField";
 
 import { Screens } from "../../routes/navigation";
 

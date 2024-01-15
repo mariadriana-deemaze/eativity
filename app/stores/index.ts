@@ -6,7 +6,13 @@ import authReducer from "./auth/slices";
 
 import userReducer from "./user/slices";
 
-const rootReducer = combineReducers({ auth: authReducer, user: userReducer });
+import recipeReducer from "./recipe/slices";
+
+const rootReducer = combineReducers({
+  auth: authReducer,
+  user: userReducer,
+  recipe: recipeReducer,
+});
 
 const store = configureStore({
   reducer: rootReducer,
