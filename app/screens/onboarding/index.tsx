@@ -48,7 +48,7 @@ export const Onboarding = () => {
 
   const userStateSlice = useSelector((state: IRootState) => state.user);
 
-  const { control, getValues, setValue, reset } = useForm<User>({
+  const { control, getValues, setValue, reset, watch } = useForm<User>({
     defaultValues: {
       ...userStateSlice.user,
     },
@@ -59,6 +59,8 @@ export const Onboarding = () => {
   const navigation = useNavigation();
 
   const toast = useToast();
+
+  watch();
 
   const updateUser = () => {
     const data = getValues();
@@ -116,8 +118,6 @@ export const Onboarding = () => {
 
   return (
     <Box
-      borderWidth="3"
-      borderColor="orange.700"
       display="flex"
       alignItems="center"
       justifyContent="center"
