@@ -40,7 +40,6 @@ export default function Navigation() {
 
   return (
     <NavigationContainer>
-      <Text>{String(enterOnboardingFlow)}</Text>
       {!isAuth || enterOnboardingFlow ? (
         <AuthRoutes onboarding={enterOnboardingFlow} />
       ) : (
