@@ -4,11 +4,25 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 
 import { createStackNavigator } from "@react-navigation/stack";
 
-import { Dashboard, Settings, Recipes, Recipe } from "../screens";
+import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
+
+import {
+  Dashboard,
+  Settings,
+  Recipes,
+  Recipe,
+  Foods,
+  MyFoods,
+  MyRecipes,
+} from "../screens";
 
 import CustomDrawer from "../components/drawer";
 
 import Ionicons from "@expo/vector-icons/Ionicons";
+
+import { Text } from "native-base";
+
+import { DailyLog } from "../screens/protected/dailyLog";
 
 import { Screens } from "./navigation";
 
@@ -37,23 +51,23 @@ const AppBottomStack = () => {
           headerShown: false,
           tabBarIcon: ({ focused }) => (
             <Ionicons
-              name="md-checkmark-circle"
+              name="podium-outline"
               size={32}
-              color={focused ? "blue" : "gray"}
+              color={focused ? "green" : "gray"}
             />
           ),
         }}
       />
       <BottomStack.Screen
-        name={Screens.SETTINGS}
-        component={Settings}
+        name={Screens.FOODS}
+        component={Foods}
         options={{
           headerShown: false,
           tabBarIcon: ({ focused }) => (
             <Ionicons
-              name="md-checkmark-circle"
+              name="restaurant-outline"
               size={32}
-              color={focused ? "blue" : "gray"}
+              color={focused ? "green" : "gray"}
             />
           ),
         }}
@@ -65,9 +79,9 @@ const AppBottomStack = () => {
           headerShown: false,
           tabBarIcon: ({ focused }) => (
             <Ionicons
-              name="md-checkmark-circle"
+              name="book-outline"
               size={32}
-              color={focused ? "blue" : "gray"}
+              color={focused ? "green" : "gray"}
             />
           ),
         }}
@@ -80,6 +94,15 @@ const DrawerRoutes = () => {
   return (
     <Drawer.Navigator drawerContent={() => <CustomDrawer />}>
       <Drawer.Screen name="Eativity" component={AppBottomStack} />
+      <Stack.Screen name={Screens.RECIPE} component={Recipe} />
+      <Stack.Screen name={Screens.DAILY_LOG} component={DailyLog} />
+      <Stack.Screen name={Screens.SETTINGS} component={Settings} />
+      <Stack.Screen name={Screens.MY_FOODS} component={MyFoods} />
+      <Stack.Screen name={Screens.MY_RECIPES} component={MyRecipes} />
+      <Stack.Screen
+        name={Screens.WEEKLY_SUMMARY}
+        component={() => <Text>My weekly summary</Text>}
+      />
     </Drawer.Navigator>
   );
 };
@@ -88,9 +111,16 @@ export const ProtectedRoutes = () => (
   <Stack.Navigator
     screenOptions={{
       headerShown: false,
+      headerBackTitleVisible: true,
     }}
+    screenListeners={({ route }) => ({
+      state: () => {
+        const subRoute = getFocusedRouteNameFromRoute(route);
+        console.log("subroute", subRoute);
+        // Your logic here //
+      },
+    })}
   >
     <Stack.Screen name="Routes" component={DrawerRoutes} />
-    <Stack.Screen name="Recipe" component={Recipe} />
   </Stack.Navigator>
 );

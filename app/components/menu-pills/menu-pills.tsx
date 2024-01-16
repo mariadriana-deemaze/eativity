@@ -28,7 +28,7 @@ export const MenuPills = ({
         px="4"
         height="8"
         borderRadius="full"
-        bgColor={isActive ? "violet.600" : "violet.400"}
+        bgColor={isActive ? "green.600" : "green.400"}
       >
         <Text
           fontSize="xs"
