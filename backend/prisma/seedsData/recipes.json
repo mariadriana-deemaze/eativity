@@ -1,0 +1,29 @@
+[
+  {
+    "name": "Creamy Salad Dressing",
+    "description": "A creamy salad dressing with all the taste and far less calories.",
+    "calories": 85,
+    "carbohydrates": 11.94,
+    "fats": 1.82,
+    "proteins": 6.38,
+    "image": null
+  },
+  {
+    "name": "Broiled Salmon with Asparagus",
+    "description": "Delicious seasoned and broiled salmon, together with stalks of asparagus.",
+    "calories": 453,
+    "carbohydrates": 13.07,
+    "fats": 24.93,
+    "proteins": 42.04,
+    "image": "https://m.ftscrt.com/static/recipe/d08a56ad-5f8f-49e3-aa87-f540fec616f5.jpg"
+  },
+  {
+    "name": "Beef and Broccoli",
+    "description": "Tasty, low-calorie dish for lunch or dinner.",
+    "calories": 230,
+    "carbohydrates": 6.35,
+    "fats": 15.28,
+    "proteins": 16.19,
+    "image": "https://m.ftscrt.com/static/recipe/d9f0ff2b-6ef7-42ec-800e-4baa568b767f.jpg"
+  }
+]
