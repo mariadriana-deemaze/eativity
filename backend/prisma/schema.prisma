@@ -58,14 +58,19 @@ model UserMeal {
 }
 
 model Food {
-  id            Int    @id @default(autoincrement())
+  id            Int      @id @default(autoincrement())
   name          String
-  barcode       String @unique
+  description   String?
+  barcode       String?  @unique
   calories      Int
   carbohydrates Int
   proteins      Int
   fats          Int
-  meals         Meal[] @relation("FoodToMeal")
+  servingSize   Int
+  image         String?
+  meals         Meal[]   @relation("FoodToMeal")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @default(now())
 }
 
 model Meal {
