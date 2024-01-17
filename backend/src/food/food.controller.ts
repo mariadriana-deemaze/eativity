@@ -1,8 +1,10 @@
-import { Body, Controller, Get, Param, Query, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post, Query, UseGuards } from "@nestjs/common";
 
 import { JwtGuard } from "src/auth/guard";
 
 import { FoodService } from "./food.service";
+
+import { FoodDto } from "./dto";
 
 @UseGuards(JwtGuard)
 @Controller("food")
@@ -20,5 +22,10 @@ export class FoodController {
   @Get(":id")
   async getFoodBySearchId(@Param() { id }: { id: string }) {
     return this.foodService.getFoodById({ id: parseInt(id) });
+  }
+  
+  @Post()
+  async createFood(@Body() foodDto: FoodDto) {
+    return this.foodService.create(foodDto);
   }
 }

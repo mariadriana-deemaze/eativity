@@ -2,6 +2,7 @@ import { Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { Prisma } from "@prisma/client";
 import { PrismaService } from "src/prisma/prisma.service";
+import { FoodDto } from "./dto";
 
 @Injectable()
 export class FoodService {
@@ -61,5 +62,18 @@ export class FoodService {
     if (!results) throw new NotFoundException();
 
     return results;
+  }
+
+  async create(foodDto: FoodDto) {
+    const created = await this.prisma.food.create({
+      data: foodDto,
+    });
+
+    this.logger.log(`foodDto -> ${JSON.stringify(foodDto)}`);
+    this.logger.log(`created -> ${JSON.stringify(created)}`);
+
+    if (!created) return foodDto;
+
+    return created;
   }
 }
