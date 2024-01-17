@@ -58,14 +58,46 @@ model UserMeal {
 }
 
 model Food {
-  id            Int    @id @default(autoincrement())
+  id            Int          @id @default(autoincrement())
   name          String
-  barcode       String @unique
+  description   String?
+  barcode       String?      @unique
   calories      Int
   carbohydrates Int
   proteins      Int
   fats          Int
-  meals         Meal[] @relation("FoodToMeal")
+  servingSize   Int
+  image         String?
+  meals         Meal[]       @relation("FoodToMeal")
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @default(now())
+  FoodRecipe    FoodRecipe[]
+}
+
+model Recipe {
+  id            Int          @id @default(autoincrement())
+  name          String
+  description   String?
+  calories      Int
+  carbohydrates Int
+  proteins      Int
+  fats          Int
+  image         String?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @default(now())
+  FoodRecipe    FoodRecipe[]
+}
+
+model FoodRecipe {
+  id        Int      @id @default(autoincrement())
+  recipeId  Int
+  foodId    Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  Food      Food     @relation(fields: [foodId], references: [id])
+  Recipe    Recipe   @relation(fields: [recipeId], references: [id])
+
+  @@unique([recipeId, foodId], name: "recipe_food_unique")
 }
 
 model Meal {
