@@ -4,16 +4,23 @@ import { ConfigModule } from "@nestjs/config";
 
 import { MailerModule } from "@nestjs-modules/mailer";
 
+import { DevtoolsModule } from "@nestjs/devtools-integration";
+
 import { PrismaModule } from "./prisma/prisma.module";
 
 import { AuthModule } from "./auth/auth.module";
 
 import { UserModule } from "./user/user.module";
 
+import { FoodModule } from "./food/food.module";
+
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+    }),
+    DevtoolsModule.register({
+      http: process.env.NODE_ENV !== "production",
     }),
     MailerModule.forRoot({
       transport: {
@@ -25,19 +32,12 @@ import { UserModule } from "./user/user.module";
       defaults: {
         from: '"No Reply" <no-reply@localhost>',
       },
-      preview: true, // preview e-mail in browser
-      // TODO: React e-mail <-> https://react.email/docs/integrations/nodemailer
-      /*  template: {
-        dir: __dirname + '/templates',
-        //adapter: new PugAdapter(),
-        options: {
-          strict: true,
-        },
-      }, */
+      preview: true,
     }),
     UserModule,
     AuthModule,
     PrismaModule,
+    FoodModule,
   ],
 })
 export class AppModule {}
