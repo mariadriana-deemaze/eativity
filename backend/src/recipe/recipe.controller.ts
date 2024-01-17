@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, Post, Query, UseGuards } from "@nestjs/common";
 
-import { JwtGuard } from "src/auth/guard";
+import { JwtGuard } from "./../auth/guard";
 
 import { RecipeService } from "./recipe.service";
 

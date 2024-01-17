@@ -27,7 +27,7 @@ export const WelcomeEmail = ({ name, email }: WelcomeEmailProps) => {
   const DUMMY_LOGO =
     "https://react-email-demo-ijnnx5hul-resend.vercel.app/static/linear-logo.png";
 
-  const loginLink = `www.eativity.com/login?email=${email}`;
+  const loginLink = `http://www.eativity.com/login?email=${email}`;
 
   return (
     <Html>
