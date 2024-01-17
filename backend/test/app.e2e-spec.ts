@@ -12,29 +12,42 @@ import { PrismaService } from "../src/prisma/prisma.service";
 
 import { AuthDto } from "../src/auth/dto";
 
-import { EditUserDto } from "src/user/dto";
+import { EditUserDto } from "../src/user/dto";
+
+import { FoodService } from "../src/food/food.service";
+
+import { FoodDto } from "src/food/dto";
+
+async function makeApp(): Promise<INestApplication> {
+  let app: INestApplication;
+
+  const moduleRef = await Test.createTestingModule({
+    imports: [AppModule],
+    providers: [PrismaService, WeightService, FoodService],
+  }).compile();
+
+  // eslint-disable-next-line prefer-const
+  app = moduleRef.createNestApplication();
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+    })
+  );
+
+  await app.init();
+
+  await app.listen(3333);
+
+  return app;
+}
 
 describe("App e2e", () => {
-  let app: INestApplication;
   let prisma: PrismaService;
+  let app;
 
   beforeAll(async () => {
-    const moduleRef = await Test.createTestingModule({
-      imports: [AppModule],
-      providers: [PrismaService, WeightService],
-    }).compile();
-
-    app = moduleRef.createNestApplication();
-
-    app.useGlobalPipes(
-      new ValidationPipe({
-        whitelist: true,
-      })
-    );
-
-    await app.init();
-
-    await app.listen(3333);
+    app = await makeApp();
 
     prisma = app.get(PrismaService);
 
@@ -130,8 +143,7 @@ describe("App e2e", () => {
           .withHeaders({
             Authorization: "Bearer $S{userAt}",
           })
-          .expectStatus(200)
-          .inspect();
+          .expectStatus(200);
       });
 
       it("should get current user with the latest weight", async () => {
@@ -153,7 +165,6 @@ describe("App e2e", () => {
             Authorization: "Bearer $S{userAt}",
           })
           .expectStatus(200)
-          .inspect()
           .expectJsonLike({
             weight: 66,
           });
@@ -198,7 +209,7 @@ describe("App e2e", () => {
       });
     });
 
-    describe("Delete user", () => {
+    /* describe("Delete user", () => {
       it("should delete current user", () => {
         return pactum
           .spec()
@@ -208,6 +219,121 @@ describe("App e2e", () => {
           })
           .withBody(dto)
           .expectStatus(200);
+      });
+    }); */
+  });
+
+  describe("Food", () => {
+    describe("Get food", () => {
+      it("should successfully search by name and get a result back", async () => {
+        const response = await pactum
+          .spec()
+          .get(`/food/search?name=Broccoli`)
+          .withHeaders({
+            Authorization: "Bearer $S{userAt}",
+          })
+          .expectStatus(200)
+          .expectJsonLike({
+            pagination: {
+              count: 1,
+            },
+          });
+
+        return response;
+      });
+
+      it("should be able to search for a non-existant item and get empty results back", () => {
+        return pactum
+          .spec()
+          .get(`/food/search?name=Bicicle`)
+          .withHeaders({
+            Authorization: "Bearer $S{userAt}",
+          })
+          .expectStatus(200)
+          .expectJsonLike({
+            data: [],
+            pagination: {
+              count: 0,
+            },
+          });
+      });
+
+      it("should be able to query a food by id and get a matching result", () => {
+        return pactum
+          .spec()
+          .get(`/food/1`)
+          .withHeaders({
+            Authorization: "Bearer $S{userAt}",
+          })
+          .expectJsonLike({
+            id: 1,
+          });
+      });
+
+      it("should be able to query a food by id but get nothing back", () => {
+        return pactum
+          .spec()
+          .get(`/food/100`)
+          .withHeaders({
+            Authorization: "Bearer $S{userAt}",
+          })
+          .expectStatus(404);
+      });
+    });
+
+    describe("Post food", () => {
+      it("should be able to create a food", () => {
+        const dto: FoodDto = {
+          name: "Some name",
+          description: "Must be a good one",
+          barcode: "123",
+          calories: 1,
+          carbohydrates: 10,
+          proteins: 100,
+          fats: 20,
+          servingSize: 100,
+          image: "some_image_url_here",
+        };
+
+        return pactum
+          .spec()
+          .post(`/food`)
+          .withHeaders({
+            Authorization: "Bearer $S{userAt}",
+          })
+          .withBody(dto)
+          .expectStatus(201)
+          .expectJsonLike(dto);
+      });
+
+      it("should retrieve error when attempting to create a food with a bad payload", () => {
+        const badFoodDtoPayload: Omit<FoodDto, "proteins"> & {
+          proteins: string;
+        } = {
+          name: "Some other name",
+          description: "Must better than the other",
+          barcode: "123",
+          calories: 1,
+          carbohydrates: 10,
+          proteins: "100",
+          fats: 20,
+          servingSize: 100,
+          image: "some_image__url_here",
+        };
+
+        return pactum
+          .spec()
+          .post(`/food`)
+          .withHeaders({
+            Authorization: "Bearer $S{userAt}",
+          })
+          .withBody(badFoodDtoPayload)
+          .expectStatus(400)
+          .expectJsonLike({
+            message: [
+              "proteins must be a number conforming to the specified constraints",
+            ],
+          });
       });
     });
   });

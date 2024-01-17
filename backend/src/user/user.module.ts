@@ -12,7 +12,7 @@ import { PlanService } from "./../plan/plan.service";
 
 import { PlanController } from "./../plan/plan.controller";
 
-import { FoodModule } from "src/food/food.module";
+import { FoodModule } from "../food/food.module";
 
 @Module({
   imports: [FoodModule],
