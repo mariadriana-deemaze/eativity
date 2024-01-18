@@ -8,10 +8,13 @@ import userReducer from "./user/slices";
 
 import recipeReducer from "./recipe/slices";
 
+import foodReducer from "./food/slices";
+
 const rootReducer = combineReducers({
   auth: authReducer,
   user: userReducer,
   recipe: recipeReducer,
+  food: foodReducer,
 });
 
 const store = configureStore({

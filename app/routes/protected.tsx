@@ -11,6 +11,8 @@ import CustomDrawer from "../components/drawer";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
 import { Screens } from "./navigation";
+import { Foods } from "../screens/protected/foods";
+import { Food } from "../screens/protected/food";
 
 const Drawer = createDrawerNavigator();
 
@@ -21,6 +23,8 @@ const Stack = createStackNavigator();
 export type RoutesParamList = {
   Recipes: undefined;
   Recipe: { recipeId: string };
+  Foods: undefined;
+  Food: { foodId: string };
 };
 
 const AppBottomStack = () => {
@@ -47,6 +51,20 @@ const AppBottomStack = () => {
       <BottomStack.Screen
         name={Screens.SETTINGS}
         component={Settings}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ focused }) => (
+            <Ionicons
+              name="md-checkmark-circle"
+              size={32}
+              color={focused ? "blue" : "gray"}
+            />
+          ),
+        }}
+      />
+      <BottomStack.Screen
+        name={Screens.FOODS}
+        component={Foods}
         options={{
           headerShown: false,
           tabBarIcon: ({ focused }) => (
@@ -92,5 +110,6 @@ export const ProtectedRoutes = () => (
   >
     <Stack.Screen name="Routes" component={DrawerRoutes} />
     <Stack.Screen name="Recipe" component={Recipe} />
+    <Stack.Screen name="Food" component={Food} />
   </Stack.Navigator>
 );

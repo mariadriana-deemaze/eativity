@@ -26,3 +26,12 @@ api.interceptors.request.use(
     Promise.reject(error);
   }
 );
+
+api.interceptors.response.use((res) => {
+  if (process.env.NODE_ENV !== "production") {
+    console.log("//////");
+    console.log(`[LOGGER::${res.config.url}] -> ${JSON.stringify(res.data)}`);
+    console.log("-----");
+  }
+  return res;
+});

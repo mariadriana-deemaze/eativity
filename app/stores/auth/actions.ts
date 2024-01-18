@@ -25,8 +25,6 @@ export const authenticateUser = createAsyncThunk(
         password,
       });
 
-      console.log("response here ->", response);
-
       return response;
     } catch (error) {
       if (error.response && error.response.data.message) {
@@ -47,8 +45,6 @@ export const registerUser = createAsyncThunk(
         email,
         password,
       });
-
-      console.log("response here ->", response);
 
       return response;
     } catch (error) {
