@@ -12,7 +12,10 @@ import { PlanService } from "./../plan/plan.service";
 
 import { PlanController } from "./../plan/plan.controller";
 
+import { FoodModule } from "../food/food.module";
+
 @Module({
+  imports: [FoodModule],
   controllers: [UserController, WeightController, PlanController],
   providers: [UserService, WeightService, PlanService],
 })
