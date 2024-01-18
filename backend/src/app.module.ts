@@ -14,6 +14,8 @@ import { UserModule } from "./user/user.module";
 
 import { FoodModule } from "./food/food.module";
 
+import { RecipeModule } from "./recipe/recipe.module";
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -38,6 +40,7 @@ import { FoodModule } from "./food/food.module";
     AuthModule,
     PrismaModule,
     FoodModule,
+    RecipeModule,
   ],
 })
 export class AppModule {}
