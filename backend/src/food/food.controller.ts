@@ -9,8 +9,6 @@ import {
   UseGuards,
 } from "@nestjs/common";
 
-import { Prisma } from "@prisma/client";
-
 import { JwtGuard } from "../auth/guard";
 
 import { FoodService } from "./food.service";
@@ -41,10 +39,7 @@ export class FoodController {
   }
 
   @Patch(":id")
-  async editFood(
-    @Param() { id }: { id: string },
-    @Body() food: Prisma.FoodUpdateInput
-  ) {
-    return this.foodService.edit({ id: parseInt(id), food });
+  async editFood(@Param() { id }: { id: string }, @Body() foodDto: FoodDto) {
+    return this.foodService.edit({ id: parseInt(id), foodDto });
   }
 }

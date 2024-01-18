@@ -336,5 +336,61 @@ describe("App e2e", () => {
           });
       });
     });
+
+    describe("Patch food", () => {
+      it("should be able to successfully edit a food", () => {
+        const dto: FoodDto = {
+          name: "Some name 2",
+          description: "Must be a good one",
+          barcode: "456",
+          calories: 1,
+          carbohydrates: 10,
+          proteins: 100,
+          fats: 20,
+          servingSize: 100,
+          image: "some_image_url_here",
+        };
+
+        return pactum
+          .spec()
+          .patch(`/food/1`)
+          .withHeaders({
+            Authorization: "Bearer $S{userAt}",
+          })
+          .withBody(dto)
+          .expectStatus(200)
+          .expectJsonLike(dto);
+      });
+
+      it("should retrieve error when attempting to edit a food with a bad payload", () => {
+        const badFoodDtoPayload: Omit<FoodDto, "proteins"> & {
+          proteins: string;
+        } = {
+          name: "Some other name",
+          description: "Must better than the other",
+          barcode: "123",
+          calories: 1,
+          carbohydrates: 10,
+          proteins: "100",
+          fats: 20,
+          servingSize: 100,
+          image: "some_image__url_here",
+        };
+
+        return pactum
+          .spec()
+          .patch(`/food/1`)
+          .withHeaders({
+            Authorization: "Bearer $S{userAt}",
+          })
+          .withBody(badFoodDtoPayload)
+          .expectStatus(400)
+          .expectJsonLike({
+            message: [
+              "proteins must be a number conforming to the specified constraints",
+            ],
+          });
+      });
+    });
   });
 });

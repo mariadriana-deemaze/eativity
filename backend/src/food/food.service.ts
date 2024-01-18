@@ -1,12 +1,8 @@
-import {
-  BadRequestException,
-  Injectable,
-  Logger,
-  NotFoundException,
-} from "@nestjs/common";
+import { Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { Prisma } from "@prisma/client";
 import { PrismaService } from "../prisma/prisma.service";
+
 import { FoodDto } from "./dto";
 
 @Injectable()
@@ -82,18 +78,18 @@ export class FoodService {
     return created;
   }
 
-  async edit({ id, food }: { id: number; food: Prisma.FoodUpdateInput }) {
+  async edit({ id, foodDto }: { id: number; foodDto: FoodDto }) {
     const edited = await this.prisma.food.update({
       where: {
         id,
       },
-      data: food,
+      data: foodDto,
     });
 
-    this.logger.log(`foodDto -> ${JSON.stringify(food)}`);
+    this.logger.log(`foodDto -> ${JSON.stringify(foodDto)}`);
     this.logger.log(`edited -> ${JSON.stringify(edited)}`);
 
-    if (!edited) throw new BadRequestException();
+    if (!edited) return foodDto;
 
     return edited;
   }
