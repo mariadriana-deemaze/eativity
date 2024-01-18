@@ -1,4 +1,15 @@
-import { Body, Controller, Get, Param, Post, Query, UseGuards } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+  UseGuards,
+} from "@nestjs/common";
+
+import { Prisma } from "@prisma/client";
 
 import { JwtGuard } from "../auth/guard";
 
@@ -23,9 +34,17 @@ export class FoodController {
   async getFoodBySearchId(@Param() { id }: { id: string }) {
     return this.foodService.getFoodById({ id: parseInt(id) });
   }
-  
+
   @Post()
   async createFood(@Body() foodDto: FoodDto) {
     return this.foodService.create(foodDto);
+  }
+
+  @Patch(":id")
+  async editFood(
+    @Param() { id }: { id: string },
+    @Body() food: Prisma.FoodUpdateInput
+  ) {
+    return this.foodService.edit({ id: parseInt(id), food });
   }
 }
