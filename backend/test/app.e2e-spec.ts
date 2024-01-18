@@ -18,6 +18,8 @@ import { FoodService } from "../src/food/food.service";
 
 import { FoodDto } from "src/food/dto";
 
+import { RecipeDto } from "src/recipe/dto";
+
 async function makeApp(): Promise<INestApplication> {
   let app: INestApplication;
 
@@ -384,6 +386,117 @@ describe("App e2e", () => {
             Authorization: "Bearer $S{userAt}",
           })
           .withBody(badFoodDtoPayload)
+          .expectStatus(400)
+          .expectJsonLike({
+            message: [
+              "proteins must be a number conforming to the specified constraints",
+            ],
+          });
+      });
+    });
+  });
+
+  describe("Recipe", () => {
+    describe("Get recipe", () => {
+      it("should successfully search by name and get a result back", async () => {
+        const response = await pactum
+          .spec()
+          .get(`/recipe/search?name=Broccoli`)
+          .withHeaders({
+            Authorization: "Bearer $S{userAt}",
+          })
+          .expectStatus(200)
+          .expectJsonLike({
+            pagination: {
+              count: 1,
+            },
+          });
+
+        return response;
+      });
+
+      it("should be able to search for a non-existant item and get empty results back", () => {
+        return pactum
+          .spec()
+          .get(`/recipe/search?name=Bicicle`)
+          .withHeaders({
+            Authorization: "Bearer $S{userAt}",
+          })
+          .expectStatus(200)
+          .expectJsonLike({
+            data: [],
+            pagination: {
+              count: 0,
+            },
+          });
+      });
+
+      it("should be able to query a recipe by id and get a matching result", () => {
+        return pactum
+          .spec()
+          .get(`/recipe/1`)
+          .withHeaders({
+            Authorization: "Bearer $S{userAt}",
+          })
+          .expectJsonLike({
+            id: 1,
+          });
+      });
+
+      it("should be able to query a recipe by id but get nothing back", () => {
+        return pactum
+          .spec()
+          .get(`/recipe/100`)
+          .withHeaders({
+            Authorization: "Bearer $S{userAt}",
+          })
+          .expectStatus(404);
+      });
+    });
+
+    describe("Post recipe", () => {
+      it("should be able to create a recipe", () => {
+        const dto: RecipeDto = {
+          name: "Some recipe name",
+          description: "Must be a good one",
+          calories: 1,
+          carbohydrates: 10,
+          proteins: 100,
+          fats: 20,
+          image: "some_image_url_here",
+        };
+
+        return pactum
+          .spec()
+          .post(`/recipe`)
+          .withHeaders({
+            Authorization: "Bearer $S{userAt}",
+          })
+          .withBody(dto)
+          .expectStatus(201)
+          .expectJsonLike(dto);
+      });
+
+      it("should retrieve error when attempting to create a recipe with a bad payload", () => {
+        const badRecipeDtoPayload: Omit<RecipeDto, "proteins"> & {
+          proteins: string;
+        } = {
+          name: "Some other recipe name",
+          description: "Must better than the other",
+          calories: 1,
+          carbohydrates: 10,
+          proteins: "100",
+          fats: 20,
+          image: "some_image__url_here",
+        };
+
+        return pactum
+          .spec()
+          .post(`/food`)
+          .withHeaders({
+            Authorization: "Bearer $S{userAt}",
+          })
+          .withBody(badRecipeDtoPayload)
           .expectStatus(400)
           .expectJsonLike({
             message: [
