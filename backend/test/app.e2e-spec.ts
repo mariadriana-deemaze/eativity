@@ -137,7 +137,7 @@ describe("App e2e", () => {
   });
 
   describe("User", () => {
-    describe("Get user", () => {
+    describe("Get User", () => {
       it("should get current user", () => {
         return pactum
           .spec()
@@ -189,7 +189,7 @@ describe("App e2e", () => {
       },
     };
 
-    describe("Edit user", () => {
+    describe("Edit User", () => {
       it("should edit current user", () => {
         return pactum
           .spec()
@@ -226,7 +226,7 @@ describe("App e2e", () => {
   });
 
   describe("Food", () => {
-    describe("Get food", () => {
+    describe("Get Food", () => {
       it("should successfully search by name and get a result back", async () => {
         const response = await pactum
           .spec()
@@ -283,7 +283,7 @@ describe("App e2e", () => {
       });
     });
 
-    describe("Post food", () => {
+    describe("Post Food", () => {
       it("should be able to create a food", () => {
         const dto: FoodDto = {
           name: "Some name",
@@ -339,7 +339,7 @@ describe("App e2e", () => {
       });
     });
 
-    describe("Patch food", () => {
+    describe("Patch Food", () => {
       it("should be able to successfully edit a food", () => {
         const dto: FoodDto = {
           name: "Some name 2",
@@ -397,7 +397,7 @@ describe("App e2e", () => {
   });
 
   describe("Recipe", () => {
-    describe("Get recipe", () => {
+    describe("Get Recipe", () => {
       it("should successfully search by name and get a result back", async () => {
         const response = await pactum
           .spec()
@@ -454,7 +454,7 @@ describe("App e2e", () => {
       });
     });
 
-    describe("Post recipe", () => {
+    describe("Post Recipe", () => {
       it("should be able to create a recipe", () => {
         const dto: RecipeDto = {
           name: "Some recipe name",
@@ -493,6 +493,58 @@ describe("App e2e", () => {
         return pactum
           .spec()
           .post(`/food`)
+          .withHeaders({
+            Authorization: "Bearer $S{userAt}",
+          })
+          .withBody(badRecipeDtoPayload)
+          .expectStatus(400)
+          .expectJsonLike({
+            message: [
+              "proteins must be a number conforming to the specified constraints",
+            ],
+          });
+      });
+    });
+
+    describe("Patch Recipe", () => {
+      it("should be able to successfully edit a recipe", () => {
+        const dto: RecipeDto = {
+          name: "Some other cool recipe name",
+          description: "Must be a good one",
+          calories: 1,
+          carbohydrates: 10,
+          proteins: 100,
+          fats: 20,
+          image: "some_image_url_here",
+        };
+
+        return pactum
+          .spec()
+          .patch(`/recipe/1`)
+          .withHeaders({
+            Authorization: "Bearer $S{userAt}",
+          })
+          .withBody(dto)
+          .expectStatus(200)
+          .expectJsonLike(dto);
+      });
+
+      it("should retrieve error when attempting to edit a recipe with a bad payload", () => {
+        const badRecipeDtoPayload: Omit<RecipeDto, "proteins"> & {
+          proteins: string;
+        } = {
+          name: "Some other uncool recipe name",
+          description: "Must be a good one",
+          calories: 1,
+          carbohydrates: 10,
+          proteins: "100",
+          fats: 20,
+          image: "some_image_url_here",
+        };
+
+        return pactum
+          .spec()
+          .patch(`/recipe/1`)
           .withHeaders({
             Authorization: "Bearer $S{userAt}",
           })
