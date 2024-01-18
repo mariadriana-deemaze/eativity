@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Param, Post, Query, UseGuards } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+  UseGuards,
+} from "@nestjs/common";
 
 import { JwtGuard } from "./../auth/guard";
 
@@ -27,5 +36,13 @@ export class RecipeController {
   @Post()
   async createRecipe(@Body() recipeDto: RecipeDto) {
     return this.recipeService.create(recipeDto);
+  }
+
+  @Patch(":id")
+  async editFood(
+    @Param() { id }: { id: string },
+    @Body() recipeDto: RecipeDto
+  ) {
+    return this.recipeService.edit({ id: parseInt(id), recipeDto });
   }
 }

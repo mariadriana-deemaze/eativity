@@ -76,4 +76,20 @@ export class RecipeService {
 
     return created;
   }
+
+  async edit({ id, recipeDto }: { id: number; recipeDto: RecipeDto }) {
+    const edited = await this.prisma.recipe.update({
+      where: {
+        id,
+      },
+      data: recipeDto,
+    });
+
+    this.logger.log(`recipeDto -> ${JSON.stringify(recipeDto)}`);
+    this.logger.log(`edited -> ${JSON.stringify(edited)}`);
+
+    if (!edited) return recipeDto;
+
+    return edited;
+  }
 }
