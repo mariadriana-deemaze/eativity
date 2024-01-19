@@ -36,6 +36,10 @@ export class EditUserDto {
   @IsOptional()
   measurementUnit?: MeasurementUnit;
 
+  @IsString()
+  @IsOptional()
+  imageId?: string;
+
   @IsOptional()
   plan?: {
     goal?: Goal;

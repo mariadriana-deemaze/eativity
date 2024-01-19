@@ -65,9 +65,21 @@ export class RecipeService {
   }
 
   async create(recipeDto: RecipeDto) {
+    const { name, description, calories, carbohydrates, proteins, fats } =
+      recipeDto;
+
     const created = await this.prisma.recipe.create({
-      data: recipeDto,
+      data: {
+        name,
+        description,
+        calories,
+        carbohydrates,
+        proteins,
+        fats,
+      },
     });
+
+    // TODO: Image - imageId
 
     this.logger.log(`recipeDto -> ${JSON.stringify(recipeDto)}`);
     this.logger.log(`created -> ${JSON.stringify(created)}`);
@@ -78,12 +90,24 @@ export class RecipeService {
   }
 
   async edit({ id, recipeDto }: { id: number; recipeDto: RecipeDto }) {
+    const { name, description, calories, carbohydrates, proteins, fats } =
+      recipeDto;
+
     const edited = await this.prisma.recipe.update({
       where: {
         id,
       },
-      data: recipeDto,
+      data: {
+        name,
+        description,
+        calories,
+        carbohydrates,
+        proteins,
+        fats,
+      },
     });
+
+    // TODO: Image - imageId
 
     this.logger.log(`recipeDto -> ${JSON.stringify(recipeDto)}`);
     this.logger.log(`edited -> ${JSON.stringify(edited)}`);

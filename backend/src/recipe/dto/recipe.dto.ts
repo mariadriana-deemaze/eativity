@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsNumber } from "class-validator";
+import { IsNotEmpty, IsString, IsNumber, IsOptional } from "class-validator";
 
 export class RecipeDto {
   @IsString()
@@ -6,6 +6,7 @@ export class RecipeDto {
   name: string;
 
   @IsString()
+  @IsOptional()
   description?: string;
 
   @IsNumber()
@@ -25,6 +26,6 @@ export class RecipeDto {
   fats: number;
 
   @IsString()
-  @IsNotEmpty()
-  image: string;
+  @IsOptional()
+  imageId?: string;
 }

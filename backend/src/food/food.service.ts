@@ -66,9 +66,31 @@ export class FoodService {
   }
 
   async create(foodDto: FoodDto) {
+    const {
+      name,
+      description,
+      servingSize,
+      barcode,
+      fats,
+      calories,
+      carbohydrates,
+      proteins,
+    } = foodDto;
+
     const created = await this.prisma.food.create({
-      data: foodDto,
+      data: {
+        name,
+        description,
+        servingSize,
+        barcode,
+        fats,
+        calories,
+        carbohydrates,
+        proteins,
+      },
     });
+
+    // TODO: Image - imageId
 
     this.logger.log(`foodDto -> ${JSON.stringify(foodDto)}`);
     this.logger.log(`created -> ${JSON.stringify(created)}`);
@@ -79,12 +101,34 @@ export class FoodService {
   }
 
   async edit({ id, foodDto }: { id: number; foodDto: FoodDto }) {
+    const {
+      name,
+      description,
+      servingSize,
+      barcode,
+      fats,
+      calories,
+      carbohydrates,
+      proteins,
+    } = foodDto;
+
     const edited = await this.prisma.food.update({
       where: {
         id,
       },
-      data: foodDto,
+      data: {
+        name,
+        description,
+        servingSize,
+        barcode,
+        fats,
+        calories,
+        carbohydrates,
+        proteins,
+      },
     });
+
+    // TODO: Image - imageId
 
     this.logger.log(`foodDto -> ${JSON.stringify(foodDto)}`);
     this.logger.log(`edited -> ${JSON.stringify(edited)}`);
