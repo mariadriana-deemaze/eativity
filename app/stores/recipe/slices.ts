@@ -7,22 +7,20 @@ import {
   defaultNetworkErrorMessage,
 } from "../../components/toastAlert";
 
-import { Recipe } from "../../types/recipe";
-
-import { recipe } from "../../utils";
+import { Recipe, PaginatedPayload } from "../../types";
 
 interface InitialState {
   loading: boolean;
   recipe: Recipe | null;
-  recipes: Recipe[] | null;
+  recipes: PaginatedPayload<Recipe>;
   error: ToastInfoProps | null;
   category: string;
   search?: string;
 }
 
 const initialState: InitialState = {
-  recipe: recipe[0],
-  recipes: null,
+  recipe: null,
+  recipes: { data: [], pagination: { count: 0, offset: 0, maxResults: 0 } },
   loading: false,
   error: null,
   category: "All",
@@ -59,15 +57,32 @@ const recipeSlice = createSlice({
       })
       .addCase(
         getRecipesFromSearch.fulfilled,
-        (state, { payload: recipes }) => {
-          state.loading = false;
-          state.recipes = recipes;
+        (state, { payload: paginatedRecipes }) => {
+          Object.assign(state, {
+            ...state,
+            loading: false,
+            recipes: {
+              // TODO: Review
+              data:
+                state.recipes.data.length < paginatedRecipes?.pagination?.count
+                  ? [...state?.recipes?.data, ...paginatedRecipes?.data]
+                  : [...state?.recipes?.data],
+              pagination: {
+                count: paginatedRecipes?.pagination?.count || 0,
+                offset: paginatedRecipes?.pagination?.offset || 0,
+                maxResults: paginatedRecipes?.pagination?.maxResults || 0,
+              },
+            },
+          });
         }
       )
-      .addCase(getRecipesFromSearch.rejected, (state) => {
-        state.loading = false;
-        state.error = defaultNetworkErrorMessage;
-      })
+      .addCase(
+        getRecipesFromSearch.rejected,
+        (state, { payload: errorPayload }) => {
+          state.loading = false;
+          state.error = errorPayload || defaultNetworkErrorMessage;
+        }
+      )
       .addCase(getRecipeInfo.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -76,9 +91,9 @@ const recipeSlice = createSlice({
         state.loading = false;
         state.recipe = recipe;
       })
-      .addCase(getRecipeInfo.rejected, (state) => {
+      .addCase(getRecipeInfo.rejected, (state, { payload: errorPayload }) => {
         state.loading = false;
-        state.error = defaultNetworkErrorMessage;
+        state.error = errorPayload || defaultNetworkErrorMessage;
       });
   },
 });

@@ -1,3 +1,5 @@
+import { format } from "date-fns";
+
 import {
   VStack,
   Box,
@@ -5,7 +7,6 @@ import {
   Image,
   Skeleton,
   AspectRatio,
-  Center,
   Stack,
   Heading,
   HStack,
@@ -50,7 +51,8 @@ export const RecipeCardSkeleton = () => {
 export const RecipeCard = ({
   name,
   description,
-  types,
+  createdAt,
+  updatedAt,
   onPress,
 }: RecipeCardProps) => {
   return (
@@ -83,30 +85,6 @@ export const RecipeCard = ({
                 alt="image"
               />
             </AspectRatio>
-            <Center
-              bg="violet.500"
-              _dark={{
-                bg: "violet.400",
-              }}
-              position="absolute"
-              bottom="0"
-              px="3"
-              py="1.5"
-              display="flex"
-              flexDirection="row"
-            >
-              {types.map((type) => (
-                <Text
-                  key={`recipe_${name}_category_${type}`}
-                  color="warmGray.50"
-                  fontWeight="700"
-                  fontSize="xs"
-                  pr="0.5"
-                >
-                  {type}
-                </Text>
-              ))}
-            </Center>
           </Box>
           <Stack p="4" space={3}>
             <Stack space={2}>
@@ -144,7 +122,16 @@ export const RecipeCard = ({
                   }}
                   fontWeight="400"
                 >
-                  6 mins ago
+                  {format(new Date(createdAt), "MM/dd/yyyy")}
+                </Text>
+                <Text
+                  color="coolGray.600"
+                  _dark={{
+                    color: "warmGray.200",
+                  }}
+                  fontWeight="400"
+                >
+                  {format(new Date(updatedAt), "MM/dd/yyyy")}
                 </Text>
               </HStack>
             </HStack>

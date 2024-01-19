@@ -1,4 +1,6 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+
+import { format } from "date-fns";
 
 import { StackNavigationProp } from "@react-navigation/stack";
 
@@ -7,13 +9,14 @@ import { RouteProp } from "@react-navigation/native";
 import {
   AspectRatio,
   Box,
-  Center,
   HStack,
   Heading,
   Image,
-  Spinner,
+  ScrollView,
+  Skeleton,
   Stack,
   Text,
+  VStack,
 } from "native-base";
 
 import { useSelector } from "react-redux";
@@ -30,6 +33,8 @@ import { recipeActions } from "../../stores/recipe/slices";
 
 import { RoutesParamList } from "../../routes/protected";
 
+import RecipeForm from "../../components/recipes/form";
+
 type RecipeScreenNavigationProp = StackNavigationProp<
   RoutesParamList,
   "Recipe"
@@ -43,6 +48,10 @@ type RecipeScreenProps = {
 };
 
 export const Recipe: React.FC<RecipeScreenProps> = ({ route, navigation }) => {
+  const [onEditMode, setEditMode] = useState<"create" | "edit" | undefined>(
+    undefined
+  );
+
   const { recipeId } = route.params;
 
   const dispatch = useAppDispatch();
@@ -55,6 +64,14 @@ export const Recipe: React.FC<RecipeScreenProps> = ({ route, navigation }) => {
 
   const navigateBack = () => navigation.goBack();
 
+  const enterEditRecord = () => {
+    onEditMode === "edit" ? setEditMode(undefined) : setEditMode("edit");
+  };
+
+  const enterNewRecord = () => {
+    onEditMode === "create" ? setEditMode(undefined) : setEditMode("create");
+  };
+
   useEffect(() => {
     dispatch(getRecipeInfo(recipeId));
 
@@ -63,12 +80,20 @@ export const Recipe: React.FC<RecipeScreenProps> = ({ route, navigation }) => {
     };
   }, []);
 
-  // TODO: Skeletons for this bizzz
-  if (!recipe && loading) return <Spinner />;
+  if (loading)
+    return (
+      <Box h="full" w="container" alignContent="center">
+        <Skeleton height="64" width="full" rounded="md" bgColor="gray.100" />
+        <VStack space="4" mt="8" px="8">
+          <Skeleton height="5" width="5/6" rounded="md" bgColor="gray.100" />
+          <Skeleton height="5" width="full" rounded="md" bgColor="gray.100" />
+        </VStack>
+      </Box>
+    );
 
   if (recipe)
     return (
-      <Box alignItems="center">
+      <>
         <Box>
           <AspectRatio w="100%" ratio={16 / 9}>
             <Image
@@ -83,71 +108,67 @@ export const Recipe: React.FC<RecipeScreenProps> = ({ route, navigation }) => {
               <Ionicons name="arrow-back-outline" size={32} color="white" />
             </TouchableOpacity>
           </Box>
-          <Center
-            bg="violet.500"
-            _dark={{
-              bg: "violet.400",
-            }}
-            position="absolute"
-            bottom="0"
-            px="3"
-            py="1.5"
-            display="flex"
-            flexDirection="row"
-          >
-            {recipe?.types.map((type) => (
-              <Text
-                key={`recipe_${recipe.name}_category_${type}`}
-                color="warmGray.50"
-                fontWeight="700"
-                fontSize="xs"
-              >
-                {type}
-              </Text>
-            ))}
-          </Center>
+          {(onEditMode === undefined || onEditMode === "edit") && (
+            <Box position="absolute" top="8" right="16">
+              <TouchableOpacity onPress={enterEditRecord}>
+                <Ionicons name="settings-outline" size={32} color="white" />
+              </TouchableOpacity>
+            </Box>
+          )}
+          {(onEditMode === undefined || onEditMode === "create") && (
+            <Box position="absolute" top="8" right="4">
+              <TouchableOpacity onPress={enterNewRecord}>
+                <Ionicons name="document-outline" size={32} color="white" />
+              </TouchableOpacity>
+            </Box>
+          )}
         </Box>
-        <Stack p="4" space={3}>
-          <Stack space={2}>
-            <Heading size="md" ml="-1">
-              {recipe.name}
-            </Heading>
-            {/* <Text
-              fontSize="xs"
-              _light={{
-                color: "violet.500",
-              }}
-              _dark={{
-                color: "violet.400",
-              }}
-              fontWeight="500"
-              ml="-0.5"
-              mt="-1"
-            >
-             Some aditional test here - let's see
-            </Text> */}
-          </Stack>
-          <Text fontWeight="400" noOfLines={3}>
-            {recipe.description}
-          </Text>
-          <HStack alignItems="center" space={4} justifyContent="space-between">
-            <HStack alignItems="center">
-              <Text
-                color="coolGray.600"
-                _dark={{
-                  color: "warmGray.200",
-                }}
-                fontWeight="400"
-              >
-                6 mins ago{" "}
-                {/*
-                 * TODO: Created_at here
-                 */}
+
+        <ScrollView w="full">
+          {onEditMode === "edit" && <RecipeForm recipe={recipe} />}
+
+          {onEditMode === "create" && <RecipeForm />}
+
+          {onEditMode === undefined && (
+            <Stack p="4" space={3}>
+              <Stack space={2}>
+                <Heading size="md" ml="-1">
+                  {recipe.name}
+                </Heading>
+              </Stack>
+              <Text fontWeight="400" noOfLines={3}>
+                {recipe.description}
               </Text>
-            </HStack>
-          </HStack>
-        </Stack>
-      </Box>
+              <HStack
+                alignItems="center"
+                space={4}
+                justifyContent="space-between"
+              >
+                <HStack alignItems="center">
+                  <Text
+                    color="coolGray.600"
+                    _dark={{
+                      color: "warmGray.200",
+                    }}
+                    fontWeight="400"
+                  >
+                    {format(new Date(recipe.createdAt), "MM/dd/yyyy")}
+                  </Text>
+                  <Text
+                    color="coolGray.600"
+                    _dark={{
+                      color: "warmGray.200",
+                    }}
+                    fontWeight="400"
+                  >
+                    {format(new Date(recipe.updatedAt), "MM/dd/yyyy")}
+                  </Text>
+                </HStack>
+              </HStack>
+            </Stack>
+          )}
+        </ScrollView>
+      </>
     );
 
   if (!recipe && error)

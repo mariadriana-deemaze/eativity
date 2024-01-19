@@ -1,4 +1,17 @@
-import { Box, FlatList, Icon, Input, ScrollView, View } from "native-base";
+import { useEffect } from "react";
+
+import {
+  Box,
+  FlatList,
+  HStack,
+  Icon,
+  Input,
+  Skeleton,
+  Spinner,
+  Text,
+  VStack,
+  View,
+} from "native-base";
 
 import {
   MenuPills,
@@ -17,13 +30,17 @@ import { RoutesParamList } from "../../routes/protected";
 
 import { MaterialIcons } from "@expo/vector-icons";
 
-import { categories, recipe } from "../../utils";
+import { categories } from "../../utils";
 
 import { IRootState, useAppDispatch } from "../../stores";
 
 import { recipeActions } from "../../stores/recipe/slices";
 
+import { getRecipesFromSearch } from "../../stores/recipe/actions";
+
 import { Screens } from "../../routes/navigation";
+
+import { PaginationParameters } from "../../types";
 
 type RecipeScreenNavigationProp = StackNavigationProp<
   RoutesParamList,
@@ -37,11 +54,17 @@ type RecipesScreenProps = {
   route: RecipeScreenRouteProp;
 };
 
+const DEFAULT_PAGINATION: PaginationParameters = {
+  maxResults: 5,
+  offset: 0,
+};
+
 export const Recipes: React.FC<RecipesScreenProps> = ({ navigation }) => {
   const {
     loading: isLoading,
     category: selectedCategory,
     search,
+    recipes,
   } = useSelector((state: IRootState) => state.recipe);
 
   const dispatch = useAppDispatch();
@@ -58,6 +81,30 @@ export const Recipes: React.FC<RecipesScreenProps> = ({ navigation }) => {
   const onRecipesSearch = (text: string) =>
     dispatch(recipeActions.setSearch(text));
 
+  const hasRecipesData = recipes?.data.length > 0;
+
+  const loadMoreRecipes = () => {
+    if (recipes.data.length < recipes.pagination.count) {
+      dispatch(
+        getRecipesFromSearch({
+          pagination: {
+            maxResults: recipes.pagination.maxResults,
+            offset: recipes.pagination.offset + DEFAULT_PAGINATION.maxResults,
+          },
+        })
+      );
+    }
+  };
+
+  useEffect(() => {
+    dispatch(
+      getRecipesFromSearch({
+        search,
+        pagination: DEFAULT_PAGINATION,
+      })
+    );
+  }, [search]);
+
   const pillsFlatListStyles = {
     horizontal: true,
     scrollEnabled: true,
@@ -71,11 +118,7 @@ export const Recipes: React.FC<RecipesScreenProps> = ({ navigation }) => {
   } as const;
 
   return (
-    <ScrollView
-      contentContainerStyle={{
-        alignItems: "center",
-      }}
-    >
+    <Box alignItems="center">
       <Box maxW="80" mt="5">
         <Input
           placeholder="Search for recipes"
@@ -98,40 +141,67 @@ export const Recipes: React.FC<RecipesScreenProps> = ({ navigation }) => {
         />
       </Box>
 
-      {!isLoading ? (
-        <FlatList
-          keyExtractor={(item) => `category_${item}`}
-          data={["All", ...categories]}
-          {...pillsFlatListStyles}
-          renderItem={({ item: category }) => (
-            <MenuPills
-              title={category}
-              isActive={selectedCategory === category}
-              onPress={() => onRecipeCategoryPress(category)}
-            />
-          )}
-        />
-      ) : (
-        <FlatList
-          keyExtractor={(_item, index) => `category_${index}`}
-          data={new Array(8).fill(1)}
-          {...pillsFlatListStyles}
-          renderItem={() => <MenuPillsSkeleton />}
-        />
-      )}
+      <Box h="12">
+        {categories ? (
+          <FlatList
+            keyExtractor={(item) => `category_${item}`}
+            data={["All", ...categories]}
+            {...pillsFlatListStyles}
+            renderItem={({ item: category }) => (
+              <MenuPills
+                title={category}
+                isActive={selectedCategory === category}
+                onPress={() => onRecipeCategoryPress(category)}
+              />
+            )}
+          />
+        ) : (
+          <FlatList
+            keyExtractor={(_item, index) => `category_${index}`}
+            data={new Array(8).fill(1)}
+            {...pillsFlatListStyles}
+            renderItem={() => <MenuPillsSkeleton />}
+          />
+        )}
+      </Box>
 
-      {!isLoading ? (
-        <FlatList
-          keyExtractor={(item) => item.id}
-          data={recipe}
-          renderItem={({ item }) => (
-            <RecipeCard
-              {...{ ...item, onPress: () => onRecipePress(item.id) }}
-            />
+      <Box maxW="80" my="2">
+        <HStack
+          space="2"
+          w="80"
+          alignItems="center"
+          justifyContent="space-between"
+        >
+          {hasRecipesData ? (
+            <>
+              <Text fontSize="xs">
+                Matched {recipes?.pagination?.count} results.
+              </Text>
+              <Text fontSize="xs">
+                Displaying {recipes?.data.length} results.
+              </Text>
+            </>
+          ) : (
+            <>
+              <Skeleton
+                height="5"
+                width="1/2"
+                rounded="md"
+                bgColor="gray.100"
+              />
+              <Skeleton
+                height="5"
+                width="1/2"
+                rounded="md"
+                bgColor="gray.100"
+              />
+            </>
           )}
-          ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
-        />
-      ) : (
+        </HStack>
+      </Box>
+
+      {/* SKELETON */}
+      {isLoading && !hasRecipesData && (
         <FlatList
           keyExtractor={(_item, index) => `recipe_skeleton_${index}`}
           data={new Array(8).fill(1)}
@@ -139,6 +209,47 @@ export const Recipes: React.FC<RecipesScreenProps> = ({ navigation }) => {
           ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
         />
       )}
-    </ScrollView>
+
+      <Box h="container" marginBottom="56" alignItems="center">
+        {/* RESULTS */}
+        {!isLoading && hasRecipesData && (
+          <FlatList
+            keyExtractor={(item) => item.id}
+            data={recipes?.data}
+            renderItem={({ item }) => (
+              <RecipeCard
+                {...{ ...item, onPress: () => onRecipePress(item.id) }}
+              />
+            )}
+            onEndReached={loadMoreRecipes}
+            ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+          />
+        )}
+
+        <VStack
+          space="2"
+          py="5"
+          w="80"
+          alignItems="center"
+          /* h="full"
+          justifyContent="center" */
+        >
+          {/* END OF RESULTS */}
+          {!isLoading &&
+            hasRecipesData &&
+            recipes.data.length === recipes.pagination.count && (
+              <Text>End of results.</Text>
+            )}
+
+          {/* FETCHING MORE */}
+          {isLoading && <Spinner />}
+
+          {/* QUERY RETURN NO MATCHING RESULTS */}
+          {!isLoading && !hasRecipesData && (
+            <Text>No matching results for "{search}" term.</Text>
+          )}
+        </VStack>
+      </Box>
+    </Box>
   );
 };
