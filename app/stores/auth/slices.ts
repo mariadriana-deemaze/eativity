@@ -18,17 +18,18 @@ interface InitialState {
   success: boolean;
 }
 
-const getTokenFromStore = async () => {
+/* const getTokenFromStore = async () => {
   try {
     return await SecureStore.getItemAsync(TOKEN_KEY);
   } catch (error) {
     return null;
   }
 };
-
+ */
 const initialState: InitialState = {
   loading: false,
-  userToken: getTokenFromStore(),
+  // userToken: getTokenFromStore(),
+  userToken: null,
   error: null,
   success: false,
 };

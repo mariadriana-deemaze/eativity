@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 
-export const API_URL = "http://10.11.13.17:3000";
+export const API_URL = "http://192.168.1.66:3000";
 
 import * as SecureStore from "expo-secure-store";
 
@@ -24,7 +24,7 @@ api.interceptors.request.use(
   },
   (error) => {
     Promise.reject(error);
-  }
+  },
 );
 
 const API_LOGGER = (req: AxiosResponse<any, any>) => {
@@ -32,7 +32,7 @@ const API_LOGGER = (req: AxiosResponse<any, any>) => {
   console.log(
     `[LOGGER::${req.config.method.toUpperCase()}::${
       req.config.url
-    }] -> ${JSON.stringify(req.data)}`
+    }] -> ${JSON.stringify(req.data)}`,
   );
   console.log("-----");
 };
@@ -47,5 +47,5 @@ api.interceptors.response.use(
     if (process.env.NODE_ENV !== "production")
       API_LOGGER(rejectedRequestResponse);
     return rejectedRequestResponse;
-  }
+  },
 );

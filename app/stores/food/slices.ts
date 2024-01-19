@@ -65,14 +65,14 @@ const foodSlice = createSlice({
               },
             },
           });
-        }
+        },
       )
       .addCase(
         getFoodsFromSearch.rejected,
         (state, { payload: errorPayload }) => {
           state.loading = false;
           state.error = errorPayload || defaultNetworkErrorMessage;
-        }
+        },
       )
       .addCase(getFoodInfo.pending, (state) => {
         state.loading = true;

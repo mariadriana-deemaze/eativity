@@ -5,7 +5,6 @@ import {
   Image,
   Skeleton,
   AspectRatio,
-  Center,
   Stack,
   Heading,
   HStack,
@@ -52,9 +51,7 @@ export const FoodCardSkeleton = () => {
 export const FoodCard = ({
   name,
   description,
-  //types,
   createdAt,
-  updatedAt,
   onPress,
 }: FoodCardProps) => {
   return (
@@ -87,30 +84,6 @@ export const FoodCard = ({
                 alt="image"
               />
             </AspectRatio>
-            {/* <Center
-              bg="violet.500"
-              _dark={{
-                bg: "violet.400",
-              }}
-              position="absolute"
-              bottom="0"
-              px="3"
-              py="1.5"
-              display="flex"
-              flexDirection="row"
-            >
-              {types.map((type) => (
-                <Text
-                  key={`food_${name}_category_${type}`}
-                  color="warmGray.50"
-                  fontWeight="700"
-                  fontSize="xs"
-                  pr="0.5"
-                >
-                  {type}
-                </Text>
-              ))}
-            </Center> */}
           </Box>
           <Stack p="4" space={3}>
             <Stack space={2}>

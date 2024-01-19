@@ -46,7 +46,7 @@ type FoodScreenProps = {
 
 export const Food: React.FC<FoodScreenProps> = ({ route, navigation }) => {
   const [onEditMode, setOnEditMode] = useState<"create" | "edit" | undefined>(
-    undefined
+    undefined,
   );
 
   const { foodId } = route.params;
@@ -56,7 +56,7 @@ export const Food: React.FC<FoodScreenProps> = ({ route, navigation }) => {
   const { setFoodInfo } = foodActions;
 
   const { food, loading, error } = useSelector(
-    (state: IRootState) => state.food
+    (state: IRootState) => state.food,
   );
 
   const navigateBack = () => navigation.goBack();

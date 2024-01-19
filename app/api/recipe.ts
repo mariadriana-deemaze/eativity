@@ -23,7 +23,7 @@ const formatPayload = (recipe: Recipe) => {
 
 export const getRecipes = async (
   searchName?: string,
-  paginationParameters?: PaginationParameters
+  paginationParameters?: PaginationParameters,
 ): Promise<PaginatedPayload<Recipe>> => {
   let url = `${API_URL}/recipe/`;
 

@@ -49,7 +49,7 @@ type RecipeScreenProps = {
 
 export const Recipe: React.FC<RecipeScreenProps> = ({ route, navigation }) => {
   const [onEditMode, setEditMode] = useState<"create" | "edit" | undefined>(
-    undefined
+    undefined,
   );
 
   const { recipeId } = route.params;
@@ -59,7 +59,7 @@ export const Recipe: React.FC<RecipeScreenProps> = ({ route, navigation }) => {
   const { setRecipeInfo } = recipeActions;
 
   const { recipe, loading, error } = useSelector(
-    (state: IRootState) => state.recipe
+    (state: IRootState) => state.recipe,
   );
 
   const navigateBack = () => navigation.goBack();

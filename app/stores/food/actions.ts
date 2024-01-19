@@ -14,7 +14,7 @@ export const getFoodsFromSearch = createAsyncThunk(
       search?: string;
       pagination?: PaginationParameters;
     },
-    { rejectWithValue }
+    { rejectWithValue },
   ) => {
     try {
       return await getFoods(search, pagination);
@@ -25,7 +25,7 @@ export const getFoodsFromSearch = createAsyncThunk(
         return rejectWithValue("An error has ocurred!");
       }
     }
-  }
+  },
 );
 
 export const getFoodInfo = createAsyncThunk(
@@ -40,7 +40,7 @@ export const getFoodInfo = createAsyncThunk(
         return rejectWithValue("An error has ocurred!");
       }
     }
-  }
+  },
 );
 
 export const createNewFood = createAsyncThunk(
@@ -57,7 +57,7 @@ export const createNewFood = createAsyncThunk(
         return rejectWithValue("An error has ocurred!");
       }
     }
-  }
+  },
 );
 
 export const updateFoodInfo = createAsyncThunk(
@@ -74,5 +74,5 @@ export const updateFoodInfo = createAsyncThunk(
         return rejectWithValue("An error has ocurred!");
       }
     }
-  }
+  },
 );

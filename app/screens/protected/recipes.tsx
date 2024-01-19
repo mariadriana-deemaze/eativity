@@ -91,7 +91,7 @@ export const Recipes: React.FC<RecipesScreenProps> = ({ navigation }) => {
             maxResults: recipes.pagination.maxResults,
             offset: recipes.pagination.offset + DEFAULT_PAGINATION.maxResults,
           },
-        })
+        }),
       );
     }
   };
@@ -101,7 +101,7 @@ export const Recipes: React.FC<RecipesScreenProps> = ({ navigation }) => {
       getRecipesFromSearch({
         search,
         pagination: DEFAULT_PAGINATION,
-      })
+      }),
     );
   }, [search]);
 

@@ -16,7 +16,7 @@ export const getUserInfo = createAsyncThunk(
         return rejectWithValue(error.message);
       }
     }
-  }
+  },
 );
 
 export const updateUserInfo = createAsyncThunk(
@@ -32,5 +32,5 @@ export const updateUserInfo = createAsyncThunk(
         return rejectWithValue(error.message);
       }
     }
-  }
+  },
 );

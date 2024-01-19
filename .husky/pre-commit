@@ -37,6 +37,3 @@ yarn fe:lint ||
 #    echo "😤🏀👋😤 Test Failed, buggy code. I ain't going to commit this, the hell! - Try again."
 #    false; 
 #)
-
-# Add to staged
-git add .

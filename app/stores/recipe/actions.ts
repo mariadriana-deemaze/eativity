@@ -19,7 +19,7 @@ export const getRecipesFromSearch = createAsyncThunk(
       search?: string;
       pagination: PaginationParameters;
     },
-    { rejectWithValue }
+    { rejectWithValue },
   ) => {
     try {
       return await getRecipes(search, pagination);
@@ -30,7 +30,7 @@ export const getRecipesFromSearch = createAsyncThunk(
         return rejectWithValue("An error has ocurred!");
       }
     }
-  }
+  },
 );
 
 export const getRecipeInfo = createAsyncThunk(
@@ -45,7 +45,7 @@ export const getRecipeInfo = createAsyncThunk(
         return rejectWithValue("An error has ocurred!");
       }
     }
-  }
+  },
 );
 
 export const createNewRecipe = createAsyncThunk(
@@ -62,7 +62,7 @@ export const createNewRecipe = createAsyncThunk(
         return rejectWithValue("An error has ocurred!");
       }
     }
-  }
+  },
 );
 
 export const updateRecipeInfo = createAsyncThunk(
@@ -79,5 +79,5 @@ export const updateRecipeInfo = createAsyncThunk(
         return rejectWithValue("An error has ocurred!");
       }
     }
-  }
+  },
 );

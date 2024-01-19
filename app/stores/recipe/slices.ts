@@ -76,14 +76,14 @@ const recipeSlice = createSlice({
               },
             },
           });
-        }
+        },
       )
       .addCase(
         getRecipesFromSearch.rejected,
         (state, { payload: errorPayload }) => {
           state.loading = false;
           state.error = errorPayload || defaultNetworkErrorMessage;
-        }
+        },
       )
       .addCase(getRecipeInfo.pending, (state) => {
         state.loading = true;

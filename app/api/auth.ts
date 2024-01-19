@@ -19,7 +19,7 @@ export const signInUser = async (params: SignInInputs) =>
     });
 
 export const signUpUser = async (
-  params: Omit<SignUpInputs, "password_repeat">
+  params: Omit<SignUpInputs, "password_repeat">,
 ) =>
   await api
     .post<SignUpUserResponse>(`${API_URL}/auth/sign-up`, params)

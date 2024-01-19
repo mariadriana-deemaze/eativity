@@ -41,8 +41,8 @@ export const ToastAlert = ({
     variant === "solid"
       ? "lightText"
       : variant !== "outline"
-      ? "darkText"
-      : null;
+        ? "darkText"
+        : null;
 
   const iconStyles = {
     color: variant === "solid" ? "lightText" : "darkText",

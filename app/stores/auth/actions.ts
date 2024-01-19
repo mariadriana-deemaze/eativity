@@ -33,7 +33,7 @@ export const authenticateUser = createAsyncThunk(
         return rejectWithValue(error.message);
       }
     }
-  }
+  },
 );
 
 export const registerUser = createAsyncThunk(
@@ -54,5 +54,5 @@ export const registerUser = createAsyncThunk(
         return rejectWithValue(error.message);
       }
     }
-  }
+  },
 );

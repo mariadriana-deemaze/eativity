@@ -76,7 +76,7 @@ export const Foods: React.FC<FoodsScreenProps> = ({ navigation }) => {
             maxResults: foods.pagination.maxResults,
             offset: foods.pagination.offset + DEFAULT_PAGINATION.maxResults,
           },
-        })
+        }),
       );
     }
   };
@@ -86,7 +86,7 @@ export const Foods: React.FC<FoodsScreenProps> = ({ navigation }) => {
       getFoodsFromSearch({
         search,
         pagination: DEFAULT_PAGINATION,
-      })
+      }),
     );
   }, [search]);
 

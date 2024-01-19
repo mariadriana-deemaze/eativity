@@ -172,7 +172,7 @@ export const Onboarding = () => {
               onPressIn={() => setIsDatePickerOpen(true)}
               value={format(
                 new Date(getValues("birthdate")) || new Date(),
-                "MM/dd/yyyy"
+                "MM/dd/yyyy",
               )}
             />
           </Box>
