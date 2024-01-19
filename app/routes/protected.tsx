@@ -4,11 +4,11 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 
 import { createStackNavigator } from "@react-navigation/stack";
 
-import { Dashboard, Settings, Recipes, Recipe } from "../screens";
+import Ionicons from "@expo/vector-icons/Ionicons";
+
+import { Dashboard, Settings, Recipes, Recipe, Foods, Food } from "../screens";
 
 import CustomDrawer from "../components/drawer";
-
-import Ionicons from "@expo/vector-icons/Ionicons";
 
 import { Screens } from "./navigation";
 
@@ -17,11 +17,6 @@ const Drawer = createDrawerNavigator();
 const BottomStack = createBottomTabNavigator();
 
 const Stack = createStackNavigator();
-
-export type RoutesParamList = {
-  Recipes: undefined;
-  Recipe: { recipeId: string };
-};
 
 const AppBottomStack = () => {
   return (
@@ -47,6 +42,20 @@ const AppBottomStack = () => {
       <BottomStack.Screen
         name={Screens.SETTINGS}
         component={Settings}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ focused }) => (
+            <Ionicons
+              name="md-checkmark-circle"
+              size={32}
+              color={focused ? "blue" : "gray"}
+            />
+          ),
+        }}
+      />
+      <BottomStack.Screen
+        name={Screens.FOODS}
+        component={Foods}
         options={{
           headerShown: false,
           tabBarIcon: ({ focused }) => (
@@ -91,6 +100,10 @@ export const ProtectedRoutes = () => (
     }}
   >
     <Stack.Screen name="Routes" component={DrawerRoutes} />
-    <Stack.Screen name="Recipe" component={Recipe} />
+    <Stack.Screen name={Screens.RECIPE} component={Recipe} />
+    <Stack.Screen name={Screens.FOOD} component={Food} />
+    {/* MOVE THEM TO HERE */}
+    {/* <Stack.Screen name={Screens.RECIPES} component={Recipes} />
+    <Stack.Screen name={Screens.FOODS} component={Foods} /> */}
   </Stack.Navigator>
 );

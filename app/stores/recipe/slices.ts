@@ -7,7 +7,9 @@ import {
   defaultNetworkErrorMessage,
 } from "../../components/toastAlert";
 
-import { Recipe, PaginatedPayload } from "../../types";
+import { Recipe } from "../../types/recipe";
+
+import { PaginatedPayload } from "../../types";
 
 interface InitialState {
   loading: boolean;

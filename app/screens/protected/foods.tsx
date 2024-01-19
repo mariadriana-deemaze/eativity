@@ -13,45 +13,35 @@ import {
   View,
 } from "native-base";
 
-import {
-  MenuPills,
-  MenuPillsSkeleton,
-} from "../../components/menu-pills/menu-pills";
-
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { RouteProp } from "@react-navigation/native";
 
 import { useSelector } from "react-redux";
 
-import { RecipeCard, RecipeCardSkeleton } from "../../components/recipes";
+import { FoodCard, FoodCardSkeleton } from "../../components/foods";
 
 import { RoutesParamList } from "../../routes/navigation";
 
 import { MaterialIcons } from "@expo/vector-icons";
 
-import { categories } from "../../utils";
-
 import { IRootState, useAppDispatch } from "../../stores";
 
-import { recipeActions } from "../../stores/recipe/slices";
+import { foodActions } from "../../stores/food/slices";
 
-import { getRecipesFromSearch } from "../../stores/recipe/actions";
+import { getFoodsFromSearch } from "../../stores/food/actions";
 
 import { Screens } from "../../routes/navigation";
 
 import { PaginationParameters } from "../../types";
 
-type RecipeScreenNavigationProp = StackNavigationProp<
-  RoutesParamList,
-  "Recipes"
->;
+type FoodScreenNavigationProp = StackNavigationProp<RoutesParamList, "Foods">;
 
-type RecipeScreenRouteProp = RouteProp<RoutesParamList, "Recipes">;
+type FoodScreenRouteProp = RouteProp<RoutesParamList, "Foods">;
 
-type RecipesScreenProps = {
-  navigation: RecipeScreenNavigationProp;
-  route: RecipeScreenRouteProp;
+type FoodsScreenProps = {
+  navigation: FoodScreenNavigationProp;
+  route: FoodScreenRouteProp;
 };
 
 const DEFAULT_PAGINATION: PaginationParameters = {
@@ -59,37 +49,32 @@ const DEFAULT_PAGINATION: PaginationParameters = {
   offset: 0,
 };
 
-export const Recipes: React.FC<RecipesScreenProps> = ({ navigation }) => {
+export const Foods: React.FC<FoodsScreenProps> = ({ navigation }) => {
   const {
     loading: isLoading,
-    category: selectedCategory,
+    foods,
     search,
-    recipes,
-  } = useSelector((state: IRootState) => state.recipe);
+  } = useSelector((state: IRootState) => state.food);
 
   const dispatch = useAppDispatch();
 
-  const onRecipeCategoryPress = (category: string) =>
-    dispatch(recipeActions.setCategory(category));
+  const hasFoodData = foods?.data.length > 0;
 
-  const onRecipePress = (id: string) => {
-    navigation.navigate(Screens.RECIPE, {
-      recipeId: id,
+  const onFoodPress = (id: string) => {
+    navigation.navigate(Screens.FOOD, {
+      foodId: id,
     });
   };
 
-  const onRecipesSearch = (text: string) =>
-    dispatch(recipeActions.setSearch(text));
+  const onFoodsSearch = (text: string) => dispatch(foodActions.setSearch(text));
 
-  const hasRecipesData = recipes?.data.length > 0;
-
-  const loadMoreRecipes = () => {
-    if (recipes.data.length < recipes.pagination.count) {
+  const loadMoreFoods = () => {
+    if (foods.data.length < foods.pagination.count) {
       dispatch(
-        getRecipesFromSearch({
+        getFoodsFromSearch({
           pagination: {
-            maxResults: recipes.pagination.maxResults,
-            offset: recipes.pagination.offset + DEFAULT_PAGINATION.maxResults,
+            maxResults: foods.pagination.maxResults,
+            offset: foods.pagination.offset + DEFAULT_PAGINATION.maxResults,
           },
         })
       );
@@ -98,30 +83,18 @@ export const Recipes: React.FC<RecipesScreenProps> = ({ navigation }) => {
 
   useEffect(() => {
     dispatch(
-      getRecipesFromSearch({
+      getFoodsFromSearch({
         search,
         pagination: DEFAULT_PAGINATION,
       })
     );
   }, [search]);
 
-  const pillsFlatListStyles = {
-    horizontal: true,
-    scrollEnabled: true,
-    overScrollMode: "always",
-    height: "16",
-    px: "3",
-    contentContainerStyle: {
-      display: "flex",
-      alignItems: "center",
-    },
-  } as const;
-
   return (
     <Box alignItems="center">
       <Box maxW="80" mt="5">
         <Input
-          placeholder="Search for recipes"
+          placeholder="Search for foods"
           width="100%"
           borderRadius="4"
           py="3"
@@ -137,32 +110,8 @@ export const Recipes: React.FC<RecipesScreenProps> = ({ navigation }) => {
             />
           }
           value={search}
-          onChangeText={onRecipesSearch}
+          onChangeText={onFoodsSearch}
         />
-      </Box>
-
-      <Box h="12">
-        {categories ? (
-          <FlatList
-            keyExtractor={(item) => `category_${item}`}
-            data={["All", ...categories]}
-            {...pillsFlatListStyles}
-            renderItem={({ item: category }) => (
-              <MenuPills
-                title={category}
-                isActive={selectedCategory === category}
-                onPress={() => onRecipeCategoryPress(category)}
-              />
-            )}
-          />
-        ) : (
-          <FlatList
-            keyExtractor={(_item, index) => `category_${index}`}
-            data={new Array(8).fill(1)}
-            {...pillsFlatListStyles}
-            renderItem={() => <MenuPillsSkeleton />}
-          />
-        )}
       </Box>
 
       <Box maxW="80" my="2">
@@ -172,13 +121,13 @@ export const Recipes: React.FC<RecipesScreenProps> = ({ navigation }) => {
           alignItems="center"
           justifyContent="space-between"
         >
-          {hasRecipesData ? (
+          {hasFoodData ? (
             <>
               <Text fontSize="xs">
-                Matched {recipes?.pagination?.count} results.
+                Matched {foods?.pagination?.count} results.
               </Text>
               <Text fontSize="xs">
-                Displaying {recipes?.data.length} results.
+                Displaying {foods?.data.length} results.
               </Text>
             </>
           ) : (
@@ -201,27 +150,25 @@ export const Recipes: React.FC<RecipesScreenProps> = ({ navigation }) => {
       </Box>
 
       {/* SKELETON */}
-      {isLoading && !hasRecipesData && (
+      {isLoading && !hasFoodData && (
         <FlatList
-          keyExtractor={(_item, index) => `recipe_skeleton_${index}`}
+          keyExtractor={(_item, index) => `food_skeleton_${index}`}
           data={new Array(8).fill(1)}
-          renderItem={() => <RecipeCardSkeleton />}
+          renderItem={() => <FoodCardSkeleton />}
           ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
         />
       )}
 
       <Box h="container" marginBottom="56" alignItems="center">
         {/* RESULTS */}
-        {!isLoading && hasRecipesData && (
+        {!isLoading && hasFoodData && (
           <FlatList
             keyExtractor={(item) => item.id}
-            data={recipes?.data}
+            data={foods?.data}
             renderItem={({ item }) => (
-              <RecipeCard
-                {...{ ...item, onPress: () => onRecipePress(item.id) }}
-              />
+              <FoodCard {...{ ...item, onPress: () => onFoodPress(item.id) }} />
             )}
-            onEndReached={loadMoreRecipes}
+            onEndReached={loadMoreFoods}
             ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
           />
         )}
@@ -236,8 +183,8 @@ export const Recipes: React.FC<RecipesScreenProps> = ({ navigation }) => {
         >
           {/* END OF RESULTS */}
           {!isLoading &&
-            hasRecipesData &&
-            recipes.data.length === recipes.pagination.count && (
+            hasFoodData &&
+            foods.data.length === foods.pagination.count && (
               <Text>End of results.</Text>
             )}
 
@@ -245,7 +192,7 @@ export const Recipes: React.FC<RecipesScreenProps> = ({ navigation }) => {
           {isLoading && <Spinner />}
 
           {/* QUERY RETURN NO MATCHING RESULTS */}
-          {!isLoading && !hasRecipesData && (
+          {!isLoading && !hasFoodData && (
             <Text>No matching results for "{search}" term.</Text>
           )}
         </VStack>

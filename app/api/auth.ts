@@ -12,7 +12,6 @@ export const signInUser = async (params: SignInInputs) =>
   await api
     .post<SignInUserResponse>(`${API_URL}/auth/sign-in`, params)
     .then(({ data }) => {
-      console.log("data ->", data);
       return data;
     })
     .catch((err) => {
@@ -25,7 +24,6 @@ export const signUpUser = async (
   await api
     .post<SignUpUserResponse>(`${API_URL}/auth/sign-up`, params)
     .then(({ data }) => {
-      console.log("data ->", data);
       return data;
     })
     .catch((err) => {

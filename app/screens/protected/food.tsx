@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 
-import { format } from "date-fns";
-
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { RouteProp } from "@react-navigation/native";
@@ -27,58 +25,59 @@ import { Ionicons } from "@expo/vector-icons";
 
 import { IRootState, useAppDispatch } from "../../stores";
 
-import { getRecipeInfo } from "../../stores/recipe/actions";
+import { getFoodInfo } from "../../stores/food/actions";
 
-import { recipeActions } from "../../stores/recipe/slices";
+import { foodActions } from "../../stores/food/slices";
 
 import { RoutesParamList } from "../../routes/navigation";
 
-import RecipeForm from "../../components/recipes/form";
+import FoodForm from "../../components/foods/form";
 
-type RecipeScreenNavigationProp = StackNavigationProp<
-  RoutesParamList,
-  "Recipe"
->;
+import { format } from "date-fns";
 
-type RecipeScreenRouteProp = RouteProp<RoutesParamList, "Recipe">;
+type FoodScreenNavigationProp = StackNavigationProp<RoutesParamList, "Food">;
 
-type RecipeScreenProps = {
-  navigation: RecipeScreenNavigationProp;
-  route: RecipeScreenRouteProp;
+type FoodScreenRouteProp = RouteProp<RoutesParamList, "Food">;
+
+type FoodScreenProps = {
+  navigation: FoodScreenNavigationProp;
+  route: FoodScreenRouteProp;
 };
 
-export const Recipe: React.FC<RecipeScreenProps> = ({ route, navigation }) => {
-  const [onEditMode, setEditMode] = useState<"create" | "edit" | undefined>(
+export const Food: React.FC<FoodScreenProps> = ({ route, navigation }) => {
+  const [onEditMode, setOnEditMode] = useState<"create" | "edit" | undefined>(
     undefined
   );
 
-  const { recipeId } = route.params;
+  const { foodId } = route.params;
 
   const dispatch = useAppDispatch();
 
-  const { setRecipeInfo } = recipeActions;
+  const { setFoodInfo } = foodActions;
 
-  const { recipe, loading, error } = useSelector(
-    (state: IRootState) => state.recipe
+  const { food, loading, error } = useSelector(
+    (state: IRootState) => state.food
   );
 
   const navigateBack = () => navigation.goBack();
 
   const enterEditRecord = () => {
-    onEditMode === "edit" ? setEditMode(undefined) : setEditMode("edit");
+    onEditMode === "edit" ? setOnEditMode(undefined) : setOnEditMode("create");
   };
 
   const enterNewRecord = () => {
-    onEditMode === "create" ? setEditMode(undefined) : setEditMode("create");
+    onEditMode === "create"
+      ? setOnEditMode(undefined)
+      : setOnEditMode("create");
   };
 
   useEffect(() => {
-    dispatch(getRecipeInfo(recipeId));
+    dispatch(getFoodInfo(foodId));
 
     return () => {
-      dispatch(setRecipeInfo(null));
+      dispatch(setFoodInfo(null));
     };
-  }, []);
+  }, [foodId]);
 
   if (loading)
     return (
@@ -91,7 +90,7 @@ export const Recipe: React.FC<RecipeScreenProps> = ({ route, navigation }) => {
       </Box>
     );
 
-  if (recipe)
+  if (food)
     return (
       <>
         <Box>
@@ -125,19 +124,19 @@ export const Recipe: React.FC<RecipeScreenProps> = ({ route, navigation }) => {
         </Box>
 
         <ScrollView w="full">
-          {onEditMode === "edit" && <RecipeForm recipe={recipe} />}
+          {onEditMode === "edit" && <FoodForm food={food} />}
 
-          {onEditMode === "create" && <RecipeForm />}
+          {onEditMode === "create" && <FoodForm />}
 
           {onEditMode === undefined && (
             <Stack p="4" space={3}>
               <Stack space={2}>
                 <Heading size="md" ml="-1">
-                  {recipe.name}
+                  {food.name}
                 </Heading>
               </Stack>
               <Text fontWeight="400" noOfLines={3}>
-                {recipe.description}
+                {food.description}
               </Text>
               <HStack
                 alignItems="center"
@@ -152,7 +151,7 @@ export const Recipe: React.FC<RecipeScreenProps> = ({ route, navigation }) => {
                     }}
                     fontWeight="400"
                   >
-                    {format(new Date(recipe.createdAt), "MM/dd/yyyy")}
+                    {format(new Date(food.createdAt), "MM/dd/yyyy")}
                   </Text>
                   <Text
                     color="coolGray.600"
@@ -161,7 +160,7 @@ export const Recipe: React.FC<RecipeScreenProps> = ({ route, navigation }) => {
                     }}
                     fontWeight="400"
                   >
-                    {format(new Date(recipe.updatedAt), "MM/dd/yyyy")}
+                    {format(new Date(food.updatedAt), "MM/dd/yyyy")}
                   </Text>
                 </HStack>
               </HStack>
@@ -171,6 +170,6 @@ export const Recipe: React.FC<RecipeScreenProps> = ({ route, navigation }) => {
       </>
     );
 
-  if (!recipe && error)
+  if (!food && error)
     return <Text>{error.message ?? "An error has ocurred."}</Text>;
 };

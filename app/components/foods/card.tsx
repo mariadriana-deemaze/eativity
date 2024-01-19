@@ -1,0 +1,160 @@
+import {
+  VStack,
+  Box,
+  Text,
+  Image,
+  Skeleton,
+  AspectRatio,
+  Center,
+  Stack,
+  Heading,
+  HStack,
+  Pressable,
+} from "native-base";
+
+import { format } from "date-fns";
+
+import { Food } from "../../types";
+
+import { GestureResponderEvent } from "react-native";
+
+interface FoodCardProps extends Food {
+  onPress: (event: GestureResponderEvent) => void;
+}
+
+// TODO: Do better Adriana, this alignment ain't good
+export const FoodCardSkeleton = () => {
+  return (
+    <Box alignItems="center" width="full">
+      <Box
+        maxW="80"
+        width="80"
+        borderRadius="lg"
+        borderWidth="1"
+        borderColor="gray.200"
+      >
+        <VStack space="4" p="2">
+          <Skeleton flex="1" height="80" rounded="md" bgColor="gray.100" />
+          <Box px="4" pt="4">
+            <Skeleton flex="1" height="5" rounded="md" bgColor="gray.100" />
+          </Box>
+          <VStack space="4">
+            <Skeleton flex="1" height="5" rounded="md" bgColor="gray.100" />
+            <Skeleton flex="1" height="5" rounded="md" bgColor="gray.100" />
+            <Skeleton flex="1" height="5" rounded="md" bgColor="gray.100" />
+          </VStack>
+        </VStack>
+      </Box>
+    </Box>
+  );
+};
+
+export const FoodCard = ({
+  name,
+  description,
+  //types,
+  createdAt,
+  updatedAt,
+  onPress,
+}: FoodCardProps) => {
+  return (
+    <Pressable onPress={onPress}>
+      <Box alignItems="center">
+        <Box
+          maxW="80"
+          rounded="lg"
+          overflow="hidden"
+          borderColor="coolGray.200"
+          borderWidth="1"
+          _dark={{
+            borderColor: "coolGray.600",
+            backgroundColor: "gray.700",
+          }}
+          _web={{
+            shadow: 2,
+            borderWidth: 0,
+          }}
+          _light={{
+            backgroundColor: "gray.50",
+          }}
+        >
+          <Box>
+            <AspectRatio w="100%" ratio={16 / 9}>
+              <Image
+                source={{
+                  uri: "https://wallpaperaccess.com/full/317501.jpg",
+                }}
+                alt="image"
+              />
+            </AspectRatio>
+            {/* <Center
+              bg="violet.500"
+              _dark={{
+                bg: "violet.400",
+              }}
+              position="absolute"
+              bottom="0"
+              px="3"
+              py="1.5"
+              display="flex"
+              flexDirection="row"
+            >
+              {types.map((type) => (
+                <Text
+                  key={`food_${name}_category_${type}`}
+                  color="warmGray.50"
+                  fontWeight="700"
+                  fontSize="xs"
+                  pr="0.5"
+                >
+                  {type}
+                </Text>
+              ))}
+            </Center> */}
+          </Box>
+          <Stack p="4" space={3}>
+            <Stack space={2}>
+              <Heading size="md" ml="-1">
+                {name}
+              </Heading>
+              <Text
+                fontSize="xs"
+                _light={{
+                  color: "violet.500",
+                }}
+                _dark={{
+                  color: "violet.400",
+                }}
+                fontWeight="500"
+                ml="-0.5"
+                mt="-1"
+              >
+                The Silicon Valley of India.
+              </Text>
+            </Stack>
+            <Text fontWeight="400" noOfLines={3}>
+              {description}
+            </Text>
+            <HStack
+              alignItems="center"
+              space={4}
+              justifyContent="space-between"
+            >
+              <HStack alignItems="center">
+                <Text
+                  color="coolGray.600"
+                  _dark={{
+                    color: "warmGray.200",
+                  }}
+                  fontWeight="400"
+                >
+                  {format(new Date(createdAt), "MM/dd/yyyy")}
+                </Text>
+              </HStack>
+            </HStack>
+          </Stack>
+        </Box>
+      </Box>
+    </Pressable>
+  );
+};

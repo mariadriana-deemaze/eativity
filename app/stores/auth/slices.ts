@@ -10,6 +10,7 @@ import {
 } from "../../components/toastAlert";
 
 const TOKEN_KEY = "secure_token";
+
 interface InitialState {
   loading: boolean;
   userToken: Promise<string> | string | null;
@@ -17,10 +18,17 @@ interface InitialState {
   success: boolean;
 }
 
+const getTokenFromStore = async () => {
+  try {
+    return await SecureStore.getItemAsync(TOKEN_KEY);
+  } catch (error) {
+    return null;
+  }
+};
+
 const initialState: InitialState = {
   loading: false,
-  // userToken: SecureStore.getItemAsync(TOKEN_KEY).then((t) => t),
-  userToken: null,
+  userToken: getTokenFromStore(),
   error: null,
   success: false,
 };
@@ -48,8 +56,6 @@ const authSlice = createSlice({
         state.error = null;
       })
       .addCase(authenticateUser.fulfilled, (state, { payload }) => {
-        console.log("authenticateUser payload ->", payload);
-
         state.loading = false;
         state.success = true;
         state.userToken = payload.access_token;
