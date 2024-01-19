@@ -34,6 +34,10 @@ enum GoalDiff {
   ONE // 1
 }
 
+enum MediaType {
+  IMAGE
+}
+
 model User {
   id              Int             @id @default(autoincrement())
   name            String
@@ -48,6 +52,8 @@ model User {
   weight          Weight[]
   meals           UserMeal[]
   plan            Plan?
+  image           Media?          @relation(fields: [imageId], references: [id])
+  imageId         Int?
 }
 
 model UserMeal {
@@ -67,7 +73,8 @@ model Food {
   proteins      Int
   fats          Int
   servingSize   Int
-  image         String?
+  image         Media?       @relation(fields: [imageId], references: [id])
+  imageId       Int?
   meals         Meal[]       @relation("FoodToMeal")
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @default(now())
@@ -82,7 +89,8 @@ model Recipe {
   carbohydrates Int
   proteins      Int
   fats          Int
-  image         String?
+  image         Media?       @relation(fields: [imageId], references: [id])
+  imageId       Int?
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @default(now())
   FoodRecipe    FoodRecipe[]
@@ -128,4 +136,18 @@ model Plan {
   goal_diff                            GoalDiff
   weekly_training_amount               Int
   average_minutes_per_training_session Int
+}
+
+model Media {
+  id         Int       @id @default(autoincrement())
+  thumbLink  String
+  mediumLink String
+  link       String
+  extension  String
+  name       String
+  deleteUrl  String
+  type       MediaType
+  Recipe     Recipe[]
+  Food       Food[]
+  User       User[]
 }
