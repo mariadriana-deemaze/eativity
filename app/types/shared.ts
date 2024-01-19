@@ -1,5 +1,7 @@
 export interface Record {
   id: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface NutrionalValues {
@@ -8,3 +10,17 @@ export interface NutrionalValues {
   fat: number;
   protein: number;
 }
+
+export type PaginatedPayload<T> = {
+  data: T[];
+  pagination: {
+    count: number;
+    offset: number;
+    maxResults: number;
+  };
+};
+
+export type PaginationParameters = {
+  offset: number;
+  maxResults: number;
+};

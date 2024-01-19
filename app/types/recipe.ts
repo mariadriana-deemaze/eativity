@@ -1,10 +1,15 @@
-import { NutrionalValues, Record } from ".";
+import { Record } from ".";
 
 export interface Recipe extends Record {
   name: string;
-  description: string;
-  image: string;
-  ingredients: string[];
-  nutrition: NutrionalValues;
-  types: string[];
+  calories: number;
+  carbohydrates: number;
+  proteins: number;
+  fats: number;
+  description?: string;
+  image?: string;
 }
+
+export type PostRecipe = Omit<Recipe, keyof Record>;
+
+export type PatchRecipe = Omit<Recipe, keyof Record>;
