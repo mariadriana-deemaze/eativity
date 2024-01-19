@@ -31,7 +31,7 @@ import { getRecipeInfo } from "../../stores/recipe/actions";
 
 import { recipeActions } from "../../stores/recipe/slices";
 
-import { RoutesParamList } from "../../routes/protected";
+import { RoutesParamList } from "../../routes/navigation";
 
 import RecipeForm from "../../components/recipes/form";
 

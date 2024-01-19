@@ -12,7 +12,6 @@ import {
   Image,
   ScrollView,
   Skeleton,
-  Spinner,
   Stack,
   Text,
   VStack,
@@ -30,10 +29,11 @@ import { getFoodInfo } from "../../stores/food/actions";
 
 import { foodActions } from "../../stores/food/slices";
 
-import { RoutesParamList } from "../../routes/protected";
+import { RoutesParamList } from "../../routes/navigation";
+
+import FoodForm from "../../components/foods/form";
 
 import { format } from "date-fns";
-import FoodForm from "../../components/foods/form";
 
 type FoodScreenNavigationProp = StackNavigationProp<RoutesParamList, "Food">;
 
@@ -45,7 +45,9 @@ type FoodScreenProps = {
 };
 
 export const Food: React.FC<FoodScreenProps> = ({ route, navigation }) => {
-  const [onEditMode, setOnEditMode] = useState(false);
+  const [onEditMode, setOnEditMode] = useState<"create" | "edit" | undefined>(
+    undefined
+  );
 
   const { foodId } = route.params;
 
@@ -59,10 +61,18 @@ export const Food: React.FC<FoodScreenProps> = ({ route, navigation }) => {
 
   const navigateBack = () => navigation.goBack();
 
+  const enterEditRecord = () => {
+    onEditMode === "edit" ? setOnEditMode(undefined) : setOnEditMode("create");
+  };
+
+  const enterNewRecord = () => {
+    onEditMode === "create"
+      ? setOnEditMode(undefined)
+      : setOnEditMode("create");
+  };
+
   useEffect(() => {
-    dispatch(getFoodInfo(foodId)).then((res) => {
-      console.log("res ->", res);
-    });
+    dispatch(getFoodInfo(foodId));
 
     return () => {
       dispatch(setFoodInfo(null));
@@ -97,17 +107,28 @@ export const Food: React.FC<FoodScreenProps> = ({ route, navigation }) => {
               <Ionicons name="arrow-back-outline" size={32} color="white" />
             </TouchableOpacity>
           </Box>
-          <Box position="absolute" top="8" right="4">
-            <TouchableOpacity onPress={() => setOnEditMode(true)}>
-              <Ionicons name="settings-outline" size={32} color="white" />
-            </TouchableOpacity>
-          </Box>
+          {(onEditMode === undefined || onEditMode === "edit") && (
+            <Box position="absolute" top="8" right="16">
+              <TouchableOpacity onPress={enterEditRecord}>
+                <Ionicons name="settings-outline" size={32} color="white" />
+              </TouchableOpacity>
+            </Box>
+          )}
+          {(onEditMode === undefined || onEditMode === "create") && (
+            <Box position="absolute" top="8" right="4">
+              <TouchableOpacity onPress={enterNewRecord}>
+                <Ionicons name="document-outline" size={32} color="white" />
+              </TouchableOpacity>
+            </Box>
+          )}
         </Box>
 
         <ScrollView w="full">
-          {onEditMode ? (
-            <FoodForm food={food} />
-          ) : (
+          {onEditMode === "edit" && <FoodForm food={food} />}
+
+          {onEditMode === "create" && <FoodForm />}
+
+          {onEditMode === undefined && (
             <Stack p="4" space={3}>
               <Stack space={2}>
                 <Heading size="md" ml="-1">

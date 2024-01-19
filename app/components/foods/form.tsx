@@ -1,14 +1,23 @@
-import React from "react";
+import React, { useMemo } from "react";
+
 import { Controller, useForm } from "react-hook-form";
-import { Food } from "../../types";
+
 import { Button, VStack } from "native-base";
+
 import { TextField } from "../atoms/textField";
 
-const FoodForm = ({ food }: { food: Food }) => {
+import { createNewFood, updateFoodInfo } from "../../stores/food/actions";
+
+import { useAppDispatch } from "../../stores";
+
+import { Food } from "../../types";
+import { newFoodDummy } from "../../utils";
+
+const FoodForm = ({ food }: { food?: Food }) => {
+  const editMode = useMemo(() => !!food, [food]);
+
   const formInstance = useForm<Food>({
-    defaultValues: {
-      ...food,
-    },
+    defaultValues: food || newFoodDummy,
   });
 
   const {
@@ -17,8 +26,14 @@ const FoodForm = ({ food }: { food: Food }) => {
     formState: { isDirty },
   } = formInstance;
 
-  const onSubmit = (data: Food) => {
-    console.log("updated food ->", data);
+  const dispatch = useAppDispatch();
+
+  const onSubmit = (foodData: Food) => {
+    if (editMode) {
+      dispatch(updateFoodInfo(foodData));
+    } else {
+      dispatch(createNewFood(foodData));
+    }
   };
 
   return (
@@ -53,10 +68,11 @@ const FoodForm = ({ food }: { food: Food }) => {
         control={control}
         render={({ field: { onChange, onBlur, value } }) => (
           <TextField
-            label="E-mail"
+            label="Description"
             onBlur={onBlur}
             onChangeText={(value) => onChange(value)}
             value={value}
+            numberOfLines={3}
           />
         )}
         name="description"
@@ -68,7 +84,7 @@ const FoodForm = ({ food }: { food: Food }) => {
             label="Calories"
             onBlur={onBlur}
             onChangeText={(value) => onChange(value)}
-            value={String(value)}
+            value={value ? String(value) : undefined}
           />
         )}
         name="calories"
@@ -81,7 +97,7 @@ const FoodForm = ({ food }: { food: Food }) => {
             label="Carbohydrates"
             onBlur={onBlur}
             onChangeText={(value) => onChange(value)}
-            value={String(value)}
+            value={value ? String(value) : undefined}
           />
         )}
         name="carbohydrates"
@@ -94,7 +110,7 @@ const FoodForm = ({ food }: { food: Food }) => {
             label="Fats"
             onBlur={onBlur}
             onChangeText={(value) => onChange(value)}
-            value={String(value)}
+            value={value ? String(value) : undefined}
           />
         )}
         name="fats"
@@ -107,7 +123,7 @@ const FoodForm = ({ food }: { food: Food }) => {
             label="Proteins"
             onBlur={onBlur}
             onChangeText={(value) => onChange(value)}
-            value={String(value)}
+            value={value ? String(value) : undefined}
           />
         )}
         name="proteins"
@@ -120,7 +136,7 @@ const FoodForm = ({ food }: { food: Food }) => {
             label="Portion(g)"
             onBlur={onBlur}
             onChangeText={(value) => onChange(value)}
-            value={String(value)}
+            value={value ? String(value) : undefined}
           />
         )}
         name="servingSize"
@@ -134,7 +150,7 @@ const FoodForm = ({ food }: { food: Food }) => {
             label="Barcode"
             onBlur={onBlur}
             onChangeText={(value) => onChange(value)}
-            value={String(value)}
+            value={value ? String(value) : undefined}
           />
         )}
         name="barcode"
@@ -148,7 +164,7 @@ const FoodForm = ({ food }: { food: Food }) => {
             label="Image"
             onBlur={onBlur}
             onChangeText={(value) => onChange(value)}
-            value={String(value)}
+            value={value ? String(value) : undefined}
           />
         )}
         name="image"

@@ -22,6 +22,13 @@ export enum Screens {
   FOOD = "Food",
 }
 
+export type RoutesParamList = {
+  Recipes: undefined;
+  Recipe: { recipeId: string };
+  Foods: undefined;
+  Food: { foodId: string };
+};
+
 export default function Navigation() {
   const authStateSlice = useSelector((state: IRootState) => state.auth);
 

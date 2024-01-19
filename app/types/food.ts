@@ -13,3 +13,7 @@ export interface Food extends Record {
   //nutrition: NutrionalValues;
   //types: string[];
 }
+
+export type PatchFood = Omit<Food, keyof Record>;
+
+export type PostFood = Omit<Food, keyof Record>;

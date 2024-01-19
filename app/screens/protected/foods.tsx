@@ -21,7 +21,7 @@ import { useSelector } from "react-redux";
 
 import { FoodCard, FoodCardSkeleton } from "../../components/foods";
 
-import { RoutesParamList } from "../../routes/protected";
+import { RoutesParamList } from "../../routes/navigation";
 
 import { MaterialIcons } from "@expo/vector-icons";
 

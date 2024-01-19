@@ -1,5 +1,28 @@
 import { api, API_URL } from "./api";
-import { Food, PaginatedPayload, PaginationParameters } from "../types";
+
+import {
+  Food,
+  PaginatedPayload,
+  PaginationParameters,
+  PostFood,
+  PatchFood
+} from "../types";
+
+const formatPayload = (food: Food) => {
+  const formatted: PostFood | PatchFood = {
+    name: food.name,
+    description: food.description,
+    carbohydrates: Number(food.carbohydrates),
+    proteins: Number(food.proteins),
+    calories: Number(food.calories),
+    fats: Number(food.fats),
+    servingSize: Number(food.servingSize),
+    barcode: food.barcode,
+    image: food.image,
+  };
+
+  return formatted;
+};
 
 export const getFoods = async (
   searchName?: string,
@@ -30,10 +53,29 @@ export const getFoodById = async ({ id }: { id: string }): Promise<Food> => {
     });
 };
 
-export const createFood = async ({ food }: { food: Food }): Promise<Food> => {
+export const createFood = async (food: Food): Promise<Food> => {
+  const newFood: PostFood = formatPayload(food);
+
   return await api
-    .post(`${API_URL}/food/`, food)
-    .then(({ data }) => {
+    .post(`${API_URL}/food/`, newFood)
+    .then((resp) => {
+      console.log("API resp ->", resp);
+      const { data } = resp;
+      return data;
+    })
+    .catch((err) => {
+      throw new Error(err);
+    });
+};
+
+export const updateFood = async (food: Food): Promise<Food> => {
+  const updatedFood: PatchFood = formatPayload(food);
+
+  return await api
+    .patch(`${API_URL}/food/${food.id}`, updatedFood)
+    .then((resp) => {
+      console.log("API resp ->", resp);
+      const { data } = resp;
       return data;
     })
     .catch((err) => {

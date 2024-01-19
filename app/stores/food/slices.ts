@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { getFoodsFromSearch, getFoodInfo } from "./actions";
+import { getFoodsFromSearch, getFoodInfo, updateFoodInfo } from "./actions";
 
 import {
   ToastInfoProps,
@@ -67,10 +67,13 @@ const foodSlice = createSlice({
           });
         }
       )
-      .addCase(getFoodsFromSearch.rejected, (state) => {
-        state.loading = false;
-        state.error = defaultNetworkErrorMessage;
-      })
+      .addCase(
+        getFoodsFromSearch.rejected,
+        (state, { payload: errorPayload }) => {
+          state.loading = false;
+          state.error = errorPayload || defaultNetworkErrorMessage;
+        }
+      )
       .addCase(getFoodInfo.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -79,9 +82,21 @@ const foodSlice = createSlice({
         state.loading = false;
         state.food = food;
       })
-      .addCase(getFoodInfo.rejected, (state) => {
+      .addCase(getFoodInfo.rejected, (state, { payload: errorPayload }) => {
         state.loading = false;
-        state.error = defaultNetworkErrorMessage;
+        state.error = errorPayload || defaultNetworkErrorMessage;
+      })
+      .addCase(updateFoodInfo.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateFoodInfo.fulfilled, (state, { payload: food }) => {
+        state.loading = false;
+        state.food = food;
+      })
+      .addCase(updateFoodInfo.rejected, (state, { payload: errorPayload }) => {
+        state.loading = false;
+        state.error = errorPayload || defaultNetworkErrorMessage;
       });
   },
 });

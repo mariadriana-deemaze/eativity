@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 
 export const API_URL = "http://10.11.13.17:3000";
 
@@ -27,11 +27,25 @@ api.interceptors.request.use(
   }
 );
 
-api.interceptors.response.use((res) => {
-  if (process.env.NODE_ENV !== "production") {
-    console.log("//////");
-    console.log(`[LOGGER::${res.config.url}] -> ${JSON.stringify(res.data)}`);
-    console.log("-----");
+const API_LOGGER = (req: AxiosResponse<any, any>) => {
+  console.log("//////");
+  console.log(
+    `[LOGGER::${req.config.method.toUpperCase()}::${
+      req.config.url
+    }] -> ${JSON.stringify(req.data)}`
+  );
+  console.log("-----");
+};
+
+api.interceptors.response.use(
+  (fulfilledRequestResponse) => {
+    if (process.env.NODE_ENV !== "production")
+      API_LOGGER(fulfilledRequestResponse);
+    return fulfilledRequestResponse;
+  },
+  (rejectedRequestResponse) => {
+    if (process.env.NODE_ENV !== "production")
+      API_LOGGER(rejectedRequestResponse);
+    return rejectedRequestResponse;
   }
-  return res;
-});
+);
