@@ -57,6 +57,17 @@ model UserMeal {
   meals  Meal[]
 }
 
+model RecipeCategory {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  image     String
+  title     String
+  foodId    Int?
+  Recipe    Recipe?  @relation(fields: [recipeId], references: [id])
+  recipeId  Int?
+}
+
 model Food {
   id            Int          @id @default(autoincrement())
   name          String
@@ -75,7 +86,7 @@ model Food {
 }
 
 model Recipe {
-  id            Int          @id @default(autoincrement())
+  id            Int              @id @default(autoincrement())
   name          String
   description   String?
   calories      Int
@@ -83,9 +94,10 @@ model Recipe {
   proteins      Int
   fats          Int
   image         String?
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @default(now())
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @default(now())
   FoodRecipe    FoodRecipe[]
+  categories    RecipeCategory[]
 }
 
 model FoodRecipe {
