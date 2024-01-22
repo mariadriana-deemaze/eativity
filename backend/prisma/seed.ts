@@ -6,6 +6,8 @@ import seedingFoods from "./seedsData/foods.json";
 
 import seedingRecipes from "./seedsData/recipes.json";
 
+import seedingRecipeCategories from "./seedsData/recipeCategories.json";
+
 const prisma = new PrismaClient();
 
 async function main() {
@@ -19,6 +21,10 @@ async function main() {
 
   const recipes = await prisma.recipe.createMany({
     data: seedingRecipes,
+  });
+
+  const recipesCategories = await prisma.recipeCategory.createMany({
+    data: seedingRecipeCategories,
   });
 
   /* 
@@ -62,6 +68,7 @@ async function main() {
   console.log("created user ->", user);
   console.log("created foods ->", foods);
   console.log("created recipes ->", recipes);
+  console.log("created recipe categories ->", recipesCategories);
 }
 main()
   .then(async () => {

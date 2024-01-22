@@ -1,0 +1,54 @@
+[
+  {
+    "title": "Appetizer",
+    "image": "https://www.svgrepo.com/show/532031/cloud-fog.svg"
+  },
+  {
+    "title": "Soup",
+    "image": "https://www.svgrepo.com/show/532031/cloud-fog.svg"
+  },
+  {
+    "title": "Main Dish",
+    "image": "https://www.svgrepo.com/show/532031/cloud-fog.svg"
+  },
+  {
+    "title": "Side Dish",
+    "image": "https://www.svgrepo.com/show/532031/cloud-fog.svg"
+  },
+  {
+    "title": "Baked",
+    "image": "https://www.svgrepo.com/show/532031/cloud-fog.svg"
+  },
+  {
+    "title": "Salad and Salad Dressing",
+    "image": "https://www.svgrepo.com/show/532031/cloud-fog.svg"
+  },
+  {
+    "title": "Sauce and Condiment",
+    "image": "https://www.svgrepo.com/show/532031/cloud-fog.svg"
+  },
+  {
+    "title": "Dessert",
+    "image": "https://www.svgrepo.com/show/532031/cloud-fog.svg"
+  },
+  {
+    "title": "Snack",
+    "image": "https://www.svgrepo.com/show/532031/cloud-fog.svg"
+  },
+  {
+    "title": "Beverage",
+    "image": "https://www.svgrepo.com/show/532031/cloud-fog.svg"
+  },
+  {
+    "title": "Breakfast",
+    "image": "https://www.svgrepo.com/show/532031/cloud-fog.svg"
+  },
+  {
+    "title": "Lunch",
+    "image": "https://www.svgrepo.com/show/532031/cloud-fog.svg"
+  },
+  {
+    "title": "Other",
+    "image": "https://www.svgrepo.com/show/532031/cloud-fog.svg"
+  }
+]
