@@ -5,7 +5,7 @@ import {
   PaginatedPayload,
   PaginationParameters,
   PostFood,
-  PatchFood
+  PatchFood,
 } from "../types";
 
 const formatPayload = (food: Food) => {
