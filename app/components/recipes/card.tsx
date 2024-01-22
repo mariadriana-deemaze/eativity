@@ -11,7 +11,7 @@ import {
   Heading,
   HStack,
   Pressable,
-} from "native-base";
+} from "@gluestack-ui/themed";
 
 import { Recipe } from "../../types";
 
@@ -92,7 +92,7 @@ export const RecipeCard = ({
                 {name}
               </Heading>
               <Text
-                fontSize="xs"
+                size="xs"
                 _light={{
                   color: "violet.500",
                 }}

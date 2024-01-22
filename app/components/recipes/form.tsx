@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 
 import { Controller, useForm } from "react-hook-form";
 
-import { Button, VStack } from "native-base";
+import { Button, VStack } from "@gluestack-ui/themed";
 
 import { TextField } from "../atoms/textField";
 

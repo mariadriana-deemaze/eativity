@@ -2,7 +2,7 @@ import { Controller, useForm } from "react-hook-form";
 
 import { useNavigation } from "@react-navigation/native";
 
-import { Box, Button, Text } from "native-base";
+import { Box, Button, Text } from "@gluestack-ui/themed";
 
 import { registerUser, SignUpInputs } from "../../stores/auth/actions";
 

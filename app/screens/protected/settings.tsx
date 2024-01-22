@@ -4,7 +4,7 @@ import { ScrollView } from "react-native";
 
 import { useSelector } from "react-redux";
 
-import { Box, Button, Text, Select, CheckIcon } from "native-base";
+import { Box, Button, Text, Select, CheckIcon } from "@gluestack-ui/themed";
 
 import DateTimePicker from "@react-native-community/datetimepicker";
 

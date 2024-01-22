@@ -3,7 +3,7 @@ import {
   IInputProps,
   Input,
   WarningOutlineIcon,
-} from "native-base";
+} from "@gluestack-ui/themed";
 
 interface TextFieldProps extends IInputProps {
   label: string;

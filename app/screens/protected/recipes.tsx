@@ -11,7 +11,7 @@ import {
   Text,
   VStack,
   View,
-} from "native-base";
+} from "@gluestack-ui/themed";
 
 import {
   MenuPills,
@@ -126,7 +126,7 @@ export const Recipes: React.FC<RecipesScreenProps> = ({ navigation }) => {
           borderRadius="4"
           py="3"
           px="1"
-          fontSize="14"
+          size="14"
           InputLeftElement={
             <Icon
               m="2"
@@ -174,10 +174,10 @@ export const Recipes: React.FC<RecipesScreenProps> = ({ navigation }) => {
         >
           {hasRecipesData ? (
             <>
-              <Text fontSize="xs">
+              <Text size="xs">
                 Matched {recipes?.pagination?.count} results.
               </Text>
-              <Text fontSize="xs">
+              <Text size="xs">
                 Displaying {recipes?.data.length} results.
               </Text>
             </>

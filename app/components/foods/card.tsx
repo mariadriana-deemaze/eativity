@@ -10,7 +10,7 @@ import {
   Heading,
   HStack,
   Pressable,
-} from "native-base";
+} from "@gluestack-ui/themed";
 
 import { format } from "date-fns";
 
@@ -104,7 +104,7 @@ export const FoodCard = ({
                   key={`food_${name}_category_${type}`}
                   color="warmGray.50"
                   fontWeight="700"
-                  fontSize="xs"
+                  size="xs"
                   pr="0.5"
                 >
                   {type}
@@ -118,7 +118,7 @@ export const FoodCard = ({
                 {name}
               </Heading>
               <Text
-                fontSize="xs"
+                size="xs"
                 _light={{
                   color: "violet.500",
                 }}

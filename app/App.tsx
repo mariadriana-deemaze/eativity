@@ -1,6 +1,8 @@
 import { Provider } from "react-redux";
 
-import { /* extendTheme, */ NativeBaseProvider } from "native-base";
+import { GluestackUIProvider } from "@gluestack-ui/themed";
+
+import { config } from "@gluestack-ui/config"; // Optional if you want to use default theme
 
 import Navigation from "./routes/navigation";
 
@@ -36,14 +38,9 @@ export default function App() {
  */
   return (
     <Provider store={store}>
-      <NativeBaseProvider
-        // theme={theme}
-        config={{
-          strictMode: "warn",
-        }}
-      >
+      <GluestackUIProvider config={config}>
         <Navigation />
-      </NativeBaseProvider>
+      </GluestackUIProvider>
     </Provider>
   );
 }

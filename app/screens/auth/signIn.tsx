@@ -1,4 +1,4 @@
-import { Box, Button, Text, useToast } from "native-base";
+import { Box, Button, Text, useToast } from "@gluestack-ui/themed";
 import { useEffect } from "react";
 
 import { Controller, useForm } from "react-hook-form";

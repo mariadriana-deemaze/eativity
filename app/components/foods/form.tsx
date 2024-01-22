@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 
 import { Controller, useForm } from "react-hook-form";
 
-import { Button, VStack } from "native-base";
+import { Button, VStack } from "@gluestack-ui/themed";
 
 import { TextField } from "../atoms/textField";
 
@@ -11,6 +11,7 @@ import { createNewFood, updateFoodInfo } from "../../stores/food/actions";
 import { useAppDispatch } from "../../stores";
 
 import { Food } from "../../types";
+
 import { newFoodDummy } from "../../utils";
 
 const FoodForm = ({ food }: { food?: Food }) => {

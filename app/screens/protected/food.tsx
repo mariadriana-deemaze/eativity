@@ -15,7 +15,7 @@ import {
   Stack,
   Text,
   VStack,
-} from "native-base";
+} from "@gluestack-ui/themed";
 
 import { useSelector } from "react-redux";
 

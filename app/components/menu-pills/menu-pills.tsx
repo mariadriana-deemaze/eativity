@@ -1,4 +1,4 @@
-import { Box, Pressable, Skeleton, Text } from "native-base";
+import { Box, Pressable, Skeleton, Text } from "@gluestack-ui/themed";
 import { GestureResponderEvent } from "react-native";
 
 export const MenuPillsSkeleton = () => {
@@ -31,7 +31,7 @@ export const MenuPills = ({
         bgColor={isActive ? "violet.600" : "violet.400"}
       >
         <Text
-          fontSize="xs"
+          size="xs"
           color="white"
           fontWeight={isActive ? "bold" : "medium"}
           alignSelf="flex-start"

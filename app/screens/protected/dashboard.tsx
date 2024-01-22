@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-import { Box, Text } from "native-base";
+import { Box, Text } from "@gluestack-ui/themed";
 
 import { SvgUri } from "react-native-svg";
 
@@ -31,7 +31,7 @@ export const Dashboard = () => {
       }}
       bg="red.400"
     >
-      <Text isTruncated maxW="300" w="80%" fontSize="lg">
+      <Text isTruncated maxW="300" w="80%" size="lg">
         {userSliceState.user.name}
       </Text>
 

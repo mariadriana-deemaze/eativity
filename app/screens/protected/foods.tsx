@@ -11,7 +11,7 @@ import {
   Text,
   VStack,
   View,
-} from "native-base";
+} from "@gluestack-ui/themed";
 
 import { StackNavigationProp } from "@react-navigation/stack";
 
@@ -99,7 +99,7 @@ export const Foods: React.FC<FoodsScreenProps> = ({ navigation }) => {
           borderRadius="4"
           py="3"
           px="1"
-          fontSize="14"
+          size="14"
           InputLeftElement={
             <Icon
               m="2"
@@ -123,10 +123,10 @@ export const Foods: React.FC<FoodsScreenProps> = ({ navigation }) => {
         >
           {hasFoodData ? (
             <>
-              <Text fontSize="xs">
+              <Text size="xs">
                 Matched {foods?.pagination?.count} results.
               </Text>
-              <Text fontSize="xs">
+              <Text size="xs">
                 Displaying {foods?.data.length} results.
               </Text>
             </>

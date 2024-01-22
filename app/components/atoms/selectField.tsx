@@ -4,7 +4,7 @@ import {
   Select,
   Stack,
   WarningOutlineIcon,
-} from "native-base";
+} from "@gluestack-ui/themed";
 
 interface SelectFieldProps extends ISelectProps {
   label: string;

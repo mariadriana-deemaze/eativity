@@ -7,7 +7,7 @@ import {
   IconButton,
   Text,
   VStack,
-} from "native-base";
+} from "@gluestack-ui/themed";
 
 export interface ToastInfoProps {
   title?: string;
@@ -59,7 +59,7 @@ export const ToastAlert = ({
           <HStack space={2} flexShrink={1} alignItems="center">
             <Alert.Icon />
             <Text
-              fontSize="md"
+              size="md"
               fontWeight="medium"
               flexShrink={1}
               color={textColor}
