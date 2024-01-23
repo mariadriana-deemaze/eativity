@@ -2,7 +2,7 @@ import { Controller, useForm } from "react-hook-form";
 
 import { useNavigation } from "@react-navigation/native";
 
-import { Box, Button, Text } from "native-base";
+import { Box, Button, Text, useToast } from "native-base";
 
 import { registerUser, SignUpInputs } from "../../stores/auth/actions";
 
@@ -10,24 +10,42 @@ import { useAppDispatch } from "../../stores";
 
 import { TextField } from "../../components/atoms/textField";
 
+import { ToastAlert } from "../../components/toastAlert";
+
 import { Screens } from "../../routes/navigation";
 
 import { signUpDefaultDevData } from "../../utils";
 
 export const SignUp: React.FC = () => {
+  const dispatch = useAppDispatch();
+
+  const toast = useToast();
+
+  const navigation = useNavigation();
+
   const { control, handleSubmit } = useForm<SignUpInputs>({
     defaultValues: signUpDefaultDevData,
   });
-
-  const dispatch = useAppDispatch();
-
-  const navigation = useNavigation();
 
   const onSubmit = async (data: SignUpInputs) => {
     dispatch(registerUser(data)).then((response) => {
       if (response.payload) {
         // @ts-expect-error
         navigation.navigate(Screens.SIGN_IN);
+
+        toast.show({
+          id: "signUpSuccess",
+          render: () => {
+            return (
+              <ToastAlert
+                title="Success!"
+                description="You have signed up with success! Please login."
+                status="success"
+                onClose={() => toast.close("signUpSuccess")}
+              />
+            );
+          },
+        });
       }
     });
   };
