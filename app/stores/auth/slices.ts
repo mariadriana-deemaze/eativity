@@ -32,6 +32,9 @@ const authSlice = createSlice({
     setAuthToken(state, action) {
       state.userToken = action.payload;
     },
+    retrieveAuthToken() {
+      SecureStore.getItemAsync(TOKEN_KEY);
+    },
     clearAuthToken: (state) => {
       SecureStore.deleteItemAsync(TOKEN_KEY);
       state.userToken = null;

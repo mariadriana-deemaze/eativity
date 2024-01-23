@@ -5,7 +5,6 @@ import {
   Image,
   Skeleton,
   AspectRatio,
-  Center,
   Stack,
   Heading,
   HStack,
@@ -54,7 +53,6 @@ export const FoodCard = ({
   description,
   //types,
   createdAt,
-  updatedAt,
   onPress,
 }: FoodCardProps) => {
   return (

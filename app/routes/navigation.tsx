@@ -1,14 +1,16 @@
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 
-import { NavigationContainer, useNavigation } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 
 import { useDispatch, useSelector } from "react-redux";
+
+import { decode as atob } from "base-64";
 
 import * as SecureStore from "expo-secure-store";
 
 import { IRootState } from "../stores";
 
-import { TOKEN_KEY, setAuthToken } from "../stores/auth/slices";
+import { TOKEN_KEY, clearAuthToken, setAuthToken } from "../stores/auth/slices";
 
 import { AuthRoutes } from "./auth";
 
@@ -52,15 +54,25 @@ export default function Navigation() {
 
   const dispatch = useDispatch();
 
-  //const navigation = useNavigation();
+  const navigation = useNavigation();
 
   useEffect(() => {
     const restoreJWTfromStore = async () => {
       try {
         const storedToken = await SecureStore.getItemAsync(TOKEN_KEY);
 
-        if (storedToken && userToken !== storedToken) {
-          dispatch(setAuthToken(storedToken));
+        const decoded = JSON.parse(atob(storedToken.split(".")[1]));
+
+        const isExpired = decoded.exp * 1000 < new Date().getTime();
+
+        if (isExpired) {
+          // Expired - User must login again
+          dispatch(clearAuthToken());
+        } else {
+          // Not Expired
+          if (storedToken && userToken !== storedToken) {
+            dispatch(setAuthToken(storedToken));
+          }
         }
       } catch (error) {
         console.error("Error retrieving token from SecureStore ->", error);
@@ -69,20 +81,16 @@ export default function Navigation() {
 
     restoreJWTfromStore();
 
-    //const focusListener = navigation.addListener("focus", restoreJWTfromStore);
+    const focusListener = navigation.addListener("focus", restoreJWTfromStore);
 
     return () => {
-      // focusListener();
+      focusListener();
     };
-  }, [dispatch, userToken]);
+  }, [dispatch]);
 
-  return (
-    <NavigationContainer>
-      {!isAuth || enterOnboardingFlow ? (
-        <AuthRoutes onboarding={enterOnboardingFlow} />
-      ) : (
-        <ProtectedRoutes />
-      )}
-    </NavigationContainer>
+  return !isAuth || enterOnboardingFlow ? (
+    <AuthRoutes onboarding={enterOnboardingFlow} />
+  ) : (
+    <ProtectedRoutes />
   );
 }
