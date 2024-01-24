@@ -14,11 +14,15 @@ import { PlanController } from "./../plan/plan.controller";
 
 import { FoodModule } from "../food/food.module";
 
+import { FoodService } from "../food/food.service";
+
 import { RecipeModule } from "../recipe/recipe.module";
+
+import { RecipeService } from "../recipe/recipe.service";
 
 @Module({
   imports: [FoodModule, RecipeModule],
   controllers: [UserController, WeightController, PlanController],
-  providers: [UserService, WeightService, PlanService],
+  providers: [UserService, WeightService, PlanService, FoodService, RecipeService],
 })
 export class UserModule {}

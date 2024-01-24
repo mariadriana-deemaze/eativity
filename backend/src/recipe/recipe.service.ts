@@ -64,6 +64,32 @@ export class RecipeService {
     return results;
   }
 
+  async getMany(args: Prisma.RecipeFindManyArgs) {
+    const query: Prisma.RecipeFindManyArgs = {
+      ...args,
+      orderBy: { createdAt: "desc" },
+    };
+
+    const [results, count] = await this.prisma.$transaction([
+      this.prisma.recipe.findMany(query),
+      this.prisma.recipe.count({ where: query.where }),
+    ]);
+
+    this.logger.log(`results -> ${JSON.stringify(results)}`);
+    this.logger.log(`count -> ${JSON.stringify(count)}`);
+
+    if (!results) throw new NotFoundException();
+
+    return {
+      data: results,
+      pagination: {
+        count,
+        offset: query.skip,
+        maxResults: query.take,
+      },
+    };
+  }
+
   async create(recipeDto: RecipeDto) {
     const created = await this.prisma.recipe.create({
       data: recipeDto,

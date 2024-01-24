@@ -48,6 +48,8 @@ model User {
   weight          Weight[]
   meals           UserMeal[]
   plan            Plan?
+  foods           Food[]
+  recipes         Recipe[]
 }
 
 model UserMeal {
@@ -83,10 +85,14 @@ model Food {
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @default(now())
   FoodRecipe    FoodRecipe[]
+  User          User?        @relation(fields: [userId], references: [id])
+  userId        Int?
 }
 
 model Recipe {
   id            Int              @id @default(autoincrement())
+  User          User?            @relation(fields: [userId], references: [id])
+  userId        Int?
   name          String
   description   String?
   calories      Int
