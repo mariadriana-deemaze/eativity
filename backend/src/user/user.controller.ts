@@ -30,8 +30,8 @@ export class UserController {
     private userService: UserService,
     private weightService: WeightService,
     private planService: PlanService,
-    private FoodService: FoodService,
-    private RecipeService: RecipeService
+    private foodService: FoodService,
+    private recipeService: RecipeService
   ) {}
 
   @Get("me")
@@ -94,11 +94,11 @@ export class UserController {
 
   @Get("me/foods")
   async getUserFoods(@GetUser() { id }: User) {
-    return await this.FoodService.getMany({ where: { userId: id } });
+    return await this.foodService.getMany({ where: { userId: id } });
   }
 
   @Get("me/recipes")
   async getUserRecipes(@GetUser() { id }: User) {
-    return await this.RecipeService.getMany({ where: { userId: id } });
+    return await this.recipeService.getMany({ where: { userId: id } });
   }
 }
