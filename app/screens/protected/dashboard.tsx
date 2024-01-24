@@ -11,13 +11,15 @@ import { getUserInfo } from "../../stores/user/actions";
 import { useSelector } from "react-redux";
 
 export const Dashboard = () => {
+  const authStateSlice = useSelector((state: IRootState) => state.auth);
+
   const userSliceState = useSelector((state: IRootState) => state.user);
 
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(getUserInfo());
-  }, []);
+  }, [authStateSlice.userToken]);
 
   return (
     <Box
@@ -32,7 +34,7 @@ export const Dashboard = () => {
       bg="red.400"
     >
       <Text isTruncated maxW="300" w="80%" fontSize="lg">
-        {userSliceState.user.name}
+        {userSliceState.user?.name || "-"}
       </Text>
 
       <SvgUri

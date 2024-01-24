@@ -9,26 +9,18 @@ import {
   ToastInfoProps,
 } from "../../components/toastAlert";
 
-const TOKEN_KEY = "secure_token";
+export const TOKEN_KEY = "secure_token";
 
 interface InitialState {
   loading: boolean;
-  userToken: Promise<string> | string | null;
+  userToken: string | null;
   error: ToastInfoProps | null;
   success: boolean;
 }
 
-const getTokenFromStore = async () => {
-  try {
-    return await SecureStore.getItemAsync(TOKEN_KEY);
-  } catch (error) {
-    return null;
-  }
-};
-
 const initialState: InitialState = {
   loading: false,
-  userToken: getTokenFromStore(),
+  userToken: null,
   error: null,
   success: false,
 };
@@ -36,7 +28,18 @@ const initialState: InitialState = {
 const authSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: {},
+  reducers: {
+    setAuthToken(state, action) {
+      state.userToken = action.payload;
+    },
+    retrieveAuthToken() {
+      SecureStore.getItemAsync(TOKEN_KEY);
+    },
+    clearAuthToken: (state) => {
+      SecureStore.deleteItemAsync(TOKEN_KEY);
+      state.userToken = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(registerUser.pending, (state) => {
@@ -69,4 +72,7 @@ const authSlice = createSlice({
       });
   },
 });
+
+export const { setAuthToken, clearAuthToken } = authSlice.actions;
+
 export default authSlice.reducer;

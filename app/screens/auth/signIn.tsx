@@ -20,15 +20,30 @@ import { signInDefaultDevData } from "../../utils";
 export const SignIn = ({ navigation }) => {
   const authStateSlice = useSelector((state: IRootState) => state.auth);
 
-  const { control, handleSubmit } = useForm<SignInInputs>({
-    defaultValues: signInDefaultDevData,
-  });
-
   const dispatch = useAppDispatch();
 
   const toast = useToast();
 
-  const onSubmit = (data: SignInInputs) => dispatch(authenticateUser(data));
+  const { control, handleSubmit } = useForm<SignInInputs>({
+    defaultValues: signInDefaultDevData,
+  });
+
+  const onSubmit = (data: SignInInputs) =>
+    dispatch(authenticateUser(data)).then(() =>
+      toast.show({
+        id: "signInSuccess",
+        render: () => {
+          return (
+            <ToastAlert
+              title="Success!"
+              description="You have been logged in with success!!"
+              status="success"
+              onClose={() => toast.close("signInSuccess")}
+            />
+          );
+        },
+      })
+    );
 
   useEffect(() => {
     if (authStateSlice.error) {
@@ -37,7 +52,6 @@ export const SignIn = ({ navigation }) => {
         render: () => {
           return (
             <ToastAlert
-              id="signInError"
               title={authStateSlice.error.title || "Erro"}
               description={authStateSlice.error.message || "Erro"}
               status="error"
