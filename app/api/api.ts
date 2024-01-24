@@ -4,6 +4,8 @@ export const API_URL = "http://10.11.13.17:3000";
 
 import * as SecureStore from "expo-secure-store";
 
+import { TOKEN_KEY } from "../stores/auth/slices";
+
 const headers = {
   Accept: "*/*",
   "Content-Type": "application/json",
@@ -16,7 +18,7 @@ export const api = axios.create({
 
 api.interceptors.request.use(
   async (config) => {
-    const token = await SecureStore.getItemAsync("secure_token");
+    const token = await SecureStore.getItemAsync(TOKEN_KEY);
 
     if (token) config.headers["Authorization"] = `Bearer ${token}`;
 

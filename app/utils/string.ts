@@ -1,4 +1,4 @@
-export const greetUser = (username: string) => {
+export const gretting = () => {
   const currentHour = new Date().getHours();
   let greeting = "";
 
@@ -12,7 +12,7 @@ export const greetUser = (username: string) => {
   if (isEvening) greeting = "Good evening";
   if (isNight) greeting = "Good night";
 
-  return `${greeting},\n ${username}.`;
+  return greeting;
 };
 
 /* export const greetMissingMeal = (lastMeal: string) => {
