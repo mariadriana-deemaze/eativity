@@ -8,6 +8,8 @@ import { SignIn, SignUp, Onboarding } from "../screens";
 
 import { Screens } from "./navigation";
 
+import { View } from "native-base";
+
 export type RoutesParamList = {
   SignUp: undefined;
   SignIn: undefined;
@@ -27,14 +29,16 @@ export const AuthRoutes = ({ onboarding }: { onboarding: boolean }) => {
   }, [onboarding]);
 
   return (
-    <Stack.Navigator
-      screenOptions={{
-        headerShown: false,
-      }}
-    >
-      <Stack.Screen name={Screens.SIGN_UP} component={SignUp} />
-      <Stack.Screen name={Screens.SIGN_IN} component={SignIn} />
-      <Stack.Screen name={Screens.ONBOARDING} component={Onboarding} />
-    </Stack.Navigator>
+    <View width="100%" borderWidth={1} borderColor={"amber.400"} flex={1}>
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
+        <Stack.Screen name={Screens.SIGN_UP} component={SignUp} />
+        <Stack.Screen name={Screens.SIGN_IN} component={SignIn} />
+        <Stack.Screen name={Screens.ONBOARDING} component={Onboarding} />
+      </Stack.Navigator>
+    </View>
   );
 };

@@ -111,7 +111,7 @@ export const Onboarding = () => {
 
   if (!userStateSlice?.user)
     return (
-      <Box flex="1" display="flex" justifyContent="center">
+      <Box flex="1" display="flex" justifyContent="center" width="100%">
         <Spinner size="lg" />
       </Box>
     );
