@@ -87,7 +87,14 @@ const AppBottomStack = () => {
 
 const DrawerRoutes = () => {
   return (
-    <Drawer.Navigator drawerContent={() => <CustomDrawer />}>
+    <Drawer.Navigator
+      drawerContent={() => <CustomDrawer />}
+      screenOptions={{
+        drawerStyle: {
+          backgroundColor: "transparent",
+        },
+      }}
+    >
       <Drawer.Screen name="Eativity" component={AppBottomStack} />
     </Drawer.Navigator>
   );
