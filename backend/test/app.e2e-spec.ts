@@ -211,6 +211,42 @@ describe("App e2e", () => {
       });
     });
 
+    describe("Get User Foods", () => {
+      it("should retrieve current user foods", () => {
+        return pactum
+          .spec()
+          .get("/users/me/foods")
+          .withHeaders({
+            Authorization: "Bearer $S{userAt}",
+          })
+          .expectStatus(200)
+          .expectJsonLike({
+            data: [],
+            pagination: {
+              count: 0,
+            },
+          });
+      });
+    });
+
+    describe("Get User Recipes", () => {
+      it("should retrieve current user recipes", () => {
+        return pactum
+          .spec()
+          .get("/users/me/recipes")
+          .withHeaders({
+            Authorization: "Bearer $S{userAt}",
+          })
+          .expectStatus(200)
+          .expectJsonLike({
+            data: [],
+            pagination: {
+              count: 0,
+            },
+          });
+      });
+    });
+
     /* describe("Delete user", () => {
       it("should delete current user", () => {
         return pactum
