@@ -31,7 +31,8 @@ export const Dashboard = () => {
         color: "warmGray.50",
         letterSpacing: "lg",
       }}
-      bg="red.400"
+      bg="gray.100"
+      width="100%"
     >
       <Text isTruncated maxW="300" w="80%" fontSize="lg">
         {userSliceState.user?.name || "-"}

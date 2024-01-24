@@ -1,5 +1,7 @@
 import { useEffect } from "react";
 
+import { View } from "native-base";
+
 import { useNavigation } from "@react-navigation/native";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -23,6 +25,8 @@ export enum Screens {
   DASHBOARD = "Dashboard",
   SETTINGS = "Settings",
   RECIPES = "Recipes",
+  MY_RECIPES = "MyRecipes",
+  MY_FOODS = "MyFoods",
   RECIPE = "Recipe",
   FOODS = "Foods",
   FOOD = "Food",
@@ -88,9 +92,13 @@ export default function Navigation() {
     };
   }, [dispatch]);
 
-  return !isAuth || enterOnboardingFlow ? (
-    <AuthRoutes onboarding={enterOnboardingFlow} />
-  ) : (
-    <ProtectedRoutes />
+  return (
+    <View width="100%" height="100%">
+      {!isAuth || enterOnboardingFlow ? (
+        <AuthRoutes onboarding={enterOnboardingFlow} />
+      ) : (
+        <ProtectedRoutes />
+      )}
+    </View>
   );
 }

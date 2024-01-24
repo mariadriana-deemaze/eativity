@@ -2,9 +2,11 @@ import { useCallback, useEffect, useState } from "react";
 
 import { View } from "react-native";
 
+import { NavigationContainer } from "@react-navigation/native";
+
 import { Provider } from "react-redux";
 
-import { NativeBaseProvider } from "native-base";
+import { NativeBaseProvider, extendTheme } from "native-base";
 
 import * as SplashScreen from "expo-splash-screen";
 
@@ -12,10 +14,49 @@ import Navigation from "./routes/navigation";
 
 import store from "./stores";
 
+import {
+  useFonts as useInterFonts,
+  Inter_900Black,
+  Inter_300Light,
+  Inter_400Regular,
+  Inter_500Medium,
+  Inter_600SemiBold,
+} from "@expo-google-fonts/inter";
+
+import {
+  useFonts as useJakartaFonts,
+  PlusJakartaSans_200ExtraLight,
+  PlusJakartaSans_400Regular,
+  PlusJakartaSans_600SemiBold,
+  PlusJakartaSans_700Bold,
+} from "@expo-google-fonts/plus-jakarta-sans";
+import { colors } from "./theme";
+
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
+
+  const [interFontsLoaded, interFontError] = useInterFonts({
+    Inter_300Light,
+    Inter_400Regular,
+    Inter_500Medium,
+    Inter_600SemiBold,
+    Inter_900Black,
+  });
+
+  const [jakartafontsLoaded, jakartaFontError] = useJakartaFonts({
+    PlusJakartaSans_200ExtraLight,
+    PlusJakartaSans_400Regular,
+    PlusJakartaSans_600SemiBold,
+    PlusJakartaSans_700Bold,
+  });
+
+  const fontsNotLoaded =
+    !interFontsLoaded &&
+    !interFontError &&
+    !jakartafontsLoaded &&
+    !jakartaFontError;
 
   const onLayoutRootView = useCallback(async () => {
     if (appIsReady) {
@@ -25,25 +66,54 @@ export default function App() {
 
   useEffect(() => {
     async function prepare() {
-      try {
-        // Load calls here
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-      } catch (e) {
-        console.warn(e);
-      } finally {
-        // Tell the application to render
-        setAppIsReady(true);
-      }
+      !fontsNotLoaded && setAppIsReady(true);
     }
 
     prepare();
-  }, []);
+  }, [interFontsLoaded, jakartafontsLoaded]);
+
+  const theme = extendTheme({
+    /* fontConfig: {
+      Inter: {
+        300: { normal: Inter_300Light },
+        400: { normal: Inter_400Regular },
+        500: { normal: Inter_500Medium },
+        600: { normal: Inter_600SemiBold },
+        900: { normal: Inter_900Black },
+      },
+      Jakarta: {
+        200: { normal: PlusJakartaSans_200ExtraLight },
+        400: { normal: PlusJakartaSans_400Regular },
+        600: { normal: PlusJakartaSans_600SemiBold },
+        700: { normal: PlusJakartaSans_700Bold },
+      },
+    },
+    fonts: {
+      heading: "Inter",
+      body: "Inter",
+      mono: "Inter",
+    },
+    fontSizes: {
+      xs: 10,
+      sm: 12,
+      md: 16,
+      lg: 20,
+      xlg: 22,
+    }, */
+    colors: {
+      green: {
+        700: colors.green.primary,
+        900: colors.green.secondary,
+      },
+    },
+  });
 
   if (!appIsReady) return null;
 
   return (
     <Provider store={store}>
       <NativeBaseProvider
+        theme={theme}
         config={{
           strictMode: "warn",
         }}
@@ -54,13 +124,13 @@ export default function App() {
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-            borderWidth: 1,
-            borderColor: "red",
             width: "100%",
           }}
           onLayout={onLayoutRootView}
         >
-          <Navigation />
+          <NavigationContainer>
+            <Navigation />
+          </NavigationContainer>
         </View>
       </NativeBaseProvider>
     </Provider>
