@@ -1,9 +1,3 @@
-import { UserService } from "./user.service";
-
-import { WeightService } from "../weight/weight.service";
-
-import { PlanService } from "../plan/plan.service";
-
 import {
   Controller,
   Body,
@@ -12,6 +6,16 @@ import {
   Patch,
   UseGuards,
 } from "@nestjs/common";
+
+import { UserService } from "./user.service";
+
+import { FoodService } from "../food/food.service";
+
+import { RecipeService } from "../recipe/recipe.service";
+
+import { WeightService } from "../weight/weight.service";
+
+import { PlanService } from "../plan/plan.service";
 
 import { JwtGuard } from "../auth/guard";
 
@@ -25,7 +29,9 @@ export class UserController {
   constructor(
     private userService: UserService,
     private weightService: WeightService,
-    private planService: PlanService
+    private planService: PlanService,
+    private FoodService: FoodService,
+    private RecipeService: RecipeService
   ) {}
 
   @Get("me")
@@ -47,12 +53,12 @@ export class UserController {
 
   @Patch("me")
   async editUser(
-    @GetUser() user: User,
+    @GetUser() { id }: User,
     @Body()
     userData: Prisma.UserUpdateInput
   ): Promise<UserModel> {
     return this.userService.editUser({
-      where: { id: user.id },
+      where: { id },
       // @ts-ignore
       data: {
         ...userData,
@@ -65,24 +71,34 @@ export class UserController {
 
   // Delete user
   @Delete("me")
-  async deleteUser(@GetUser() user: User): Promise<UserModel> {
+  async deleteUser(@GetUser() { id }: User): Promise<UserModel> {
     // Delete the related records in the Weight table
     await this.weightService.deleteUserWeights({
       where: {
-        id: user.id,
+        id,
       },
     });
 
     // Delete the related records in the Plans table
     await this.planService.deleteUserPlans({
       where: {
-        id: user.id,
+        id,
       },
     });
 
     // Finally delete the user record
     return this.userService.deleteUser({
-      where: { id: user.id },
+      where: { id },
     });
+  }
+
+  @Get("me/foods")
+  async getUserFoods(@GetUser() { id }: User) {
+    return await this.FoodService.getMany({ where: { userId: id } });
+  }
+
+  @Get("me/recipes")
+  async getUserRecipes(@GetUser() { id }: User) {
+    return await this.RecipeService.getMany({ where: { userId: id } });
   }
 }

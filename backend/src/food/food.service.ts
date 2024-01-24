@@ -1,6 +1,9 @@
 import { Injectable, Logger, NotFoundException } from "@nestjs/common";
+
 import { ConfigService } from "@nestjs/config";
+
 import { Prisma } from "@prisma/client";
+
 import { PrismaService } from "../prisma/prisma.service";
 
 import { FoodDto } from "./dto";
@@ -63,6 +66,32 @@ export class FoodService {
     if (!results) throw new NotFoundException();
 
     return results;
+  }
+
+  async getMany(args: Prisma.FoodFindManyArgs) {
+    const query: Prisma.FoodFindManyArgs = {
+      ...args,
+      orderBy: { createdAt: "desc" },
+    };
+
+    const [results, count] = await this.prisma.$transaction([
+      this.prisma.food.findMany(query),
+      this.prisma.food.count({ where: query.where }),
+    ]);
+
+    this.logger.log(`results -> ${JSON.stringify(results)}`);
+    this.logger.log(`count -> ${JSON.stringify(count)}`);
+
+    if (!results) throw new NotFoundException();
+
+    return {
+      data: results,
+      pagination: {
+        count,
+        offset: query.skip,
+        maxResults: query.take,
+      },
+    };
   }
 
   async create(foodDto: FoodDto) {
