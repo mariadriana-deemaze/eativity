@@ -6,7 +6,15 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 import Ionicons from "@expo/vector-icons/Ionicons";
 
-import { Dashboard, Settings, Recipes, Recipe, Foods, Food } from "../screens";
+import {
+  Dashboard,
+  Settings,
+  Recipes,
+  Recipe,
+  Foods,
+  Food,
+  DailyLog,
+} from "../screens";
 
 import CustomDrawer from "../components/drawer";
 
@@ -109,6 +117,7 @@ export const ProtectedRoutes = () => (
     <Stack.Screen name="Routes" component={DrawerRoutes} />
     <Stack.Screen name={Screens.RECIPE} component={Recipe} />
     <Stack.Screen name={Screens.FOOD} component={Food} />
+    <Stack.Screen name={Screens.DAILYLOG} component={DailyLog} />
     {/* MOVE THEM TO HERE */}
     {/* <Stack.Screen name={Screens.RECIPES} component={Recipes} />
     <Stack.Screen name={Screens.FOODS} component={Foods} /> */}

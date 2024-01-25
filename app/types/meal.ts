@@ -1,3 +1,4 @@
+import { Food } from "./food";
 import { Record } from "./shared";
 
 export enum MealType {
@@ -9,6 +10,16 @@ export enum MealType {
 
 export interface Meal extends Record {
   name: string;
+  quantity: number;
   type: MealType;
   foodId: string;
 }
+
+export interface MealLog extends Food {
+  quantity: number;
+  type: MealType;
+  foodId: string;
+}
+
+export type PostMealLogEntry = Omit<MealLog, keyof Record>;
+export type PatchMealLogEntry = Omit<MealLog, keyof Record>;

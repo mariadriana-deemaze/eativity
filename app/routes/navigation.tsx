@@ -30,6 +30,7 @@ export enum Screens {
   RECIPE = "Recipe",
   FOODS = "Foods",
   FOOD = "Food",
+  DAILYLOG = "DailyLog",
 }
 
 export type RoutesParamList = {

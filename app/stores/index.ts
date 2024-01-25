@@ -10,11 +10,14 @@ import recipeReducer from "./recipe/slices";
 
 import foodReducer from "./food/slices";
 
+import dailyLogReducer from "./dailylog/slices";
+
 const rootReducer = combineReducers({
   auth: authReducer,
   user: userReducer,
   recipe: recipeReducer,
   food: foodReducer,
+  dailylog: dailyLogReducer,
 });
 
 const store = configureStore({

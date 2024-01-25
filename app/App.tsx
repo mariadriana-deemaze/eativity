@@ -103,6 +103,12 @@ export default function App() {
     }, */
     colors: {
       green: {
+        100: pallete.green.primary,
+        200: pallete.green.primary,
+        300: pallete.green.primary,
+        400: pallete.green.primary,
+        500: pallete.green.primary,
+        600: pallete.green.primary,
         700: pallete.green.primary,
         900: pallete.green.secondary,
       },
