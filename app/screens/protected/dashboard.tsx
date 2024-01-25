@@ -29,6 +29,8 @@ import {
 
 import { Recipe } from "../../types";
 
+import { lightTheme as theme } from "../../theme";
+
 export const Dashboard = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [sliderInformationVisibility, setSliderInformationVisibility] =
@@ -67,14 +69,14 @@ export const Dashboard = () => {
   }, [currentSlide]);
 
   return (
-    <VStack space="10" bg="white" minH="full">
+    <VStack space="10" bg={theme.background.primary} minH="full">
       <VStack space="6" mt="5">
         {userSliceState.user ? (
           <VStack space="1" px="4">
             <VStack>
               <Text
                 fontFamily="PlusJakartaSans_600SemiBold"
-                color="green.700"
+                color={theme.text.display.primary}
                 fontSize="xl"
                 isTruncated
               >
@@ -82,7 +84,7 @@ export const Dashboard = () => {
               </Text>
               <Text
                 fontFamily="PlusJakartaSans_600SemiBold"
-                color="green.700"
+                color={theme.text.display.primary}
                 fontSize="xl"
                 isTruncated
               >
@@ -91,7 +93,7 @@ export const Dashboard = () => {
             </VStack>
             <Text
               fontFamily="PlusJakartaSans_600SemiBold"
-              color="gray.800"
+              color={theme.text.paragraph.primary}
               fontSize="lg"
               isTruncated
             >
@@ -99,7 +101,7 @@ export const Dashboard = () => {
             </Text>
             <Text
               fontFamily="PlusJakartaSans_400Regular"
-              color="gray.400"
+              color={theme.text.paragraph.tertiary}
               fontSize="md"
             >
               Here’s some easy recipes adapted to your current macros.
@@ -191,21 +193,21 @@ export const Dashboard = () => {
                 <VStack space="2" width="100%" alignItems="flex-start">
                   <HStack
                     space="3"
-                    bg="#F3F3ED"
+                    bg={theme.background.secondary}
                     py="1"
                     px="2"
                     borderRadius="full"
                   >
                     <HStack space="1" alignItems="center">
                       <View
-                        bg="#628EC2"
+                        bg={theme.blue.primary}
                         height="2"
                         width="2"
                         borderRadius="full"
                       />
                       <Text
                         fontFamily="PlusJakartaSans_200ExtraLight"
-                        color="#565656"
+                        color={theme.text.paragraph.secondary}
                         fontSize="xs"
                         isTruncated
                       >
@@ -214,14 +216,14 @@ export const Dashboard = () => {
                     </HStack>
                     <HStack space="1" alignItems="center">
                       <View
-                        bg="#C26262"
+                        bg={theme.red.primary}
                         height="2"
                         width="2"
                         borderRadius="full"
                       />
                       <Text
                         fontFamily="PlusJakartaSans_200ExtraLight"
-                        color="#565656"
+                        color={theme.text.paragraph.secondary}
                         fontSize="xs"
                         isTruncated
                       >
@@ -230,14 +232,14 @@ export const Dashboard = () => {
                     </HStack>
                     <HStack space="1" alignItems="center">
                       <View
-                        bg="#A362C2"
+                        bg={theme.purple.primary}
                         height="2"
                         width="2"
                         borderRadius="full"
                       />
                       <Text
                         fontFamily="PlusJakartaSans_200ExtraLight"
-                        color="#565656"
+                        color={theme.text.paragraph.secondary}
                         fontSize="xs"
                         isTruncated
                       >
@@ -248,7 +250,7 @@ export const Dashboard = () => {
                   <VStack space="1">
                     <Text
                       fontFamily="PlusJakartaSans_600SemiBold"
-                      color="black"
+                      color={theme.text.paragraph.primary}
                       fontSize="md"
                       isTruncated
                     >
@@ -256,7 +258,7 @@ export const Dashboard = () => {
                     </Text>
                     <Text
                       fontFamily="PlusJakartaSans_200ExtraLight"
-                      color="#565656"
+                      color={theme.text.paragraph.secondary}
                       fontSize="sm"
                       numberOfLines={2}
                       isTruncated
@@ -273,7 +275,7 @@ export const Dashboard = () => {
       <VStack space="6" px="4">
         <Text
           fontFamily="PlusJakartaSans_600SemiBold"
-          color="black"
+          color={theme.text.paragraph.primary}
           fontSize="xl"
           numberOfLines={2}
           isTruncated

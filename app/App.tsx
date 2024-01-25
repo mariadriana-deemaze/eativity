@@ -30,7 +30,8 @@ import {
   PlusJakartaSans_600SemiBold,
   PlusJakartaSans_700Bold,
 } from "@expo-google-fonts/plus-jakarta-sans";
-import { colors } from "./theme";
+
+import { pallete } from "./theme";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -102,9 +103,11 @@ export default function App() {
     }, */
     colors: {
       green: {
-        700: colors.green.primary,
-        900: colors.green.secondary,
+        700: pallete.green.primary,
+        900: pallete.green.secondary,
       },
+      white: pallete.white,
+      black: pallete.black,
     },
   });
 
