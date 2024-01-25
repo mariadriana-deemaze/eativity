@@ -5,7 +5,7 @@ import { Screens } from "../routes/navigation";
 import { useNavigation } from "@react-navigation/native";
 import { IRootState } from "../stores";
 import { Ionicons } from "@expo/vector-icons";
-import { colors } from "../theme";
+import { pallete } from "../theme";
 
 export default function CustomDrawer() {
   const dispatch = useDispatch();
@@ -116,7 +116,7 @@ export default function CustomDrawer() {
         <Ionicons
           name="log-in-outline"
           size={32}
-          color={colors.green.primary}
+          color={pallete.green.primary}
         />
         <Text
           fontFamily="PlusJakartaSans_700Bold"

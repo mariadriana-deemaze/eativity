@@ -1,5 +1,10 @@
 import { Record } from ".";
 
+export interface RecipeCategory extends Record {
+  title: string;
+  image?: string;
+}
+
 export interface Recipe extends Record {
   name: string;
   calories: number;
@@ -8,6 +13,7 @@ export interface Recipe extends Record {
   fats: number;
   description?: string;
   image?: string;
+  categories?: RecipeCategory[];
 }
 
 export type PostRecipe = Omit<Recipe, keyof Record>;
