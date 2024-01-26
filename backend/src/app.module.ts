@@ -2,6 +2,8 @@ import { Module } from "@nestjs/common";
 
 import { ConfigModule } from "@nestjs/config";
 
+import { ScheduleModule } from "@nestjs/schedule";
+
 import { MailerModule } from "@nestjs-modules/mailer";
 
 import { DevtoolsModule } from "@nestjs/devtools-integration";
@@ -17,6 +19,8 @@ import { FoodModule } from "./food/food.module";
 import { RecipeModule } from "./recipe/recipe.module";
 
 import { DailyLogModule } from "./daily-log/daily-log.module";
+
+import { EmailNotificationModule } from "./email-notification/email-notification.module";
 
 @Module({
   imports: [
@@ -38,12 +42,14 @@ import { DailyLogModule } from "./daily-log/daily-log.module";
       },
       preview: true,
     }),
+    ScheduleModule.forRoot(),
     UserModule,
     AuthModule,
     PrismaModule,
     FoodModule,
     RecipeModule,
     DailyLogModule,
+    EmailNotificationModule,
   ],
 })
 export class AppModule {}
