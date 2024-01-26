@@ -8,11 +8,19 @@ import seedingRecipes from "./seedsData/recipes.json";
 
 import seedingRecipeCategories from "./seedsData/recipeCategories.json";
 
+import { hash } from "argon2";
+
 const prisma = new PrismaClient();
 
 async function main() {
+  const password_hash = await hash(seedingUser.password);
+
   const user = await prisma.user.create({
-    data: seedingUser,
+    data: {
+      name: seedingUser.name,
+      email: seedingUser.email,
+      password_hash,
+    },
   });
 
   const foods = await prisma.food.createMany({
