@@ -1,10 +1,12 @@
-import {  Prisma, PrismaClient } from "@prisma/client";
+import { MealLogType, Prisma, PrismaClient } from "@prisma/client";
 
 import seedingRecipeCategories from "./seedsData/recipeCategories.json";
 
 import { faker } from "@faker-js/faker";
 
 import { hash } from "argon2";
+
+import { sub } from "date-fns";
 
 const prisma = new PrismaClient();
 
@@ -159,10 +161,50 @@ const createSomeRecipeToFoodRelations = async (
   return createdRelations;
 };
 
+const createManyFoodLogs = async (
+  relations: { userId: number; foodId: number }[]
+) => {
+  const today = new Date();
+  const sevenDaysAgo = sub(today, { days: 7 });
+
+  const date = faker.date.between({
+    from: sevenDaysAgo.toISOString(),
+    to: today.toISOString(),
+  });
+
+  const createdLogs = await Promise.all(
+    relations.map((relation) =>
+      prisma.mealLog.create({
+        data: {
+          User: {
+            connect: {
+              id: relation.userId,
+            },
+          },
+          Food: {
+            connect: {
+              id: relation.foodId,
+            },
+          },
+          type: MealLogType.LUNCH,
+          quantity: faker.helpers.rangeToNumber({ min: 0, max: 5 }),
+          createdAt: date,
+          updatedAt: date,
+        },
+      })
+    )
+  );
+
+  console.log(`/////////`);
+  console.log(`Created ${createdLogs.length} logs records.`);
+  console.log(createdLogs);
+  return createdLogs;
+};
+
 async function seed() {
   await createMainUser();
 
-  await createOtherUsers(3);
+  const createdUsers = await createOtherUsers(3);
 
   const createdFoods = await createManyFoods(10);
 
@@ -186,6 +228,25 @@ async function seed() {
     {
       foodId: createdFoods[6].id,
       recipeId: createdRecipes[3].id,
+    },
+  ]);
+
+  await createManyFoodLogs([
+    {
+      foodId: createdFoods[0].id,
+      userId: createdUsers[0].id,
+    },
+    {
+      foodId: createdFoods[1].id,
+      userId: createdUsers[0].id,
+    },
+    {
+      foodId: createdFoods[2].id,
+      userId: createdUsers[0].id,
+    },
+    {
+      foodId: createdFoods[6].id,
+      userId: createdUsers[3].id,
     },
   ]);
 }

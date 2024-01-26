@@ -4,15 +4,17 @@ import {
   NotFoundException,
 } from "@nestjs/common";
 
-import { Food, MealLogType } from "@prisma/client";
+import { Food, MealLog, MealLogType } from "@prisma/client";
 
 import { PrismaService } from "../prisma/prisma.service";
 
-import { startOfToday, endOfToday, isToday } from "date-fns";
+import { startOfToday, endOfToday, isToday, sub, format } from "date-fns";
 
 import { CreateLogDto, EditLogDto } from "./dto";
 
 import { sortObjectByEnumOrder, uniq } from "../../utils";
+
+import { DaysOfWeek } from "../../types";
 
 type LogEntry = {
   id: number;
@@ -138,6 +140,44 @@ export class DailyLogService {
     return await this.prisma.mealLog.delete({
       where: { id: entryId },
     });
+  }
+
+  async getUserWeeklySummary(userId: number) {
+    const today = new Date();
+    const sevenDaysAgo = sub(today, { days: 7 });
+
+    const userLogs = await this.prisma.mealLog.findMany({
+      where: {
+        userId,
+        createdAt: {
+          gt: sevenDaysAgo,
+          lt: today,
+        },
+      },
+    });
+
+    const results: Record<DaysOfWeek, MealLog[]> = {
+      monday: [],
+      tuesday: [],
+      wednesday: [],
+      thursday: [],
+      friday: [],
+      saturday: [],
+      sunday: [],
+    };
+
+    for (const key in userLogs) {
+      const userLogRecord: MealLog = userLogs[key];
+
+      const recordDayOfWeek = format(
+        userLogRecord.createdAt,
+        "eeee"
+      ).toLowerCase() as DaysOfWeek;
+
+      results[recordDayOfWeek].push(userLogRecord);
+    }
+
+    return results;
   }
 
   /**
