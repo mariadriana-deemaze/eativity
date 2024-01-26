@@ -19,6 +19,8 @@ import { FoodService } from "../src/food/food.service";
 import { FoodDto } from "src/food/dto";
 
 import { RecipeDto } from "src/recipe/dto";
+import { CreateLogDto, EditLogDto } from "src/daily-log/dto";
+import { MealLogType } from "@prisma/client";
 
 async function makeApp(): Promise<INestApplication> {
   let app: INestApplication;
@@ -592,6 +594,82 @@ describe("App e2e", () => {
             ],
           });
       });
+    });
+  });
+
+  /**
+   * TODO: Complement with more error prone cases:
+   * - Check if all records are from the same day;
+   * - Check if records are correctly sorted by Enum order;
+   * - Only allow POST, PATCH and DELETE for current day;
+   * - Check if created log entries are correctly associated to the current user;
+   * */
+
+  describe("Dailylog", () => {
+    it("should retrieve logs from the current user and current day", () => {
+      return pactum
+        .spec()
+        .get(`/daily-log`)
+        .withHeaders({
+          Authorization: "Bearer $S{userAt}",
+        })
+        .expectStatus(200);
+    });
+
+    it("should be able to create a log entry on the current day", () => {
+      const body: CreateLogDto = {
+        foodId: 1,
+        quantity: 1,
+        type: MealLogType.LUNCH,
+      };
+
+      return pactum
+        .spec()
+        .post(`/daily-log`)
+        .withBody(body)
+        .withHeaders({
+          Authorization: "Bearer $S{userAt}",
+        })
+        .expectStatus(201)
+        .expectJsonLike({
+          type: body.type,
+          quantity: body.quantity,
+          foodId: body.foodId,
+        })
+        .stores("logEntryId", "id");
+    });
+
+    it("should be able to edit a log entry on the current day", () => {
+      const body: EditLogDto = {
+        quantity: 1,
+      };
+
+      return pactum
+        .spec()
+        .patch("/daily-log/$S{logEntryId}")
+        .withBody(body)
+        .withHeaders({
+          Authorization: "Bearer $S{userAt}",
+        })
+        .expectStatus(200)
+        .expectJsonLike({
+          id: "$S{logEntryId}",
+          quantity: body.quantity,
+        });
+    });
+
+    it("should be able to delete a log entry on the current day", () => {
+      return pactum
+        .spec()
+        .delete("/daily-log/$S{logEntryId}")
+        .withHeaders({
+          Authorization: "Bearer $S{userAt}",
+        })
+        .expectStatus(200)
+        .inspect()
+        .expectJsonLike({
+          id: "$S{logEntryId}",
+        });
     });
   });
 });

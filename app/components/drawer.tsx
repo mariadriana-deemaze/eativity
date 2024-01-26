@@ -20,6 +20,10 @@ export default function CustomDrawer() {
       link: Screens.DASHBOARD,
     },
     {
+      title: "Daily Log",
+      link: Screens.DAILYLOG,
+    },
+    {
       title: "Foods",
       link: Screens.FOODS,
     },

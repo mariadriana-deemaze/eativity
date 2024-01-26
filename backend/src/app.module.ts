@@ -16,6 +16,8 @@ import { FoodModule } from "./food/food.module";
 
 import { RecipeModule } from "./recipe/recipe.module";
 
+import { DailyLogModule } from "./daily-log/daily-log.module";
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -41,6 +43,7 @@ import { RecipeModule } from "./recipe/recipe.module";
     PrismaModule,
     FoodModule,
     RecipeModule,
+    DailyLogModule,
   ],
 })
 export class AppModule {}

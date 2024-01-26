@@ -43,3 +43,7 @@ export const greetMissingMeal = (dailyMeals: Meal[]) => {
     return "Feeling snackish?";
   }
 };
+
+export const pluralize = (length: number, string: string) => {
+  return length === 1 ? string : string + "s";
+};

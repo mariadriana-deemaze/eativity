@@ -12,3 +12,4 @@ export { Recipes } from "./protected/recipes";
 export { Recipe } from "./protected/recipe";
 export { Foods } from "./protected/foods";
 export { Food } from "./protected/food";
+export { DailyLog } from "./protected/dailylog";
