@@ -15,9 +15,8 @@ import { UserModule } from "./user/user.module";
 import { FoodModule } from "./food/food.module";
 
 import { RecipeModule } from "./recipe/recipe.module";
-import { DailyLogController } from './daily-log/daily-log.controller';
-import { DailyLogService } from './daily-log/daily-log.service';
-import { DailyLogModule } from './daily-log/daily-log.module';
+
+import { DailyLogModule } from "./daily-log/daily-log.module";
 
 @Module({
   imports: [
@@ -46,7 +45,5 @@ import { DailyLogModule } from './daily-log/daily-log.module';
     RecipeModule,
     DailyLogModule,
   ],
-  controllers: [DailyLogController],
-  providers: [DailyLogService],
 })
 export class AppModule {}

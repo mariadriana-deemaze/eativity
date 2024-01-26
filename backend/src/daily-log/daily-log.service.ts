@@ -1,10 +1,14 @@
-import { Injectable } from "@nestjs/common";
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
 
 import { Food, MealLogType } from "@prisma/client";
 
 import { PrismaService } from "../prisma/prisma.service";
 
-import { startOfToday, endOfToday } from "date-fns";
+import { startOfToday, endOfToday, isToday } from "date-fns";
 
 import { CreateLogDto, EditLogDto } from "./dto";
 
@@ -105,6 +109,13 @@ export class DailyLogService {
   Updates daily entry
    */
   async updateDailyEntry(entryId: number, { quantity }: EditLogDto) {
+    const allowDelete = await this.isRecordFromToday(entryId);
+
+    if (!allowDelete)
+      throw new ForbiddenException(
+        "You can't edit a record that is not from today."
+      );
+
     return await this.prisma.mealLog.update({
       where: { id: entryId },
       data: {
@@ -117,8 +128,30 @@ export class DailyLogService {
   Deletes daily entry
    */
   async deleteDailyEntry(entryId: number) {
+    const allowDelete = await this.isRecordFromToday(entryId);
+
+    if (!allowDelete)
+      throw new ForbiddenException(
+        "You can't delete a record that is not from today."
+      );
+
     return await this.prisma.mealLog.delete({
       where: { id: entryId },
     });
+  }
+
+  /**
+   *
+   * Guards records as to be only edited if the `createdAt` field matches the current day.
+   */
+
+  async isRecordFromToday(entryId: number) {
+    const record = await this.prisma.mealLog.findUnique({
+      where: { id: entryId },
+    });
+
+    if (record === null) throw new NotFoundException();
+
+    return isToday(new Date(record.createdAt));
   }
 }
