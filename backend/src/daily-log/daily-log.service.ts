@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { Prisma } from "@prisma/client";
 import { PrismaService } from "src/prisma/prisma.service";
+import { startOfToday, endOfToday } from "date-fns";
 
 @Injectable()
 export class DailyLogService {
@@ -14,7 +15,8 @@ export class DailyLogService {
       where: {
         userId,
         createdAt: {
-          in: new Date().toISOString(),
+          gt: startOfToday(),
+          lt: endOfToday(),
         },
       },
     });
@@ -24,16 +26,13 @@ export class DailyLogService {
   Create daily entry
    */
   async createDailyEntry(userId: number, entry: Prisma.MealLogCreateInput) {
-    // WIP
-    const user = await this.prisma.user.findUnique({
-      where: {
-        id: userId,
-      },
-    });
-
     return await this.prisma.mealLog.create({
       data: {
-        User: user,
+        User: {
+          connect: {
+            id: userId,
+          },
+        },
         ...entry,
       },
     });
