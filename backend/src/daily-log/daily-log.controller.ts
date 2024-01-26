@@ -1,8 +1,19 @@
-import { Controller, Get, Patch, Post, UseGuards } from "@nestjs/common";
+import {
+  Controller,
+  Get,
+  Patch,
+  Post,
+  UseGuards,
+  Body,
+  Param,
+  Delete,
+} from "@nestjs/common";
 import { JwtGuard } from "src/auth/guard";
 import { DailyLogService } from "./daily-log.service";
-import { Prisma, User } from "@prisma/client";
+import { User } from "@prisma/client";
 import { GetUser } from "src/auth/decorator";
+import { CreateLogDto } from "./dto/create-log.dto";
+import { EditLogDto } from "./dto";
 
 @UseGuards(JwtGuard)
 @Controller("daily-log")
@@ -15,12 +26,26 @@ export class DailyLogController {
   }
 
   @Post()
-  async createLogEntry(userId, entry: Prisma.MealLogCreateInput) {
-    return await this.dailyLogService.createDailyEntry(userId, entry);
+  async createLogEntry(
+    @GetUser() { id }: User,
+    @Body() createLogDto: CreateLogDto
+  ) {
+    return await this.dailyLogService.createDailyEntry(id, createLogDto);
   }
 
-  @Patch()
-  async updateLogEntry(userId, entry: Prisma.MealLogUpdateInput) {
-    return await this.dailyLogService.updateDailyEntry(userId, entry);
+  @Patch(":id")
+  async updateLogEntry(
+    @Param() { id }: { id: string },
+    @Body() editLogDto: EditLogDto
+  ) {
+    return await this.dailyLogService.updateDailyEntry(
+      parseInt(id),
+      editLogDto
+    );
+  }
+
+  @Delete(":id")
+  async deleteLogEntry(@Param() { id }: { id: string }) {
+    return await this.dailyLogService.deleteDailyEntry(parseInt(id));
   }
 }
