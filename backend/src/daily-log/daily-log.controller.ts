@@ -8,10 +8,10 @@ import {
   Param,
   Delete,
 } from "@nestjs/common";
-import { JwtGuard } from "src/auth/guard";
+import { JwtGuard } from "../auth/guard";
 import { DailyLogService } from "./daily-log.service";
 import { User } from "@prisma/client";
-import { GetUser } from "src/auth/decorator";
+import { GetUser } from "../auth/decorator";
 import { CreateLogDto } from "./dto/create-log.dto";
 import { EditLogDto } from "./dto";
 

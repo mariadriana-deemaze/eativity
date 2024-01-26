@@ -8,7 +8,7 @@ import { startOfToday, endOfToday } from "date-fns";
 
 import { CreateLogDto, EditLogDto } from "./dto";
 
-import { sortObjectByEnumOrder, uniq } from "utils";
+import { sortObjectByEnumOrder, uniq } from "../../utils";
 
 type LogEntry = {
   id: number;
