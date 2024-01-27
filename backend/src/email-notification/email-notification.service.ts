@@ -27,7 +27,7 @@ export class EmailNotificationService {
 
   private readonly logger = new Logger(EmailNotificationService.name);
 
-  @Cron(CustomScheduleExpression.__TEST___CURRENT_SECOND_IS_5)
+  @Cron(CustomScheduleExpression.EVERY_SUNDAY_AT_MIDNIGHT)
   async usersWeeklySummary() {
     const users = await this.userService.getAll();
 
