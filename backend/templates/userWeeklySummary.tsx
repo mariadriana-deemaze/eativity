@@ -18,14 +18,12 @@ import {
   Text,
 } from "@react-email/components";
 
-import { MealLog } from "@prisma/client";
-
-import { DaysOfWeek } from "types";
+import { DaysOfWeek, TotalIntakes } from "types";
 
 interface UserWeeklySummaryEmailProps {
   name: string;
   email: string;
-  weeklyMacros: Record<DaysOfWeek, MealLog[]>;
+  weeklyMacros: Record<DaysOfWeek, TotalIntakes>;
 }
 
 export const UserWeeklySummaryEmail = ({
@@ -60,19 +58,21 @@ export const UserWeeklySummaryEmail = ({
               Login to Eativity
             </Button>
           </Section>
-          <Text style={paragraph}>Here's your macros of the week:</Text>
+
+          <Hr />
+          <Text style={heading}>Here's your macros of the week:</Text>
 
           {hasWeeklyLogs ? (
             Object.entries(weeklyMacros).map(([key, value]) => (
               <Section key={`${key}_log`}>
-                <Text style={paragraph}>{key}:</Text>
-                {value.map((entry) => (
-                  <Section key={`log_${entry.id}`}>
-                    <Text style={paragraph}>Food ID: {entry.foodId}</Text>
-                    <Text style={paragraph}>Quantity: {entry.quantity}</Text>
-                    <Hr />
-                  </Section>
-                ))}
+                <Text style={heading}>{key}:</Text>
+                <Hr />
+                <Text style={paragraph}>Total calories: {value.calories}</Text>
+                <Text style={paragraph}>Total proteins: {value.proteins}</Text>
+                <Text style={paragraph}>
+                  Total carbohydrates: {value.carbohydrates}
+                </Text>
+                <Text style={paragraph}>Total fats: {value.fats}</Text>
               </Section>
             ))
           ) : (

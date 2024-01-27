@@ -6,11 +6,11 @@ import { Cron } from "@nestjs/schedule";
 
 import { render } from "@react-email/render";
 
-import { UserService } from "./../user/user.service";
+import { UserService } from "../user/user.service";
 
 import { DailyLogService } from "../daily-log/daily-log.service";
 
-import { UserWeeklySummaryEmail } from "templates/userWeeklySummary";
+import { UserWeeklySummaryEmail } from "../../templates/userWeeklySummary";
 
 enum CustomScheduleExpression {
   EVERY_SUNDAY_AT_MIDNIGHT = "0 0 * * 0",

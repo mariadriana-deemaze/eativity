@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from "@nestjs/common";
 
-import { Food, MealLog, MealLogType } from "@prisma/client";
+import { Food, MealLogType } from "@prisma/client";
 
 import { PrismaService } from "../prisma/prisma.service";
 
@@ -14,9 +14,8 @@ import { CreateLogDto, EditLogDto } from "./dto";
 
 import { sortObjectByEnumOrder } from "../../utils";
 
-import { DaysOfWeek } from "../../types";
+import { DaysOfWeek, FoodLogRecord, TotalIntakes } from "../../types";
 
-type FoodLogRecord = MealLog & { food: Food };
 
 @Injectable()
 export class DailyLogService {
@@ -125,7 +124,7 @@ export class DailyLogService {
     const today = new Date();
     const sevenDaysAgo = sub(today, { days: 7 });
 
-    const userLogs = await this.prisma.mealLog.findMany({
+    const userLogs: FoodLogRecord[] = await this.prisma.mealLog.findMany({
       where: {
         userId,
         createdAt: {
@@ -138,7 +137,8 @@ export class DailyLogService {
       },
     });
 
-    const results: Record<DaysOfWeek, FoodLogRecord[]> = {
+    // sort food records per day of the week
+    const sorted: Record<DaysOfWeek, Food[]> = {
       monday: [],
       tuesday: [],
       wednesday: [],
@@ -156,10 +156,36 @@ export class DailyLogService {
         "eeee"
       ).toLowerCase() as DaysOfWeek;
 
-      results[recordDayOfWeek].push(userLogRecord);
+      sorted[recordDayOfWeek].push(userLogRecord.food);
     }
 
-    return results;
+    // reduce daily intakes
+    const weeklyIntakesCounter: Record<DaysOfWeek, TotalIntakes> = {
+      monday: { calories: 0, proteins: 0, fats: 0, carbohydrates: 0 },
+      tuesday: { calories: 0, proteins: 0, fats: 0, carbohydrates: 0 },
+      wednesday: { calories: 0, proteins: 0, fats: 0, carbohydrates: 0 },
+      thursday: { calories: 0, proteins: 0, fats: 0, carbohydrates: 0 },
+      friday: { calories: 0, proteins: 0, fats: 0, carbohydrates: 0 },
+      saturday: { calories: 0, proteins: 0, fats: 0, carbohydrates: 0 },
+      sunday: { calories: 0, proteins: 0, fats: 0, carbohydrates: 0 },
+    };
+
+    Object.entries(sorted).forEach(([dayOfWeek, foods]) => {
+      const dailySummedIntakes: TotalIntakes = foods.reduce(
+        (acc, obj) => {
+          acc.calories += obj.calories;
+          acc.proteins += obj.proteins;
+          acc.carbohydrates += obj.carbohydrates;
+          acc.fats += obj.fats;
+          return acc;
+        },
+        { calories: 0, proteins: 0, fats: 0, carbohydrates: 0 }
+      );
+
+      weeklyIntakesCounter[dayOfWeek] = dailySummedIntakes;
+    });
+
+    return weeklyIntakesCounter;
   }
 
   /**
