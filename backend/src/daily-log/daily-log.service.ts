@@ -91,12 +91,12 @@ export class DailyLogService {
   async createDailyEntry(userId, { foodId, quantity, type }: CreateLogDto) {
     return await this.prisma.mealLog.create({
       data: {
-        User: {
+        user: {
           connect: {
             id: userId,
           },
         },
-        Food: {
+        food: {
           connect: {
             id: foodId,
           },
@@ -154,9 +154,14 @@ export class DailyLogService {
           lt: today,
         },
       },
+      include: {
+        food: true,
+      },
     });
 
-    const results: Record<DaysOfWeek, MealLog[]> = {
+    type FoodLogRecord = MealLog & { food: Food };
+
+    const results: Record<DaysOfWeek, FoodLogRecord[]> = {
       monday: [],
       tuesday: [],
       wednesday: [],
@@ -167,7 +172,7 @@ export class DailyLogService {
     };
 
     for (const key in userLogs) {
-      const userLogRecord: MealLog = userLogs[key];
+      const userLogRecord: FoodLogRecord = userLogs[key];
 
       const recordDayOfWeek = format(
         userLogRecord.createdAt,

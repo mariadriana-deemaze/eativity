@@ -23,6 +23,12 @@ import { RecipeService } from "../recipe/recipe.service";
 @Module({
   imports: [FoodModule, RecipeModule],
   controllers: [UserController, WeightController, PlanController],
-  providers: [UserService, WeightService, PlanService, FoodService, RecipeService],
+  providers: [
+    UserService,
+    WeightService,
+    PlanService,
+    FoodService,
+    RecipeService,
+  ],
 })
 export class UserModule {}

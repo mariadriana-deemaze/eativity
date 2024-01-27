@@ -140,12 +140,12 @@ const createSomeRecipeToFoodRelations = async (
     relations.map((relation) =>
       prisma.foodRecipe.create({
         data: {
-          Food: {
+          food: {
             connect: {
               id: relation.foodId,
             },
           },
-          Recipe: {
+          recipe: {
             connect: {
               id: relation.recipeId,
             },
@@ -176,12 +176,12 @@ const createManyFoodLogs = async (
     relations.map((relation) =>
       prisma.mealLog.create({
         data: {
-          User: {
+          user: {
             connect: {
               id: relation.userId,
             },
           },
-          Food: {
+          food: {
             connect: {
               id: relation.foodId,
             },
