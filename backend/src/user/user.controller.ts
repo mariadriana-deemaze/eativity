@@ -80,7 +80,7 @@ export class UserController {
     });
 
     // Delete the related records in the Plans table
-    await this.planService.deleteUserPlans({
+    await this.planService.deleteUserPlan({
       where: {
         id,
       },
