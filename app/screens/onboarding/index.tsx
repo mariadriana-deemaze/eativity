@@ -262,7 +262,11 @@ export const Onboarding = () => {
             rules={{ required: true }}
           />
 
-          <Button colorScheme="green" onPress={nextStep}>
+          <Button
+            colorScheme="green"
+            onPress={nextStep}
+            isDisabled={!getValues("weight")}
+          >
             Next
           </Button>
         </Box>
@@ -289,7 +293,11 @@ export const Onboarding = () => {
             rules={{ required: true }}
           />
 
-          <Button colorScheme="green" onPress={nextStep}>
+          <Button
+            colorScheme="green"
+            onPress={nextStep}
+            isDisabled={!getValues("height")}
+          >
             Next
           </Button>
         </Box>
