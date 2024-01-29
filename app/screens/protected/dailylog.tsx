@@ -1,126 +1,118 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
-import { Actionsheet, Box, Button, Text, VStack } from "native-base";
+import {
+  Actionsheet,
+  Box,
+  Button,
+  FlatList,
+  Image,
+  Pressable,
+  Spinner,
+  Text,
+  VStack,
+  View,
+  ScrollView,
+} from "native-base";
+
+import { useSelector } from "react-redux";
+
+import { Controller, useForm } from "react-hook-form";
+
+import { TextField } from "../../components/atoms/textField";
 
 import { DailyLogMealTypeSection } from "../../components/dailylog/section";
 
-import { MealLog, MealType } from "../../types";
+import {
+  MealLog,
+  MealType,
+  PatchMealLogEntry,
+  PostMealLogEntry,
+} from "../../types";
+
 import { lightTheme as theme } from "../../theme";
-import { useForm } from "react-hook-form";
+
+import { IRootState, useAppDispatch } from "../../stores";
+
+import { getDailyLogs } from "../../stores/dailylog/actions";
 
 export const DailyLog = () => {
-  const [inAddLogFlow, setInAddLogFlow] = useState(false);
+  const { log, loading } = useSelector((state: IRootState) => state.dailylog);
 
-  const formInstance = useForm<MealLog>();
+  const dispatch = useAppDispatch();
 
-  const DUMMY_LOGS: Record<MealType, MealLog[]> = {
-    [MealType.BREAKFAST]: [
-      {
-        id: "1",
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        quantity: 1,
-        type: MealType.BREAKFAST,
-        foodId: "1",
-        name: "Gala Apples",
-        description:
-          "Per 99g - Calories: 51kcal | Fat: 0.17g | Carbs: 13.67g | Protein: 0.26g",
-        calories: 51,
-        carbohydrates: 13.67,
-        proteins: 0.26,
-        fats: 0.17,
-        servingSize: 99,
-        image:
-          "https://m.ftscrt.com/food/0d4503b2-1e1f-4322-8efc-5fcdc34686f0.jpg",
-        barcode: "12",
-      },
-    ],
-    [MealType.LUNCH]: [
-      {
-        id: "2",
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        quantity: 1,
-        type: MealType.LUNCH,
-        foodId: "1",
-        name: "Carrot",
-        description:
-          "Per 99g - Calories: 51kcal | Fat: 0.17g | Carbs: 13.67g | Protein: 0.26g",
-        calories: 51,
-        carbohydrates: 13.67,
-        proteins: 0.26,
-        fats: 0.17,
-        servingSize: 99,
-        image:
-          "https://m.ftscrt.com/food/0d4503b2-1e1f-4322-8efc-5fcdc34686f0.jpg",
-        barcode: "123",
-      },
-      {
-        id: "3",
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        quantity: 1,
-        type: MealType.LUNCH,
-        foodId: "1",
-        name: "Yougurt",
-        description:
-          "Per 99g - Calories: 51kcal | Fat: 0.17g | Carbs: 13.67g | Protein: 0.26g",
-        calories: 51,
-        carbohydrates: 13.67,
-        proteins: 0.26,
-        fats: 0.17,
-        servingSize: 99,
-        image:
-          "https://m.ftscrt.com/food/0d4503b2-1e1f-4322-8efc-5fcdc34686f0.jpg",
-        barcode: "14",
-      },
-    ],
-    [MealType.DINNER]: [],
-    [MealType.SNACK]: [],
-  };
+  const [inAddLogFlow, setInAddLogFlow] = useState<MealType | undefined>(
+    undefined
+  );
 
-  const handleLogUpdate = () => {
-    // TODO: Dispatch reduced updated daily logs to store
-  };
+  const formInstance = useForm<PostMealLogEntry | PatchMealLogEntry>();
+
+  const totalSums = useMemo(() => {
+    let result = {
+      fats: 0,
+      calories: 0,
+      carbohydrates: 0,
+      proteins: 0,
+      total: 0,
+    };
+
+    Object.values(log).forEach((logValue) => {
+      logValue.forEach(
+        (log) =>
+          (result = {
+            fats: result.fats + log.food.fats * log.quantity,
+            carbohydrates:
+              result.carbohydrates + log.food.carbohydrates * log.quantity,
+            proteins: result.proteins + log.food.proteins * log.quantity,
+            calories: result.calories + log.food.calories * log.quantity,
+            total: result.total + log.quantity,
+          })
+      );
+    });
+
+    return result;
+  }, [log]);
+
+  useEffect(() => {
+    dispatch(getDailyLogs());
+  }, []);
 
   return (
-    <VStack
-      width="100%"
-      borderWidth={1}
-      borderColor="amber.800"
-      space={2}
-      px="4"
-      minHeight="100%"
-      backgroundColor={theme.background.primary}
-      pt="16"
-    >
-      {Object.entries(DUMMY_LOGS).map(
-        ([key, value]) =>
-          value.length > 0 && (
-            <DailyLogMealTypeSection
-              title={key as MealType}
-              data={value}
-              onAdd={() => setInAddLogFlow(true)}
-            />
-          )
-      )}
-
-      <Actionsheet isOpen={inAddLogFlow} onClose={() => setInAddLogFlow(false)}>
-        <Actionsheet.Content>
-          <Box w="100%" h={60} px={4} justifyContent="center">
-            <Text>Albums</Text>
-          </Box>
-          <Actionsheet.Item>Delete</Actionsheet.Item>
-          <Actionsheet.Item isDisabled>Share</Actionsheet.Item>
-          <Actionsheet.Item>Play</Actionsheet.Item>
-          <Actionsheet.Item>Favourite</Actionsheet.Item>
-          <Actionsheet.Item>Cancel</Actionsheet.Item>
-
-          <Button onPress={handleLogUpdate}>Submit</Button>
-        </Actionsheet.Content>
-      </Actionsheet>
+    <VStack>
+      <VStack pt="16" px="4" backgroundColor={theme.background.primary}>
+        <Text>{totalSums.calories}</Text>
+        <Text>{totalSums.fats}</Text>
+        <Text>{totalSums.proteins}</Text>
+        <Text>{totalSums.carbohydrates}</Text>
+      </VStack>
+      <ScrollView>
+        <VStack
+          px="4"
+          width="100%"
+          borderWidth={1}
+          borderColor="amber.800"
+          space={2}
+          backgroundColor={theme.background.primary}
+        >
+          {loading ? (
+            <Spinner />
+          ) : (
+            Object.entries(log).map(
+              ([key, value]: [key: MealType, MealLog[]]) => (
+                <DailyLogMealTypeSection
+                  key={`section_${key}`}
+                  title={key}
+                  data={value}
+                  formInstance={formInstance}
+                  inAddFlow={inAddLogFlow === key}
+                  setInAddLogFlow={setInAddLogFlow}
+                />
+              )
+            )
+          )}
+        </VStack>
+      </ScrollView>
     </VStack>
   );
 };
