@@ -1,4 +1,4 @@
-import {  Prisma, PrismaClient } from "@prisma/client";
+import { MealLogType, Prisma, PrismaClient } from "@prisma/client";
 
 import seedingRecipeCategories from "./seedsData/recipeCategories.json";
 
@@ -6,12 +6,14 @@ import { faker } from "@faker-js/faker";
 
 import { hash } from "argon2";
 
+import { sub } from "date-fns";
+
 const prisma = new PrismaClient();
 
 const createMainUser = async () => {
   const password_hash = await hash("123");
 
-  const user = await prisma.user.create({
+  const createdUser = await prisma.user.create({
     data: {
       name: "Maria Adriana",
       email: "m@gmail.com",
@@ -20,7 +22,8 @@ const createMainUser = async () => {
   });
 
   console.log(`/////////`);
-  console.log("Created main user ->", user);
+  console.log("Created main user ->", createdUser);
+  return createdUser;
 };
 
 const createOtherUsers = async (count: number = 2) => {
@@ -138,12 +141,12 @@ const createSomeRecipeToFoodRelations = async (
     relations.map((relation) =>
       prisma.foodRecipe.create({
         data: {
-          Food: {
+          food: {
             connect: {
               id: relation.foodId,
             },
           },
-          Recipe: {
+          recipe: {
             connect: {
               id: relation.recipeId,
             },
@@ -159,10 +162,53 @@ const createSomeRecipeToFoodRelations = async (
   return createdRelations;
 };
 
-async function seed() {
-  await createMainUser();
+const createManyFoodLogs = async (
+  relations: { userId: number; foodId: number }[]
+) => {
+  const today = new Date();
+  const sevenDaysAgo = sub(today, { days: 7 });
 
-  await createOtherUsers(3);
+  const createdLogs = await Promise.all(
+    relations.map((relation, index) => {
+      const date =
+        index === 0
+          ? today
+          : faker.date.between({
+              from: sevenDaysAgo.toISOString(),
+              to: today.toISOString(),
+            });
+
+      return prisma.mealLog.create({
+        data: {
+          user: {
+            connect: {
+              id: relation.userId,
+            },
+          },
+          food: {
+            connect: {
+              id: relation.foodId,
+            },
+          },
+          type: MealLogType.LUNCH,
+          quantity: faker.helpers.rangeToNumber({ min: 0, max: 5 }),
+          createdAt: date,
+          updatedAt: date,
+        },
+      });
+    })
+  );
+
+  console.log(`/////////`);
+  console.log(`Created ${createdLogs.length} logs records.`);
+  console.log(createdLogs);
+  return createdLogs;
+};
+
+async function seed() {
+  const createdMainUser = await createMainUser();
+
+  const createdUsers = await createOtherUsers(3);
 
   const createdFoods = await createManyFoods(10);
 
@@ -186,6 +232,37 @@ async function seed() {
     {
       foodId: createdFoods[6].id,
       recipeId: createdRecipes[3].id,
+    },
+  ]);
+
+  await createManyFoodLogs([
+    {
+      foodId: createdFoods[0].id,
+      userId: createdMainUser.id,
+    },
+    {
+      foodId: createdFoods[1].id,
+      userId: createdMainUser.id,
+    },
+    {
+      foodId: createdFoods[2].id,
+      userId: createdMainUser.id,
+    },
+    {
+      foodId: createdFoods[0].id,
+      userId: createdUsers[0].id,
+    },
+    {
+      foodId: createdFoods[1].id,
+      userId: createdUsers[0].id,
+    },
+    {
+      foodId: createdFoods[2].id,
+      userId: createdUsers[0].id,
+    },
+    {
+      foodId: createdFoods[6].id,
+      userId: createdUsers[3].id,
     },
   ]);
 }

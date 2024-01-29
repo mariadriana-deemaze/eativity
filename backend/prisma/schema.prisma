@@ -66,7 +66,7 @@ model RecipeCategory {
   image     String
   title     String
   foodId    Int?
-  Recipe    Recipe?  @relation(fields: [recipeId], references: [id])
+  recipe    Recipe?  @relation(fields: [recipeId], references: [id])
   recipeId  Int?
 }
 
@@ -83,17 +83,17 @@ model Food {
   fats          Int
   servingSize   Int
   image         String?
-  FoodRecipe    FoodRecipe[]
-  User          User?        @relation(fields: [userId], references: [id])
+  foodRecipe    FoodRecipe[]
+  user          User?        @relation(fields: [userId], references: [id])
   userId        Int?
-  Meal          MealLog[]
+  meal          MealLog[]
 }
 
 model Recipe {
   id            Int              @id @default(autoincrement())
   createdAt     DateTime         @default(now())
   updatedAt     DateTime         @default(now())
-  User          User?            @relation(fields: [userId], references: [id])
+  user          User?            @relation(fields: [userId], references: [id])
   userId        Int?
   name          String
   description   String?
@@ -102,7 +102,7 @@ model Recipe {
   proteins      Int
   fats          Int
   image         String?
-  FoodRecipe    FoodRecipe[]
+  foodRecipe    FoodRecipe[]
   categories    RecipeCategory[]
 }
 
@@ -112,8 +112,8 @@ model FoodRecipe {
   updatedAt DateTime @default(now())
   recipeId  Int
   foodId    Int
-  Food      Food     @relation(fields: [foodId], references: [id])
-  Recipe    Recipe   @relation(fields: [recipeId], references: [id])
+  food      Food     @relation(fields: [foodId], references: [id])
+  recipe    Recipe   @relation(fields: [recipeId], references: [id])
 
   @@unique([recipeId, foodId], name: "recipe_food_unique")
 }
@@ -125,10 +125,10 @@ model MealLog {
   type      MealLogType
   quantity  Int         @default(1)
 
-  Food   Food @relation(fields: [foodId], references: [id])
+  food   Food @relation(fields: [foodId], references: [id])
   foodId Int
 
-  User   User @relation(fields: [userId], references: [id])
+  user   User @relation(fields: [userId], references: [id])
   userId Int
 }
 

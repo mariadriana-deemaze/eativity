@@ -1,18 +1,14 @@
+import { EmailNotificationService } from "../email-notification/email-notification.service";
+
 import { ForbiddenException, Injectable } from "@nestjs/common";
 
 import { ConfigService } from "@nestjs/config";
-
-import { MailerService } from "@nestjs-modules/mailer";
 
 import { JwtService } from "@nestjs/jwt";
 
 import { PrismaService } from "../prisma/prisma.service";
 
 import { AuthDto } from "./dto";
-
-import { render } from "@react-email/render";
-
-import { WelcomeEmail } from "../../templates/welcome";
 
 import * as argon from "argon2";
 
@@ -22,7 +18,7 @@ export class AuthService {
     private prisma: PrismaService,
     private jwt: JwtService,
     private config: ConfigService,
-    private mailerService: MailerService
+    private emailNotificationService: EmailNotificationService
   ) {}
 
   async createUser({ email, name, password }: AuthDto) {
@@ -39,14 +35,7 @@ export class AuthService {
 
       const token = await this.signToken(user.id, user.email);
 
-      const html = render(WelcomeEmail({ name, email }));
-
-      await this.mailerService.sendMail({
-        to: email,
-        from: "info@eativity.com",
-        subject: `Welcome to Eativity ${name}`,
-        html,
-      });
+      await this.emailNotificationService.userWelcomeEmail(user);
 
       return token;
     } catch (error) {
