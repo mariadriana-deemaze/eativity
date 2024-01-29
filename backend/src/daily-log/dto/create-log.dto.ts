@@ -1,5 +1,5 @@
 import { MealLogType } from "@prisma/client";
-import { IsNotEmpty, IsNumber, IsString } from "class-validator";
+import { IsEnum, IsNotEmpty, IsNumber, IsString } from "class-validator";
 
 export class CreateLogDto {
   @IsNumber()
@@ -11,6 +11,7 @@ export class CreateLogDto {
   quantity: number;
 
   @IsString()
+  @IsEnum(MealLogType)
   @IsNotEmpty()
   type: MealLogType;
 }

@@ -3,6 +3,7 @@ import { Gender, Goal, GoalDiff, MeasurementUnit } from "@prisma/client";
 import {
   IsDate,
   IsEmail,
+  IsEnum,
   IsNumber,
   IsOptional,
   IsString,
@@ -34,6 +35,7 @@ export class EditUserDto {
   weight?: number;
 
   @IsOptional()
+  @IsEnum(MeasurementUnit)
   measurementUnit?: MeasurementUnit;
 
   @IsOptional()
