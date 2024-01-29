@@ -16,7 +16,6 @@ import { sortObjectByEnumOrder } from "../../utils";
 
 import { DaysOfWeek, FoodLogRecord, TotalIntakes } from "../../types";
 
-
 @Injectable()
 export class DailyLogService {
   constructor(private prisma: PrismaService) {}

@@ -17,7 +17,14 @@ import { PrismaModule } from "../prisma/prisma.module";
 import { DailyLogModule } from "../daily-log/daily-log.module";
 
 @Module({
-  imports: [FoodModule, RecipeModule, PlanModule, WeightModule, PrismaModule, DailyLogModule],
+  imports: [
+    FoodModule,
+    RecipeModule,
+    PlanModule,
+    WeightModule,
+    PrismaModule,
+    DailyLogModule,
+  ],
   controllers: [UserController],
   providers: [UserService],
 })
