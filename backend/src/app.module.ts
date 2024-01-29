@@ -8,17 +8,9 @@ import { MailerModule } from "@nestjs-modules/mailer";
 
 import { DevtoolsModule } from "@nestjs/devtools-integration";
 
-import { PrismaModule } from "./prisma/prisma.module";
-
 import { AuthModule } from "./auth/auth.module";
 
 import { UserModule } from "./user/user.module";
-
-import { FoodModule } from "./food/food.module";
-
-import { RecipeModule } from "./recipe/recipe.module";
-
-import { DailyLogModule } from "./daily-log/daily-log.module";
 
 import { EmailNotificationModule } from "./email-notification/email-notification.module";
 
@@ -43,13 +35,9 @@ import { EmailNotificationModule } from "./email-notification/email-notification
       preview: true,
     }),
     ScheduleModule.forRoot(),
-    UserModule,
-    AuthModule,
-    PrismaModule,
-    FoodModule,
-    RecipeModule,
-    DailyLogModule,
     EmailNotificationModule,
+    AuthModule,
+    UserModule,
   ],
 })
 export class AppModule {}

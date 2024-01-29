@@ -5,5 +5,6 @@ import { DailyLogController } from "./daily-log.controller";
 @Module({
   controllers: [DailyLogController],
   providers: [DailyLogService],
+  exports: [DailyLogService],
 })
 export class DailyLogModule {}
