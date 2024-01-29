@@ -6,11 +6,15 @@ import { Cron } from "@nestjs/schedule";
 
 import { render } from "@react-email/render";
 
+import { User } from "@prisma/client";
+
 import { UserService } from "../user/user.service";
 
 import { DailyLogService } from "../daily-log/daily-log.service";
 
 import { UserWeeklySummaryEmail } from "../../templates/userWeeklySummary";
+
+import { WelcomeEmail } from "../../templates/welcome";
 
 enum CustomScheduleExpression {
   EVERY_SUNDAY_AT_MIDNIGHT = "0 0 * * 0",
@@ -26,6 +30,17 @@ export class EmailNotificationService {
   ) {}
 
   private readonly logger = new Logger(EmailNotificationService.name);
+
+  async userWelcomeEmail(user: User) {
+    const html = render(WelcomeEmail({ name: user.name, email: user.email }));
+
+    await this.mailerService.sendMail({
+      to: user.email,
+      from: "info@eativity.com",
+      subject: `Welcome to Eativity ${user.name}`,
+      html,
+    });
+  }
 
   @Cron(CustomScheduleExpression.EVERY_SUNDAY_AT_MIDNIGHT)
   async usersWeeklySummaryEmail() {

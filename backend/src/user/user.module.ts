@@ -27,5 +27,6 @@ import { DailyLogModule } from "../daily-log/daily-log.module";
   ],
   controllers: [UserController],
   providers: [UserService],
+  exports: [UserService],
 })
 export class UserModule {}
