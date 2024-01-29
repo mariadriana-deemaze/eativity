@@ -225,8 +225,10 @@ export const Dashboard = () => {
                 <Pressable
                   key={`recipe_${recipe.id}`}
                   onPress={() => {
-                    setSliderInformationVisibility(false);
-                    setCurrentSlide(index);
+                    if (index !== currentSlide) {
+                      setSliderInformationVisibility(false);
+                      setCurrentSlide(index);
+                    }
                   }}
                 >
                   <Image
