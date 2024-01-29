@@ -12,9 +12,7 @@ import { UserService } from "../user/user.service";
 
 import { DailyLogService } from "../daily-log/daily-log.service";
 
-import { UserWeeklySummaryEmail } from "../../templates/userWeeklySummary";
-
-import { WelcomeEmail } from "../../templates/welcome";
+import { WelcomeEmail, UserWeeklySummaryEmail } from "../../templates";
 
 enum CustomScheduleExpression {
   EVERY_SUNDAY_AT_MIDNIGHT = "0 0 * * 0",

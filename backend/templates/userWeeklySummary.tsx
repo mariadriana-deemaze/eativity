@@ -18,6 +18,19 @@ import {
   Text,
 } from "@react-email/components";
 
+import {
+  LOGO,
+  button,
+  buttonContainer,
+  container,
+  heading,
+  hr,
+  logo,
+  main,
+  paragraph,
+  reportLink,
+} from "./styles";
+
 import { DaysOfWeek, TotalIntakes } from "types";
 
 interface UserWeeklySummaryEmailProps {
@@ -31,9 +44,6 @@ export const UserWeeklySummaryEmail = ({
   email,
   weeklyMacros,
 }: UserWeeklySummaryEmailProps) => {
-  const DUMMY_LOGO =
-    "https://react-email-demo-ijnnx5hul-resend.vercel.app/static/linear-logo.png";
-
   const loginLink = `http://www.eativity.com/login?email=${email}`;
 
   const hasWeeklyLogs = Object.values(weeklyMacros).flat().length > 0;
@@ -44,13 +54,7 @@ export const UserWeeklySummaryEmail = ({
       <Preview>Your login code for Linear</Preview>
       <Body style={main}>
         <Container style={container}>
-          <Img
-            src={DUMMY_LOGO}
-            width="42"
-            height="42"
-            alt="Linear"
-            style={logo}
-          />
+          <Img src={LOGO} width="42" height="42" alt="Linear" style={logo} />
           <Heading style={heading}>Hello {name},</Heading>
           <Heading style={heading}>Here's your weekly summary:</Heading>
           <Section style={buttonContainer}>
@@ -87,64 +91,4 @@ export const UserWeeklySummaryEmail = ({
       </Body>
     </Html>
   );
-};
-
-const logo = {
-  borderRadius: 21,
-  width: 42,
-  height: 42,
-};
-
-const main = {
-  backgroundColor: "#ffffff",
-  fontFamily:
-    '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif',
-};
-
-const container = {
-  margin: "0 auto",
-  padding: "20px 0 48px",
-  width: "560px",
-};
-
-const heading = {
-  fontSize: "24px",
-  letterSpacing: "-0.5px",
-  lineHeight: "1.3",
-  fontWeight: "400",
-  color: "#484848",
-  padding: "17px 0 0",
-};
-
-const paragraph = {
-  margin: "0 0 15px",
-  fontSize: "15px",
-  lineHeight: "1.4",
-  color: "#3c4149",
-};
-
-const buttonContainer = {
-  padding: "27px 0 27px",
-};
-
-const button = {
-  backgroundColor: "#5e6ad2",
-  borderRadius: "3px",
-  fontWeight: "600",
-  color: "#fff",
-  fontSize: "15px",
-  textDecoration: "none",
-  textAlign: "center",
-  display: "block",
-  padding: "10px 20px",
-};
-
-const reportLink = {
-  fontSize: "14px",
-  color: "#b4becc",
-};
-
-const hr = {
-  borderColor: "#dfe1e4",
-  margin: "42px 0 26px",
 };
