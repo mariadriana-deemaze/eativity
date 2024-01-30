@@ -163,10 +163,12 @@ export const Foods: React.FC<FoodsScreenProps> = ({ navigation }) => {
         {/* RESULTS */}
         {!isLoading && hasFoodData && (
           <FlatList
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => String(item.id)}
             data={foods?.data}
             renderItem={({ item }) => (
-              <FoodCard {...{ ...item, onPress: () => onFoodPress(item.id) }} />
+              <FoodCard
+                {...{ ...item, onPress: () => onFoodPress(String(item.id)) }}
+              />
             )}
             onEndReached={loadMoreFoods}
             ItemSeparatorComponent={() => <View style={{ height: 10 }} />}

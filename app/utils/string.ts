@@ -1,4 +1,4 @@
-import { Meal, MealType } from "../types";
+import { MealLog, MealType } from "../types";
 
 export const gretting = () => {
   const currentHour = new Date().getHours();
@@ -17,7 +17,7 @@ export const gretting = () => {
   return greeting;
 };
 
-export const greetMissingMeal = (dailyMeals: Meal[]) => {
+export const greetMissingMeal = (dailyMeals: MealLog[]) => {
   const currentHour = new Date().getHours();
 
   // Time frames

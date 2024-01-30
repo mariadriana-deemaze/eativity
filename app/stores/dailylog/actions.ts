@@ -43,8 +43,10 @@ export const createLogEntry = createAsyncThunk(
 
 export const updateLogEntry = createAsyncThunk(
   "updateLogEntry",
-  // @ts-ignore
-  async (id: string, entry: PatchMealLogEntry, { rejectWithValue }) => {
+  async (
+    { id, entry }: { id: number; entry: PatchMealLogEntry },
+    { rejectWithValue }
+  ) => {
     try {
       return await updateEntry(id, entry);
     } catch (error) {
@@ -59,7 +61,7 @@ export const updateLogEntry = createAsyncThunk(
 
 export const deleteLogEntry = createAsyncThunk(
   "deleteLogEntry",
-  async (id: string, { rejectWithValue }) => {
+  async (id: number, { rejectWithValue }) => {
     try {
       return await deleteEntry(id);
     } catch (error) {

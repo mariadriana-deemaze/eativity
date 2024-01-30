@@ -81,6 +81,9 @@ export class DailyLogService {
         quantity,
         type,
       },
+      include: {
+        food: true,
+      },
     });
   }
 
@@ -99,6 +102,9 @@ export class DailyLogService {
       where: { id: entryId },
       data: {
         quantity,
+      },
+      include: {
+        food: true,
       },
     });
   }

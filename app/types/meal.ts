@@ -8,14 +8,7 @@ export enum MealType {
   SNACK = "SNACK",
 }
 
-export interface Meal extends Record {
-  name: string;
-  quantity: number;
-  type: MealType;
-  foodId: number;
-}
-
-export interface MealLog {
+export interface MealLog extends Record {
   quantity: number;
   type: MealType;
   foodId: number;

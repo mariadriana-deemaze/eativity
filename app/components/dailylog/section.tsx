@@ -1,5 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useMemo } from "react";
+import { Dispatch, SetStateAction, useMemo } from "react";
+
+import { useSelector } from "react-redux";
 
 import {
   View,
@@ -13,7 +14,12 @@ import {
   FlatList,
   Pressable,
   Image,
+  Skeleton,
 } from "native-base";
+
+import { Swipeable } from "react-native-gesture-handler";
+
+import { Controller, UseFormReturn } from "react-hook-form";
 
 import {
   MealLog,
@@ -22,14 +28,46 @@ import {
   PostMealLogEntry,
 } from "../../types";
 
+import { TextField } from "../atoms/textField";
+
+import { CounterField } from "../atoms/counterField";
+
 import { lightTheme as theme } from "../../theme";
 
-import { pluralize } from "../../utils";
+import { IRootState, useAppDispatch } from "../../stores";
 
-import { TextField } from "../atoms/textField";
-import { Controller, UseFormReturn } from "react-hook-form";
-import { useAppDispatch } from "../../stores";
-import { createLogEntry } from "../../stores/dailylog/actions";
+import { createLogEntry, deleteLogEntry } from "../../stores/dailylog/actions";
+
+import { DUMMY_AUTOCOMPLETE_FOOD, pluralize } from "../../utils";
+
+const DailyLogMealTypeSectionSkeleton = () => {
+  return (
+    <VStack
+      width="100%"
+      py="3"
+      px="2"
+      backgroundColor={theme.background.secondary}
+      space="4"
+    >
+      <Skeleton flex="1" height="5" rounded="md" bgColor="gray.100" />
+      <HStack space="3">
+        <Skeleton flex="1" height="5" rounded="md" bgColor="gray.100" />
+        <HStack space="1" alignItems="center">
+          <View bg="gray.200" height="2" width="2" borderRadius="full" />
+          <Skeleton width="10" height="5" rounded="md" bgColor="gray.100" />
+        </HStack>
+        <HStack space="1" alignItems="center">
+          <View bg="gray.200" height="2" width="2" borderRadius="full" />
+          <Skeleton width="10" height="5" rounded="md" bgColor="gray.100" />
+        </HStack>
+        <HStack space="1" alignItems="center">
+          <View bg="gray.200" height="2" width="2" borderRadius="full" />
+          <Skeleton width="10" height="5" rounded="md" bgColor="gray.100" />
+        </HStack>
+      </HStack>
+    </VStack>
+  );
+};
 
 export const DailyLogMealTypeSection = ({
   title,
@@ -37,42 +75,26 @@ export const DailyLogMealTypeSection = ({
   inAddFlow,
   setInAddLogFlow,
   formInstance: {
-    getFieldState,
     getValues,
     setValue,
     control,
-    formState: { errors },
+    formState: { isValid, errors },
+    reset,
   },
 }: {
   title: MealType;
   data: MealLog[];
   inAddFlow: boolean;
-  setInAddLogFlow: React.Dispatch<React.SetStateAction<MealType>>;
-  formInstance: UseFormReturn<
-    PostMealLogEntry | PatchMealLogEntry,
-    any,
-    undefined
-  >;
+  setInAddLogFlow: Dispatch<SetStateAction<MealType>>;
+  formInstance: UseFormReturn<PostMealLogEntry | PatchMealLogEntry>;
 }) => {
+  const { mutating, logsLoaded } = useSelector(
+    (state: IRootState) => state.dailylog
+  );
+
   const dispatch = useAppDispatch();
 
-  const DUMMY_AUTOCOMPLETE_FOOD = [
-    { name: "hello", id: "1" },
-    { name: "bye", id: "2" },
-    { name: "goodbye", id: "3" },
-    { name: "potato", id: "4" },
-    { name: "potito", id: "5" },
-    { name: "hipopotamo", id: "6" },
-    { name: "potito", id: "7" },
-    { name: "hipopotamo", id: "8" },
-    { name: "hipopotamo", id: "9" },
-    { name: "hipopotamo", id: "10" },
-    { name: "hipopotamo", id: "11" },
-    { name: "hipopotamo", id: "12" },
-    { name: "hipopotamo", id: "13" },
-  ];
-
-  const onAdd = () => {
+  const enterEditEntryFlow = () => {
     setInAddLogFlow(title);
     setValue("type", title);
   };
@@ -81,9 +103,20 @@ export const DailyLogMealTypeSection = ({
     // TODO: loadMore from current search
   };
 
-  const handleLogUpdate = () => {
+  const handleLogCreate = () => {
     const data = getValues();
-    dispatch(createLogEntry(data));
+    dispatch(createLogEntry(data)).then(() => {
+      setInAddLogFlow(undefined);
+    });
+  };
+
+  const handleLogDelete = (entryId: number) => {
+    dispatch(deleteLogEntry(entryId));
+  };
+
+  const enterEditMode = (log: MealLog) => {
+    enterEditEntryFlow();
+    reset(log);
   };
 
   const sectionIntakesSum = useMemo(() => {
@@ -140,86 +173,122 @@ export const DailyLogMealTypeSection = ({
         <Divider />
 
         <VStack width="100%" space="2" alignItems="center" px="2" py="3">
-          {data ? (
-            data.map((log) => (
-              <VStack
-                key={log.food.id}
-                width="100%"
-                py="3"
-                px="2"
-                backgroundColor={theme.background.secondary}
-              >
-                <Text isTruncated>
-                  {log.quantity}x {log.food.name}
-                </Text>
-                <HStack space="3">
-                  <Text>{log.food.calories}</Text>
+          {logsLoaded ? (
+            data.length > 0 ? (
+              data.map((log) => (
+                <Swipeable
+                  key={log.id}
+                  renderRightActions={() => (
+                    <HStack space="1" alignItems="center">
+                      <Button
+                        isDisabled={mutating}
+                        onPress={() => handleLogDelete(log.id)}
+                        colorScheme="red"
+                      >
+                        Delete
+                      </Button>
+                    </HStack>
+                  )}
+                >
+                  <Pressable onPress={() => enterEditMode(log)}>
+                    <VStack
+                      width="100%"
+                      py="3"
+                      px="2"
+                      borderRadius="5"
+                      backgroundColor={theme.background.secondary}
+                    >
+                      <Text isTruncated>
+                        {log.quantity}x {log.food.name}
+                      </Text>
+                      <HStack space="3">
+                        <Text>{log.food.calories}</Text>
 
-                  <HStack space="1" alignItems="center">
-                    <View
-                      bg={theme.red.primary}
-                      height="2"
-                      width="2"
-                      borderRadius="full"
-                    />
-                    <Text
-                      fontFamily="PlusJakartaSans_200ExtraLight"
-                      color={theme.text.paragraph.secondary}
-                      fontSize="xs"
-                      isTruncated
-                    >
-                      {log.food.fats} {pluralize(log.food.fats, "fat")}
-                    </Text>
-                  </HStack>
-                  <HStack space="1" alignItems="center">
-                    <View
-                      bg={theme.blue.primary}
-                      height="2"
-                      width="2"
-                      borderRadius="full"
-                    />
-                    <Text
-                      fontFamily="PlusJakartaSans_200ExtraLight"
-                      color={theme.text.paragraph.secondary}
-                      fontSize="xs"
-                      isTruncated
-                    >
-                      {log.food.proteins}{" "}
-                      {pluralize(log.food.proteins, "protein")}
-                    </Text>
-                  </HStack>
-                  <HStack space="1" alignItems="center">
-                    <View
-                      bg={theme.purple.primary}
-                      height="2"
-                      width="2"
-                      borderRadius="full"
-                    />
-                    <Text
-                      fontFamily="PlusJakartaSans_200ExtraLight"
-                      color={theme.text.paragraph.secondary}
-                      fontSize="xs"
-                      isTruncated
-                    >
-                      {log.food.carbohydrates}{" "}
-                      {pluralize(log.food.carbohydrates, "carb")}
-                    </Text>
-                  </HStack>
-                </HStack>
-              </VStack>
-            ))
+                        <HStack space="1" alignItems="center">
+                          <View
+                            bg={theme.red.primary}
+                            height="2"
+                            width="2"
+                            borderRadius="full"
+                          />
+                          <Text
+                            fontFamily="PlusJakartaSans_200ExtraLight"
+                            color={theme.text.paragraph.secondary}
+                            fontSize="xs"
+                            isTruncated
+                          >
+                            {log.food.fats} {pluralize(log.food.fats, "fat")}
+                          </Text>
+                        </HStack>
+                        <HStack space="1" alignItems="center">
+                          <View
+                            bg={theme.blue.primary}
+                            height="2"
+                            width="2"
+                            borderRadius="full"
+                          />
+                          <Text
+                            fontFamily="PlusJakartaSans_200ExtraLight"
+                            color={theme.text.paragraph.secondary}
+                            fontSize="xs"
+                            isTruncated
+                          >
+                            {log.food.proteins}{" "}
+                            {pluralize(log.food.proteins, "protein")}
+                          </Text>
+                        </HStack>
+                        <HStack space="1" alignItems="center">
+                          <View
+                            bg={theme.purple.primary}
+                            height="2"
+                            width="2"
+                            borderRadius="full"
+                          />
+                          <Text
+                            fontFamily="PlusJakartaSans_200ExtraLight"
+                            color={theme.text.paragraph.secondary}
+                            fontSize="xs"
+                            isTruncated
+                          >
+                            {log.food.carbohydrates}{" "}
+                            {pluralize(log.food.carbohydrates, "carb")}
+                          </Text>
+                        </HStack>
+                      </HStack>
+                    </VStack>
+                  </Pressable>
+                </Swipeable>
+              ))
+            ) : (
+              <Text
+                fontFamily="PlusJakartaSans_600SemiBold"
+                color={theme.text.paragraph.primary}
+                fontSize="sm"
+              >
+                No entries added yet.
+              </Text>
+            )
           ) : (
-            <Text>Eat something dawg</Text>
+            <DailyLogMealTypeSectionSkeleton />
           )}
         </VStack>
 
         <Divider />
 
         <HStack space="2" alignItems="center" px="2" py="3">
-          <Button onPress={onAdd} colorScheme="green">
+          <Button
+            onPress={enterEditEntryFlow}
+            colorScheme="green"
+            isDisabled={!logsLoaded}
+          >
             Add food
           </Button>
-          <Text>You are totalling {sectionIntakesSum.calories} kcal.</Text>
+
+          {logsLoaded ? (
+            <Text>You are totalling {sectionIntakesSum.calories} kcal.</Text>
+          ) : (
+            <Skeleton width="10" height="5" rounded="md" bgColor="gray.100" />
+          )}
         </HStack>
       </View>
       <Actionsheet
@@ -231,9 +300,8 @@ export const DailyLogMealTypeSection = ({
             <Text>Add new {getValues("type")} entry.</Text>
 
             <VStack>
-              <Text>adddding stuff TYPE: {getValues("type")}</Text>
-              <Text>adddding stuff FOOD_ID: {getValues("foodId")}</Text>
-              <Text>adddding stuff QUANTITY: {getValues("quantity")}</Text>
+              <Text>Food_id: {getValues("foodId")}</Text>
+              <Text>Quantity: {getValues("quantity")}</Text>
             </VStack>
 
             <TextField label="Search food" />
@@ -248,7 +316,7 @@ export const DailyLogMealTypeSection = ({
               }}
               height="56"
               numColumns={4}
-              keyExtractor={(item) => item.id}
+              keyExtractor={(item) => String(item.id)}
               data={DUMMY_AUTOCOMPLETE_FOOD}
               renderItem={({ item }) => {
                 // @ts-ignore
@@ -287,9 +355,6 @@ export const DailyLogMealTypeSection = ({
                           alt="image"
                         />
                         <Text isTruncated>{item.name}</Text>
-                        {/* <FoodCard
-                    {...{ ...item, onPress: () => onFoodPress(item.id) }}
-                  /> */}
                       </Box>
                     </Box>
                   </Pressable>
@@ -303,19 +368,35 @@ export const DailyLogMealTypeSection = ({
             <Controller
               control={control}
               render={({ field: { onChange, onBlur, value } }) => (
-                <TextField
+                <CounterField
                   label="Quantity"
                   onBlur={onBlur}
                   onChangeText={(value) => onChange(value)}
                   value={value ? String(value) : "0"}
+                  error={errors?.quantity?.message}
                 />
               )}
               name="quantity"
-              rules={{ required: true }}
+              rules={{
+                required: {
+                  value: true,
+                  message: "Required field.",
+                },
+                min: {
+                  value: 1,
+                  message: "Not a valid quantity.",
+                },
+              }}
             />
           </Box>
 
-          <Button onPress={handleLogUpdate}>Submit</Button>
+          <Button
+            isLoading={mutating}
+            isDisabled={!isValid}
+            onPress={handleLogCreate}
+          >
+            Submit
+          </Button>
         </Actionsheet.Content>
       </Actionsheet>
     </>

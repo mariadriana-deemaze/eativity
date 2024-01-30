@@ -214,11 +214,11 @@ export const Recipes: React.FC<RecipesScreenProps> = ({ navigation }) => {
         {/* RESULTS */}
         {!isLoading && hasRecipesData && (
           <FlatList
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => String(item.id)}
             data={recipes?.data}
             renderItem={({ item }) => (
               <RecipeCard
-                {...{ ...item, onPress: () => onRecipePress(item.id) }}
+                {...{ ...item, onPress: () => onRecipePress(String(item.id)) }}
               />
             )}
             onEndReached={loadMoreRecipes}

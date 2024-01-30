@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { createSlice } from "@reduxjs/toolkit";
 
 import {
@@ -13,11 +12,12 @@ import {
   defaultNetworkErrorMessage,
 } from "../../components/toastAlert";
 
-import { MealType, MealLog, Meal } from "../../types";
+import { MealType, MealLog } from "../../types";
 
 interface InitialState {
-  log: Record<MealType, Meal[]>;
-  loading: boolean;
+  logsLoaded: false;
+  log: Record<MealType, MealLog[]>;
+  mutating: false;
   error: ToastInfoProps | null;
 }
 
@@ -29,8 +29,9 @@ const defaultMealLog = {
 };
 
 const initialState: InitialState = {
+  logsLoaded: false,
   log: defaultMealLog,
-  loading: false,
+  mutating: false,
   error: null,
 };
 
@@ -47,78 +48,107 @@ const dailyLog = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getDailyLogs.pending, (state, { payload }) => {
+      // ---
+      // Get user daily logs
+      .addCase(getDailyLogs.pending, (state) => {
         Object.assign(state, {
           ...state,
-          loading: true,
+          mutating: true,
         });
       })
       .addCase(getDailyLogs.fulfilled, (state, { payload: entryLogs }) => {
         Object.assign(state, {
           ...state,
-          loading: false,
+          logsLoaded: true,
+          mutating: false,
           log: { ...defaultMealLog, ...entryLogs },
         });
       })
       .addCase(getDailyLogs.rejected, (state, { payload }) => {
         Object.assign(state, {
           ...state,
-          loading: false,
+          mutating: false,
           error: payload || defaultNetworkErrorMessage,
         });
       })
-      .addCase(createLogEntry.pending, (state, { payload }) => {
+      // ---
+      // Create log
+      .addCase(createLogEntry.pending, (state) => {
         Object.assign(state, {
           ...state,
-          loading: true,
+          mutating: true,
         });
       })
       .addCase(createLogEntry.fulfilled, (state, { payload }) => {
+        console.log("payload ->", payload);
+
         const updatedLog = {
           ...state.log,
           [payload.type]: [...state.log[payload.type], payload],
         };
 
+        console.log("UPDATED ->", updatedLog);
+
         Object.assign(state, {
           ...state,
-          loading: false,
+          mutating: false,
           log: updatedLog,
         });
       })
       .addCase(createLogEntry.rejected, (state, { payload }) => {
         Object.assign(state, {
           ...state,
+          mutating: false,
           error: payload || defaultNetworkErrorMessage,
         });
       })
+      // ---
       // Update log
-      .addCase(updateLogEntry.pending, (state, { payload }) => {
-        // TODO
+      .addCase(updateLogEntry.pending, (state) => {
+        Object.assign(state, {
+          ...state,
+          mutating: true,
+        });
       })
       .addCase(updateLogEntry.fulfilled, (state, { payload }) => {
-        // TODO
-        /* Object.assign(state, {
-          ...state,
-          log: payload,
-        }); */
+        const logIndex = state.log[payload.type].findIndex(
+          (log) => log.id === payload.id
+        );
+
+        const updatedLog = {
+          ...state.log,
+          [payload.type]: state.log[payload.type].splice(logIndex, 1, payload),
+        };
+
+        if (logIndex > 0) {
+          Object.assign(state, {
+            ...state,
+            mutating: false,
+            log: updatedLog,
+          });
+        } else {
+          Object.assign(state, {
+            ...state,
+            mutating: false,
+          });
+        }
       })
       .addCase(updateLogEntry.rejected, (state, { payload }) => {
-        // TODO
         Object.assign(state, {
           ...state,
+          mutating: false,
           error: payload || defaultNetworkErrorMessage,
         });
       })
-      //
+      // ---
       // Delete log
-      .addCase(deleteLogEntry.pending, (state, { payload }) => {
+      .addCase(deleteLogEntry.pending, (state) => {
         Object.assign(state, {
           ...state,
-          loading: true,
+          mutating: true,
         });
       })
       .addCase(deleteLogEntry.fulfilled, (state, { payload }) => {
-        // @ts-ignore
         const updatedLog = {
           ...state.log,
           [payload.type]: state.log[payload.type].filter(
@@ -126,17 +156,16 @@ const dailyLog = createSlice({
           ),
         };
 
-        // TODO
         Object.assign(state, {
           ...state,
           log: updatedLog,
-          loading: false,
+          mutating: false,
         });
       })
       .addCase(deleteLogEntry.rejected, (state, { payload }) => {
-        // TODO
         Object.assign(state, {
           ...state,
+          mutating: false,
           error: payload || defaultNetworkErrorMessage,
         });
       });

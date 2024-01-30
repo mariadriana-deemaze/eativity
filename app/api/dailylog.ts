@@ -1,7 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { api, API_URL } from "./api";
 
-import { Meal, MealLog, PatchMealLogEntry, PostMealLogEntry } from "../types";
+import { MealLog, PatchMealLogEntry, PostMealLogEntry } from "../types";
 
 const url = `${API_URL}/daily-log`;
 
@@ -36,28 +35,35 @@ export const createEntry = async (entry: PostMealLogEntry) => {
     });
 };
 
-export const updateEntry = (id: string, entry: PatchMealLogEntry) => {
-  //
-  // URL = `${API_URL}/me/dailylog/entry/${id}`,
-  // update resource
-  // entry.id;
-  // api.patch
+export const updateEntry = async (
+  entryId: number,
+  entry: PatchMealLogEntry
+) => {
+  console.log("entry ->", entry);
+
+  const newEntry = formatPayload(entry);
+
+  return await api
+    .patch(`${url}/${entryId}`, { quantity: newEntry.quantity })
+    .then((resp) => {
+      console.log("API resp ->", resp);
+      const { data } = resp;
+      return data as MealLog;
+    })
+    .catch((err) => {
+      throw new Error(err);
+    });
 };
 
-export const deleteEntry = async (entryId: string) => {
+export const deleteEntry = async (entryId: number) => {
   return await api
     .delete(`${url}/${entryId}`)
     .then((resp) => {
       console.log("API resp ->", resp);
       const { data } = resp;
-      return data as Meal;
+      return data as MealLog;
     })
     .catch((err) => {
       throw new Error(err);
     });
-  //
-  // URL = `${API_URL}/me/dailylog/entry/${id}`,
-  // update resource
-  // entry.id;
-  // api.patch
 };

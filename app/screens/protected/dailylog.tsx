@@ -18,9 +18,7 @@ import {
 
 import { useSelector } from "react-redux";
 
-import { Controller, useForm } from "react-hook-form";
-
-import { TextField } from "../../components/atoms/textField";
+import { useForm } from "react-hook-form";
 
 import { DailyLogMealTypeSection } from "../../components/dailylog/section";
 
@@ -38,7 +36,7 @@ import { IRootState, useAppDispatch } from "../../stores";
 import { getDailyLogs } from "../../stores/dailylog/actions";
 
 export const DailyLog = () => {
-  const { log, loading } = useSelector((state: IRootState) => state.dailylog);
+  const { log } = useSelector((state: IRootState) => state.dailylog);
 
   const dispatch = useAppDispatch();
 
@@ -79,36 +77,66 @@ export const DailyLog = () => {
   }, []);
 
   return (
-    <VStack>
-      <VStack pt="16" px="4" backgroundColor={theme.background.primary}>
-        <Text>{totalSums.calories}</Text>
-        <Text>{totalSums.fats}</Text>
-        <Text>{totalSums.proteins}</Text>
-        <Text>{totalSums.carbohydrates}</Text>
+    <VStack minHeight="100%">
+      <VStack
+        px="4"
+        pt="12"
+        pb="6"
+        borderBottomWidth={1}
+        borderBottomColor="gray.200"
+        backgroundColor={theme.background.primary}
+      >
+        <Text
+          fontFamily="PlusJakartaSans_600SemiBold"
+          color={theme.text.paragraph.primary}
+          fontSize="md"
+          isTruncated
+        >
+          {totalSums.calories}
+        </Text>
+        <Text
+          fontFamily="PlusJakartaSans_400Regular"
+          color={theme.text.paragraph.primary}
+          fontSize="sm"
+          isTruncated
+        >
+          {totalSums.fats}
+        </Text>
+        <Text
+          fontFamily="PlusJakartaSans_400Regular"
+          color={theme.text.paragraph.primary}
+          fontSize="sm"
+          isTruncated
+        >
+          {totalSums.proteins}
+        </Text>
+        <Text
+          fontFamily="PlusJakartaSans_400Regular"
+          color={theme.text.paragraph.primary}
+          fontSize="sm"
+          isTruncated
+        >
+          {totalSums.carbohydrates}
+        </Text>
       </VStack>
+
       <ScrollView>
         <VStack
-          px="4"
+          p="4"
           width="100%"
-          borderWidth={1}
-          borderColor="amber.800"
           space={2}
           backgroundColor={theme.background.primary}
         >
-          {loading ? (
-            <Spinner />
-          ) : (
-            Object.entries(log).map(
-              ([key, value]: [key: MealType, MealLog[]]) => (
-                <DailyLogMealTypeSection
-                  key={`section_${key}`}
-                  title={key}
-                  data={value}
-                  formInstance={formInstance}
-                  inAddFlow={inAddLogFlow === key}
-                  setInAddLogFlow={setInAddLogFlow}
-                />
-              )
+          {Object.entries(log).map(
+            ([key, value]: [key: MealType, MealLog[]]) => (
+              <DailyLogMealTypeSection
+                key={`section_${key}`}
+                title={key}
+                data={value}
+                formInstance={formInstance}
+                inAddFlow={inAddLogFlow === key}
+                setInAddLogFlow={setInAddLogFlow}
+              />
             )
           )}
         </VStack>
