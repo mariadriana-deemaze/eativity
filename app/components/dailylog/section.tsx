@@ -19,7 +19,7 @@ import {
 
 import { Swipeable } from "react-native-gesture-handler";
 
-import { Controller, UseFormReturn } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 
 import {
   MealLog,
@@ -74,20 +74,20 @@ export const DailyLogMealTypeSection = ({
   data,
   inAddFlow,
   setInAddLogFlow,
-  formInstance: {
-    getValues,
-    setValue,
-    control,
-    formState: { isValid, errors },
-    reset,
-  },
 }: {
   title: MealType;
   data: MealLog[];
   inAddFlow: boolean;
   setInAddLogFlow: Dispatch<SetStateAction<MealType>>;
-  formInstance: UseFormReturn<PostMealLogEntry | PatchMealLogEntry>;
 }) => {
+  const {
+    setValue,
+    getValues,
+    reset,
+    control,
+    formState: { isValid, errors },
+  } = useForm<PostMealLogEntry | PatchMealLogEntry>();
+
   const { mutating, logsLoaded } = useSelector(
     (state: IRootState) => state.dailylog
   );

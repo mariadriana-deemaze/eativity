@@ -1,33 +1,12 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 import React, { useEffect, useMemo, useState } from "react";
 
-import {
-  Actionsheet,
-  Box,
-  Button,
-  FlatList,
-  Image,
-  Pressable,
-  Spinner,
-  Text,
-  VStack,
-  View,
-  ScrollView,
-} from "native-base";
+import { Text, VStack, ScrollView } from "native-base";
 
 import { useSelector } from "react-redux";
 
-import { useForm } from "react-hook-form";
-
 import { DailyLogMealTypeSection } from "../../components/dailylog/section";
 
-import {
-  MealLog,
-  MealType,
-  PatchMealLogEntry,
-  PostMealLogEntry,
-} from "../../types";
+import { MealLog, MealType } from "../../types";
 
 import { lightTheme as theme } from "../../theme";
 
@@ -43,8 +22,6 @@ export const DailyLog = () => {
   const [inAddLogFlow, setInAddLogFlow] = useState<MealType | undefined>(
     undefined
   );
-
-  const formInstance = useForm<PostMealLogEntry | PatchMealLogEntry>();
 
   const totalSums = useMemo(() => {
     let result = {
@@ -133,7 +110,6 @@ export const DailyLog = () => {
                 key={`section_${key}`}
                 title={key}
                 data={value}
-                formInstance={formInstance}
                 inAddFlow={inAddLogFlow === key}
                 setInAddLogFlow={setInAddLogFlow}
               />

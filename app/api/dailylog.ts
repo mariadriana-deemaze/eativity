@@ -15,20 +15,17 @@ const formatPayload = (entry: PostMealLogEntry | PatchMealLogEntry) => {
 };
 
 export const getDailyEntryLogs = async () => {
-  return await api.get(url).then(({ data }) => data);
+  return await api.get<MealLog[]>(url).then(({ data }) => data);
 };
 
 export const createEntry = async (entry: PostMealLogEntry) => {
-  console.log("entry ->", entry);
-
   const newEntry = formatPayload(entry);
 
   return await api
-    .post(url, newEntry)
+    .post<MealLog>(url, newEntry)
     .then((resp) => {
-      console.log("API resp ->", resp);
       const { data } = resp;
-      return data as MealLog;
+      return data;
     })
     .catch((err) => {
       throw new Error(err);
@@ -39,16 +36,13 @@ export const updateEntry = async (
   entryId: number,
   entry: PatchMealLogEntry
 ) => {
-  console.log("entry ->", entry);
-
   const newEntry = formatPayload(entry);
 
   return await api
-    .patch(`${url}/${entryId}`, { quantity: newEntry.quantity })
+    .patch<MealLog>(`${url}/${entryId}`, { quantity: newEntry.quantity })
     .then((resp) => {
-      console.log("API resp ->", resp);
       const { data } = resp;
-      return data as MealLog;
+      return data;
     })
     .catch((err) => {
       throw new Error(err);
@@ -57,11 +51,10 @@ export const updateEntry = async (
 
 export const deleteEntry = async (entryId: number) => {
   return await api
-    .delete(`${url}/${entryId}`)
+    .delete<MealLog>(`${url}/${entryId}`)
     .then((resp) => {
-      console.log("API resp ->", resp);
       const { data } = resp;
-      return data as MealLog;
+      return data;
     })
     .catch((err) => {
       throw new Error(err);
