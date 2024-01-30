@@ -1,5 +1,8 @@
-export interface Record {
+export interface CompactRecord {
   id: number;
+}
+
+export interface Record extends CompactRecord {
   createdAt: string;
   updatedAt: string;
 }

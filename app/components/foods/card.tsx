@@ -51,7 +51,7 @@ export const FoodCardSkeleton = () => {
 export const FoodCard = ({
   name,
   description,
-  //types,
+  image,
   createdAt,
   onPress,
 }: FoodCardProps) => {
@@ -80,35 +80,11 @@ export const FoodCard = ({
             <AspectRatio w="100%" ratio={16 / 9}>
               <Image
                 source={{
-                  uri: "https://wallpaperaccess.com/full/317501.jpg",
+                  uri: image,
                 }}
                 alt="image"
               />
             </AspectRatio>
-            {/* <Center
-              bg="violet.500"
-              _dark={{
-                bg: "violet.400",
-              }}
-              position="absolute"
-              bottom="0"
-              px="3"
-              py="1.5"
-              display="flex"
-              flexDirection="row"
-            >
-              {types.map((type) => (
-                <Text
-                  key={`food_${name}_category_${type}`}
-                  color="warmGray.50"
-                  fontWeight="700"
-                  fontSize="xs"
-                  pr="0.5"
-                >
-                  {type}
-                </Text>
-              ))}
-            </Center> */}
           </Box>
           <Stack p="4" space={3}>
             <Stack space={2}>

@@ -25,6 +25,14 @@ export class RecipeService {
           contains: name,
         },
       },
+      include: {
+        categories: {
+          select: {
+            title: true,
+            id: true,
+          },
+        },
+      },
       skip: offset && parseInt(offset),
       take: maxResults && parseInt(maxResults),
       orderBy: { createdAt: "desc" },
