@@ -1,5 +1,8 @@
 import { Box, Pressable, Skeleton, Text } from "native-base";
+
 import { GestureResponderEvent } from "react-native";
+
+import { lightTheme as theme } from "../../theme";
 
 export const MenuPillsSkeleton = () => {
   return (
@@ -28,11 +31,11 @@ export const MenuPills = ({
         px="4"
         height="8"
         borderRadius="full"
-        bgColor={isActive ? "violet.600" : "violet.400"}
+        bgColor={isActive ? "green.800" : "green.200"}
       >
         <Text
           fontSize="xs"
-          color="white"
+          color={theme.text.paragraph.inverted}
           fontWeight={isActive ? "bold" : "medium"}
           alignSelf="flex-start"
         >

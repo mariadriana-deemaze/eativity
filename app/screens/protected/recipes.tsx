@@ -9,7 +9,6 @@ import {
   Skeleton,
   Spinner,
   Text,
-  VStack,
   View,
 } from "native-base";
 
@@ -210,8 +209,8 @@ export const Recipes: React.FC<RecipesScreenProps> = ({ navigation }) => {
         />
       )}
 
-      <Box h="container" marginBottom="56" alignItems="center">
-        {/* RESULTS */}
+      {/* RESULTS */}
+      <Box h="container" marginBottom="80" alignItems="center">
         {!isLoading && hasRecipesData && (
           <FlatList
             keyExtractor={(item) => String(item.id)}
@@ -223,32 +222,14 @@ export const Recipes: React.FC<RecipesScreenProps> = ({ navigation }) => {
             )}
             onEndReached={loadMoreRecipes}
             ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+            ListEmptyComponent={
+              <Text>No matching results for "{search}" term.</Text>
+            }
+            ListFooterComponent={
+              isLoading ? <Spinner /> : <Text>End of results.</Text>
+            }
           />
         )}
-
-        <VStack
-          space="2"
-          py="5"
-          w="80"
-          alignItems="center"
-          /* h="full"
-          justifyContent="center" */
-        >
-          {/* END OF RESULTS */}
-          {!isLoading &&
-            hasRecipesData &&
-            recipes.data.length === recipes.pagination.count && (
-              <Text>End of results.</Text>
-            )}
-
-          {/* FETCHING MORE */}
-          {isLoading && <Spinner />}
-
-          {/* QUERY RETURN NO MATCHING RESULTS */}
-          {!isLoading && !hasRecipesData && (
-            <Text>No matching results for "{search}" term.</Text>
-          )}
-        </VStack>
       </Box>
     </Box>
   );

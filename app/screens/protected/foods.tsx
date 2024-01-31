@@ -9,7 +9,6 @@ import {
   Skeleton,
   Spinner,
   Text,
-  VStack,
   View,
 } from "native-base";
 
@@ -172,32 +171,34 @@ export const Foods: React.FC<FoodsScreenProps> = ({ navigation }) => {
             )}
             onEndReached={loadMoreFoods}
             ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+            ListEmptyComponent={
+              <Text>No matching results for "{search}" term.</Text>
+            }
+            ListFooterComponent={
+              isLoading ? <Spinner /> : <Text>End of results.</Text>
+            }
           />
         )}
 
-        <VStack
+        {/* <VStack
           space="2"
           py="5"
           w="80"
           alignItems="center"
-          /* h="full"
-          justifyContent="center" */
         >
-          {/* END OF RESULTS */}
+         
           {!isLoading &&
             hasFoodData &&
             foods.data.length === foods.pagination.count && (
               <Text>End of results.</Text>
             )}
 
-          {/* FETCHING MORE */}
           {isLoading && <Spinner />}
 
-          {/* QUERY RETURN NO MATCHING RESULTS */}
           {!isLoading && !hasFoodData && (
             <Text>No matching results for "{search}" term.</Text>
           )}
-        </VStack>
+        </VStack> */}
       </Box>
     </Box>
   );

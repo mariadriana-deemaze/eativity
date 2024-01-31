@@ -85,6 +85,7 @@ export const DailyLogMealTypeSection = ({
     getValues,
     reset,
     control,
+    watch,
     formState: { isValid, errors },
   } = useForm<PostMealLogEntry | PatchMealLogEntry>();
 
@@ -142,6 +143,8 @@ export const DailyLogMealTypeSection = ({
 
     return result;
   }, [data]);
+
+  watch();
 
   return (
     <>
@@ -308,8 +311,6 @@ export const DailyLogMealTypeSection = ({
 
             <FlatList
               contentContainerStyle={{
-                borderWidth: 2,
-                borderColor: "red",
                 justifyContent: "space-between",
                 alignContent: "space-between",
                 alignItems: "center",
@@ -319,7 +320,6 @@ export const DailyLogMealTypeSection = ({
               keyExtractor={(item) => String(item.id)}
               data={DUMMY_AUTOCOMPLETE_FOOD}
               renderItem={({ item }) => {
-                // @ts-ignore
                 const selected = getValues("foodId") === item.id;
 
                 return (
@@ -343,8 +343,6 @@ export const DailyLogMealTypeSection = ({
                         height="100%"
                         justifyContent="space-between"
                         alignItems="center"
-                        borderWidth={1}
-                        borderColor="orange.800"
                       >
                         <Image
                           height="10"
@@ -372,7 +370,7 @@ export const DailyLogMealTypeSection = ({
                   label="Quantity"
                   onBlur={onBlur}
                   onChangeText={(value) => onChange(value)}
-                  value={value ? String(value) : "0"}
+                  value={value ? String(value) : undefined}
                   error={errors?.quantity?.message}
                 />
               )}

@@ -41,6 +41,7 @@ export const lightTheme = {
       primary: "#0F0F0F",
       secondary: "#1E1E1E",
       tertiary: "#272727",
+      inverted: "#FFFFFF",
     },
   },
 };
