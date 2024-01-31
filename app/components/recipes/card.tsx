@@ -11,6 +11,7 @@ import {
   Heading,
   HStack,
   Pressable,
+  Badge,
 } from "native-base";
 
 import { Recipe } from "../../types";
@@ -49,8 +50,11 @@ export const RecipeCardSkeleton = () => {
 };
 
 export const RecipeCard = ({
+  id,
   name,
+  categories,
   description,
+  image,
   createdAt,
   updatedAt,
   onPress,
@@ -80,11 +84,24 @@ export const RecipeCard = ({
             <AspectRatio w="100%" ratio={16 / 9}>
               <Image
                 source={{
-                  uri: "https://wallpaperaccess.com/full/317501.jpg",
+                  uri: image,
                 }}
                 alt="image"
               />
             </AspectRatio>
+            <HStack
+              position="absolute"
+              bottom="2"
+              left="2"
+              alignSelf="center"
+              space="2"
+            >
+              {categories?.map((category) => (
+                <Badge key={`${id}_badge_for_${category.id}`} variant="subtle">
+                  {category.title}
+                </Badge>
+              ))}
+            </HStack>
           </Box>
           <Stack p="4" space={3}>
             <Stack space={2}>

@@ -213,7 +213,7 @@ export const Dashboard = () => {
             <FlatList
               ref={ref}
               horizontal
-              keyExtractor={(item) => item.id}
+              keyExtractor={(item) => String(item.id)}
               data={DUMMY_RECOMMENDED_RECIPES}
               initialScrollIndex={currentSlide}
               getItemLayout={(_data, index) => ({
@@ -225,8 +225,10 @@ export const Dashboard = () => {
                 <Pressable
                   key={`recipe_${recipe.id}`}
                   onPress={() => {
-                    setSliderInformationVisibility(false);
-                    setCurrentSlide(index);
+                    if (index !== currentSlide) {
+                      setSliderInformationVisibility(false);
+                      setCurrentSlide(index);
+                    }
                   }}
                 >
                   <Image

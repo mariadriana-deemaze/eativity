@@ -5,7 +5,7 @@ import { Screens } from "../routes/navigation";
 import { useNavigation } from "@react-navigation/native";
 import { IRootState } from "../stores";
 import { Ionicons } from "@expo/vector-icons";
-import { pallete } from "../theme";
+import { lightTheme as theme, pallete } from "../theme";
 
 export default function CustomDrawer() {
   const dispatch = useDispatch();
@@ -104,7 +104,7 @@ export default function CustomDrawer() {
             <View key={`menu_item_${link}`} py="3">
               <Text
                 fontFamily="PlusJakartaSans_600SemiBold"
-                color="white"
+                color={theme.text.paragraph.inverted}
                 onPress={() => {
                   // @ts-ignore
                   navigation.navigate(link);
@@ -120,11 +120,11 @@ export default function CustomDrawer() {
         <Ionicons
           name="log-in-outline"
           size={32}
-          color={pallete.green.primary}
+          color={pallete.green.secondary}
         />
         <Text
           fontFamily="PlusJakartaSans_700Bold"
-          color="green.900"
+          color={pallete.green.secondary}
           onPress={logout}
         >
           Log out

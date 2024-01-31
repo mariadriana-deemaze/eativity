@@ -4,7 +4,9 @@
  *
  *  */
 
-import { Meal, MealType, PostRecipe, Recipe } from "../types";
+import { faker } from "@faker-js/faker";
+
+import { MealLog, MealType, PostRecipe, Recipe } from "../types";
 
 export const signUpDefaultDevData = {
   name: "Maria Adriana",
@@ -47,7 +49,7 @@ export const newRecipeDummy: PostRecipe = {
 
 export const DUMMY_RECOMMENDED_RECIPES: Recipe[] = [
   {
-    id: "1",
+    id: 1,
     name: "Creamy Salad Dressing",
     description:
       "A creamy salad dressing with all the taste and far less calories.",
@@ -59,13 +61,13 @@ export const DUMMY_RECOMMENDED_RECIPES: Recipe[] = [
     updatedAt: new Date().toISOString(),
     categories: [
       {
-        id: "1",
+        id: 1,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         title: "Lunch",
       },
       {
-        id: "2",
+        id: 2,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         title: "Vegetarian",
@@ -75,7 +77,7 @@ export const DUMMY_RECOMMENDED_RECIPES: Recipe[] = [
       "https://plus.unsplash.com/premium_photo-1663858367001-89e5c92d1e0e?q=80&w=3715&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
   {
-    id: "2",
+    id: 2,
     name: "Nice eggs",
     description: "Sunny sided and creammy",
     calories: 85,
@@ -88,7 +90,7 @@ export const DUMMY_RECOMMENDED_RECIPES: Recipe[] = [
       "https://images.unsplash.com/photo-1525351484163-7529414344d8?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
   {
-    id: "3",
+    id: 3,
     name: "Creamy Salad Dressing",
     description:
       "A creamy salad dressing with all the taste and far less calories.",
@@ -100,7 +102,7 @@ export const DUMMY_RECOMMENDED_RECIPES: Recipe[] = [
     updatedAt: new Date().toISOString(),
     categories: [
       {
-        id: "1",
+        id: 1,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         title: "Lunch",
@@ -110,7 +112,7 @@ export const DUMMY_RECOMMENDED_RECIPES: Recipe[] = [
       "https://images.unsplash.com/photo-1484723091739-30a097e8f929?q=80&w=1547&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
   {
-    id: "4",
+    id: 4,
     name: "Creamy Salad Dressing",
     description:
       "A creamy salad dressing with all the taste and far less calories.",
@@ -125,29 +127,82 @@ export const DUMMY_RECOMMENDED_RECIPES: Recipe[] = [
   },
 ];
 
-export const DUMMY_USER_DAILY_MEALS: Meal[] = [
+export const DUMMY_USER_DAILY_MEALS: MealLog[] = [
   {
-    id: "1",
-    foodId: "1",
-    name: "Apple",
-    type: MealType.BREAKFAST,
+    id: 1,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
+    foodId: 1,
+    type: MealType.BREAKFAST,
+    quantity: 2,
+    food: {
+      id: 1,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      name: faker.lorem.lines(1),
+      description: faker.lorem.paragraphs(3),
+      calories: faker.helpers.rangeToNumber({ min: 0, max: 400 }),
+      carbohydrates: faker.helpers.rangeToNumber({ min: 0, max: 400 }),
+      proteins: faker.helpers.rangeToNumber({ min: 0, max: 400 }),
+      fats: faker.helpers.rangeToNumber({ min: 0, max: 400 }),
+      servingSize: faker.helpers.rangeToNumber({ min: 0, max: 6 }),
+      image: faker.image.urlLoremFlickr({ category: "food" }),
+      barcode: faker.commerce.isbn(),
+    },
   },
   {
-    id: "2",
-    foodId: "13",
-    name: "Iogurt",
-    type: MealType.BREAKFAST,
+    id: 2,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
+    foodId: 13,
+    type: MealType.BREAKFAST,
+    quantity: 2,
+    food: {
+      id: 13,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      name: faker.lorem.lines(1),
+      description: faker.lorem.paragraphs(3),
+      calories: faker.helpers.rangeToNumber({ min: 0, max: 400 }),
+      carbohydrates: faker.helpers.rangeToNumber({ min: 0, max: 400 }),
+      proteins: faker.helpers.rangeToNumber({ min: 0, max: 400 }),
+      fats: faker.helpers.rangeToNumber({ min: 0, max: 400 }),
+      servingSize: faker.helpers.rangeToNumber({ min: 0, max: 6 }),
+      image: faker.image.urlLoremFlickr({ category: "food" }),
+      barcode: faker.commerce.isbn(),
+    },
   },
   {
-    id: "3",
-    foodId: "24",
-    name: "Sausage",
+    id: 3,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    foodId: 24,
     type: MealType.LUNCH,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    quantity: 2,
+    food: {
+      id: 24,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      name: faker.lorem.lines(1),
+      description: faker.lorem.paragraphs(3),
+      calories: faker.helpers.rangeToNumber({ min: 0, max: 400 }),
+      carbohydrates: faker.helpers.rangeToNumber({ min: 0, max: 400 }),
+      proteins: faker.helpers.rangeToNumber({ min: 0, max: 400 }),
+      fats: faker.helpers.rangeToNumber({ min: 0, max: 400 }),
+      servingSize: faker.helpers.rangeToNumber({ min: 0, max: 6 }),
+      image: faker.image.urlLoremFlickr({ category: "food" }),
+      barcode: faker.commerce.isbn(),
+    },
   },
+];
+
+export const DUMMY_AUTOCOMPLETE_FOOD = [
+  { name: faker.lorem.word(), id: 1 },
+  { name: faker.lorem.word(), id: 2 },
+  { name: faker.lorem.word(), id: 3 },
+  { name: faker.lorem.word(), id: 4 },
+  { name: faker.lorem.word(), id: 5 },
+  { name: faker.lorem.word(), id: 6 },
+  { name: faker.lorem.word(), id: 7 },
+  { name: faker.lorem.word(), id: 8 },
 ];

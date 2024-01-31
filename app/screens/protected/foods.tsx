@@ -9,7 +9,6 @@ import {
   Skeleton,
   Spinner,
   Text,
-  VStack,
   View,
 } from "native-base";
 
@@ -163,39 +162,43 @@ export const Foods: React.FC<FoodsScreenProps> = ({ navigation }) => {
         {/* RESULTS */}
         {!isLoading && hasFoodData && (
           <FlatList
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => String(item.id)}
             data={foods?.data}
             renderItem={({ item }) => (
-              <FoodCard {...{ ...item, onPress: () => onFoodPress(item.id) }} />
+              <FoodCard
+                {...{ ...item, onPress: () => onFoodPress(String(item.id)) }}
+              />
             )}
             onEndReached={loadMoreFoods}
             ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+            ListEmptyComponent={
+              <Text>No matching results for "{search}" term.</Text>
+            }
+            ListFooterComponent={
+              isLoading ? <Spinner /> : <Text>End of results.</Text>
+            }
           />
         )}
 
-        <VStack
+        {/* <VStack
           space="2"
           py="5"
           w="80"
           alignItems="center"
-          /* h="full"
-          justifyContent="center" */
         >
-          {/* END OF RESULTS */}
+         
           {!isLoading &&
             hasFoodData &&
             foods.data.length === foods.pagination.count && (
               <Text>End of results.</Text>
             )}
 
-          {/* FETCHING MORE */}
           {isLoading && <Spinner />}
 
-          {/* QUERY RETURN NO MATCHING RESULTS */}
           {!isLoading && !hasFoodData && (
             <Text>No matching results for "{search}" term.</Text>
           )}
-        </VStack>
+        </VStack> */}
       </Box>
     </Box>
   );

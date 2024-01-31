@@ -162,6 +162,32 @@ const createSomeRecipeToFoodRelations = async (
   return createdRelations;
 };
 
+const createManyCategoriesOnRecipesRelations = async (
+  relations: { categoryId: number; recipeId: number }[]
+) => {
+  const createdRelations = await Promise.all(
+    relations.map((relation) =>
+      prisma.recipe.update({
+        where: {
+          id: relation.recipeId,
+        },
+        data: {
+          categories: {
+            connect: {
+              id: relation.categoryId,
+            },
+          },
+        },
+      })
+    )
+  );
+
+  console.log(`/////////`);
+  console.log(`Created relation of recipe to recipeCategories records.`);
+  console.log(createdRelations);
+  return createdRelations;
+};
+
 const createManyFoodLogs = async (
   relations: { userId: number; foodId: number }[]
 ) => {
@@ -214,7 +240,7 @@ async function seed() {
 
   const createdRecipes = await createManyRecipes(10);
 
-  await createManyRecipesCategories();
+  const createdCategories = await createManyRecipesCategories();
 
   await createSomeRecipeToFoodRelations([
     {
@@ -265,7 +291,31 @@ async function seed() {
       userId: createdUsers[3].id,
     },
   ]);
+
+  await createManyCategoriesOnRecipesRelations([
+    {
+      categoryId: createdCategories[0].id,
+      recipeId: createdRecipes[0].id,
+    },
+    {
+      categoryId: createdCategories[1].id,
+      recipeId: createdRecipes[0].id,
+    },
+    {
+      categoryId: createdCategories[0].id,
+      recipeId: createdRecipes[3].id,
+    },
+    {
+      categoryId: createdCategories[1].id,
+      recipeId: createdRecipes[4].id,
+    },
+    {
+      categoryId: createdCategories[5].id,
+      recipeId: createdRecipes[4].id,
+    },
+  ]);
 }
+
 seed()
   .then(async () => {
     await prisma.$disconnect();
