@@ -1,17 +1,15 @@
-import { /* NutrionalValues, */ Record } from ".";
+import { Image, Record } from ".";
 
 export interface Food extends Record {
   name: string;
   description: string;
-  image: string;
+  image: Image;
   calories: number;
   carbohydrates: number;
   fats: number;
   proteins: number;
   servingSize: number;
   barcode: string;
-  //nutrition: NutrionalValues;
-  //types: string[];
 }
 
 export type PatchFood = Omit<Food, keyof Record>;

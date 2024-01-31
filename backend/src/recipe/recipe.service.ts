@@ -1,6 +1,6 @@
 import { Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { Prisma } from "@prisma/client";
+import { MediaType, Prisma } from "@prisma/client";
 import { PrismaService } from "./../prisma/prisma.service";
 import { RecipeDto } from "./dto";
 
@@ -32,6 +32,7 @@ export class RecipeService {
             id: true,
           },
         },
+        image: true,
       },
       skip: offset && parseInt(offset),
       take: maxResults && parseInt(maxResults),
@@ -63,6 +64,9 @@ export class RecipeService {
       where: {
         id,
       },
+      include: {
+        image: true,
+      },
     });
 
     this.logger.log(`results -> ${JSON.stringify(results)}`);
@@ -75,6 +79,7 @@ export class RecipeService {
   async getMany(args: Prisma.RecipeFindManyArgs) {
     const query: Prisma.RecipeFindManyArgs = {
       ...args,
+      include: { image: true },
       orderBy: { createdAt: "desc" },
     };
 
@@ -99,8 +104,28 @@ export class RecipeService {
   }
 
   async create(recipeDto: RecipeDto) {
+    console.log("recipeDto ->", recipeDto);
+
+    /*  let imageId;
+
+    if (recipeDto.image) {
+      const created = await this.prisma.media.create({
+        data: { path: recipeDto.image.path, type: MediaType.IMAGE },
+      });
+
+      imageId = created.id;
+    } */
+
     const created = await this.prisma.recipe.create({
-      data: recipeDto,
+      data: {
+        ...recipeDto,
+        /* image: {
+          connect: {
+            id: imageId,
+          },
+        }, */
+        image: undefined,
+      },
     });
 
     this.logger.log(`recipeDto -> ${JSON.stringify(recipeDto)}`);
@@ -112,11 +137,29 @@ export class RecipeService {
   }
 
   async edit({ id, recipeDto }: { id: number; recipeDto: RecipeDto }) {
+    let imageId;
+
+    if (recipeDto.image) {
+      const created = await this.prisma.media.create({
+        data: { path: recipeDto.image, type: MediaType.IMAGE },
+      });
+
+      imageId = created.id;
+    }
+
     const edited = await this.prisma.recipe.update({
       where: {
         id,
       },
-      data: recipeDto,
+      data: {
+        name: recipeDto.name,
+        description: recipeDto.description,
+        proteins: recipeDto.proteins,
+        carbohydrates: recipeDto.carbohydrates,
+        calories: recipeDto.calories,
+        fats: recipeDto.fats,
+        imageId,
+      },
     });
 
     this.logger.log(`recipeDto -> ${JSON.stringify(recipeDto)}`);

@@ -1,4 +1,4 @@
-import { MealLogType, Prisma, PrismaClient } from "@prisma/client";
+import { MealLogType, MediaType, Prisma, PrismaClient } from "@prisma/client";
 
 import seedingRecipeCategories from "./seedsData/recipeCategories.json";
 
@@ -67,7 +67,12 @@ const createManyFoods = async (count: number = 5) => {
       proteins: faker.helpers.rangeToNumber({ min: 0, max: 400 }),
       fats: faker.helpers.rangeToNumber({ min: 0, max: 400 }),
       servingSize: faker.helpers.rangeToNumber({ min: 0, max: 6 }),
-      image: faker.image.urlLoremFlickr({ category: "food" }),
+      image: {
+        create: {
+          path: faker.image.urlLoremFlickr({ category: "food" }),
+          type: MediaType.IMAGE,
+        },
+      },
       barcode: faker.commerce.isbn(),
     };
 
@@ -99,7 +104,12 @@ const createManyRecipes = async (count: number = 5) => {
       carbohydrates: faker.helpers.rangeToNumber({ min: 0, max: 400 }),
       proteins: faker.helpers.rangeToNumber({ min: 0, max: 400 }),
       fats: faker.helpers.rangeToNumber({ min: 0, max: 400 }),
-      image: faker.image.urlLoremFlickr({ category: "food" }),
+      image: {
+        create: {
+          path: faker.image.urlLoremFlickr({ category: "food" }),
+          type: MediaType.IMAGE,
+        },
+      },
     };
 
     recipes.push(recipe);
@@ -123,7 +133,15 @@ const createManyRecipesCategories = async () => {
   const recipeCategories = await Promise.all(
     seedingRecipeCategories.map((recipeCategory) =>
       prisma.recipeCategory.create({
-        data: recipeCategory,
+        data: {
+          ...recipeCategory,
+          image: {
+            create: {
+              type: MediaType.IMAGE,
+              path: "https://www.svgrepo.com/show/532031/cloud-fog.svg",
+            },
+          },
+        },
       })
     )
   );

@@ -1,4 +1,4 @@
-import { CompactRecord, Record } from ".";
+import { CompactRecord, Image, Record } from ".";
 
 export interface CompactRecipeCategory extends CompactRecord {
   title: string;
@@ -6,7 +6,7 @@ export interface CompactRecipeCategory extends CompactRecord {
 
 export interface RecipeCategory extends Record {
   title: string;
-  image?: string;
+  image?: Image;
 }
 
 export interface Recipe extends Record {
@@ -16,10 +16,14 @@ export interface Recipe extends Record {
   proteins: number;
   fats: number;
   description?: string;
-  image?: string;
+  image?: Image;
   categories?: CompactRecipeCategory[];
 }
 
-export type PostRecipe = Omit<Recipe, keyof Record>;
+export type PostRecipe = Omit<Recipe, keyof Record | "image"> & {
+  image: string;
+};
 
-export type PatchRecipe = Omit<Recipe, keyof Record>;
+export type PatchRecipe = Omit<Recipe, keyof Record | "image"> & {
+  image: string;
+};

@@ -96,7 +96,7 @@ export class FoodService {
 
   async create(foodDto: FoodDto) {
     const created = await this.prisma.food.create({
-      data: foodDto,
+      data: { ...foodDto, image: undefined },
     });
 
     this.logger.log(`foodDto -> ${JSON.stringify(foodDto)}`);
@@ -112,7 +112,7 @@ export class FoodService {
       where: {
         id,
       },
-      data: foodDto,
+      data: { ...foodDto, image: undefined },
     });
 
     this.logger.log(`foodDto -> ${JSON.stringify(foodDto)}`);

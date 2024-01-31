@@ -1,4 +1,11 @@
-import { IsNotEmpty, IsString, IsNumber } from "class-validator";
+// import { Prisma } from "@prisma/client";
+import {
+  IsNotEmpty,
+  IsString,
+  IsNumber,
+  IsOptional,
+  IsUrl,
+} from "class-validator";
 
 export class RecipeDto {
   @IsString()
@@ -6,6 +13,7 @@ export class RecipeDto {
   name: string;
 
   @IsString()
+  @IsOptional()
   description?: string;
 
   @IsNumber()
@@ -25,6 +33,7 @@ export class RecipeDto {
   fats: number;
 
   @IsString()
-  @IsNotEmpty()
-  image: string;
+  @IsUrl()
+  @IsOptional()
+  image?: string;
 }

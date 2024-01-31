@@ -1,3 +1,5 @@
+import { MediaType } from "@prisma/client";
+
 export interface CompactRecord {
   id: number;
 }
@@ -5,6 +7,11 @@ export interface CompactRecord {
 export interface Record extends CompactRecord {
   createdAt: string;
   updatedAt: string;
+}
+
+export interface Image extends Record {
+  type: MediaType;
+  path: string;
 }
 
 export interface NutrionalValues {

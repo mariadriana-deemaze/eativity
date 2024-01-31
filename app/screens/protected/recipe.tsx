@@ -98,7 +98,9 @@ export const Recipe: React.FC<RecipeScreenProps> = ({ route, navigation }) => {
           <AspectRatio w="100%" ratio={16 / 9}>
             <Image
               source={{
-                uri: "https://wallpaperaccess.com/full/317501.jpg",
+                uri:
+                  recipe.image?.path ||
+                  "https://wallpaperaccess.com/full/317501.jpg",
               }}
               alt="image"
             />

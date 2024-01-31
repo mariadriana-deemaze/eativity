@@ -7,7 +7,7 @@ import {
   updateRecipe,
 } from "../../api";
 
-import { PaginationParameters, Recipe } from "./../../types";
+import { PaginationParameters, PatchRecipe, PostRecipe } from "./../../types";
 
 export const getRecipesFromSearch = createAsyncThunk(
   "getRecipeNameSearch",
@@ -50,7 +50,7 @@ export const getRecipeInfo = createAsyncThunk(
 
 export const createNewRecipe = createAsyncThunk(
   "createRecipe",
-  async (recipe: Recipe, { rejectWithValue }) => {
+  async ({ recipe }: { recipe: PostRecipe }, { rejectWithValue }) => {
     try {
       return await createRecipe(recipe);
     } catch (error) {
@@ -67,9 +67,12 @@ export const createNewRecipe = createAsyncThunk(
 
 export const updateRecipeInfo = createAsyncThunk(
   "updateRecipeInfoById",
-  async (recipe: Recipe, { rejectWithValue }) => {
+  async (
+    { id, recipe }: { id: number; recipe: PatchRecipe },
+    { rejectWithValue }
+  ) => {
     try {
-      return await updateRecipe(recipe);
+      return await updateRecipe(id, recipe);
     } catch (error) {
       console.log("THUNK error ->", error);
 
