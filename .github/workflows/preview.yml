@@ -24,11 +24,11 @@ jobs:
           node-version: 21.x
           cache: yarn
 
-      #- name: Setup EAS
-      #  uses: expo/expo-github-action@v8
-      #  with:
-      #    eas-version: latest
-      #    token: ${{ secrets.EXPO_TOKEN }}
+      - name: Setup EAS
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
 
       - name: Install Expo App dependencies
         run:  cd app && yarn
@@ -42,5 +42,5 @@ jobs:
       - name: Run Typescript on ./app folder
         run:  yarn fe:types
 
-      #- name: Publish update
-      #  run: cd app && eas update --auto
+      - name: Publish update
+        run: cd app && eas update --auto
