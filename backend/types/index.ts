@@ -1,3 +1,3 @@
-export * from "./fatSecret"
-export * from "./date"
-export * from "./dailylog"
+export * from "./fatSecret";
+export * from "./date";
+export * from "./dailylog";

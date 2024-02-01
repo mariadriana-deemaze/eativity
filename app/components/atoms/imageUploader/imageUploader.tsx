@@ -28,9 +28,14 @@ export const ImageUploader = ({
       quality: 0.5,
     });
 
-    if (result.canceled) setError("User canceled!");
-
-    if (!result.canceled) setImageURI(result.assets[0].uri);
+    if (result.canceled) {
+      setError("User canceled!");
+    }
+    
+    if (!result.canceled) {
+      setImageURI(result.assets[0].uri);
+      setError(null);
+    }
   };
 
   const accept = async () => {
@@ -59,14 +64,14 @@ export const ImageUploader = ({
               isDisabled={isUploading}
               colorScheme="green"
             >
-              Confirm Upload
+              Confirm
             </Button>
             <Button
               onPress={discard}
               isDisabled={isUploading}
               colorScheme="red"
             >
-              Cancel Upload
+              Cancel
             </Button>
           </HStack>
         </VStack>
