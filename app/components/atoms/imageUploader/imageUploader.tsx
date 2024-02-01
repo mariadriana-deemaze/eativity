@@ -1,12 +1,18 @@
 import { useState } from "react";
 
+import { useSelector } from "react-redux";
+
 import { View } from "react-native";
 
 import * as ImagePicker from "expo-image-picker";
 
-import { Button, HStack, Image, Text, VStack } from "native-base";
+import { Button, HStack, Image, VStack } from "native-base";
 
 import { useFirebaseStorage } from "../../../hooks";
+
+import { IRootState } from "../../../stores";
+
+import { ToastAlert } from "../../toastAlert";
 
 export const ImageUploader = ({
   folder,
@@ -15,10 +21,14 @@ export const ImageUploader = ({
   folder: string;
   onChange: (url: string | null) => void;
 }) => {
+  const userSliceState = useSelector((state: IRootState) => state.user);
+
   const [imageURI, setImageURI] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const { uploadFile, isUploading } = useFirebaseStorage(folder);
+  const { uploadFile, isUploading } = useFirebaseStorage(
+    `user_${userSliceState.user.id}/${folder}`
+  );
 
   const pick = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -50,7 +60,14 @@ export const ImageUploader = ({
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
       <Button onPress={pick}>Pick an image from camera roll</Button>
-      <Text>Error!!!??: {error}</Text>
+      {error && (
+        <ToastAlert
+          title="Error!"
+          description={error}
+          status="error"
+          onClose={() => setError(null)}
+        />
+      )}
       {imageURI && (
         <VStack>
           <Image

@@ -130,15 +130,21 @@ const createManyRecipes = async (count: number = 5) => {
 };
 
 const createManyRecipesCategories = async () => {
+  const recipeCategoryDefaultMedia = await prisma.media.create({
+    data: {
+      type: MediaType.IMAGE,
+      path: "https://www.svgrepo.com/show/532031/cloud-fog.svg",
+    },
+  });
+
   const recipeCategories = await Promise.all(
     seedingRecipeCategories.map((recipeCategory) =>
       prisma.recipeCategory.create({
         data: {
           ...recipeCategory,
           image: {
-            create: {
-              type: MediaType.IMAGE,
-              path: "https://www.svgrepo.com/show/532031/cloud-fog.svg",
+            connect: {
+              id: recipeCategoryDefaultMedia.id,
             },
           },
         },
