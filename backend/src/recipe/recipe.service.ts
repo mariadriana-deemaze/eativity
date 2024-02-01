@@ -3,10 +3,15 @@ import { ConfigService } from "@nestjs/config";
 import { MediaType, Prisma } from "@prisma/client";
 import { PrismaService } from "./../prisma/prisma.service";
 import { RecipeDto } from "./dto";
+import { MediaService } from "src/media/media.service";
 
 @Injectable()
 export class RecipeService {
-  constructor(private config: ConfigService, private prisma: PrismaService) {}
+  constructor(
+    private config: ConfigService,
+    private prisma: PrismaService,
+    private mediaService: MediaService
+  ) {}
 
   private readonly logger = new Logger(RecipeService.name);
 
@@ -104,27 +109,22 @@ export class RecipeService {
   }
 
   async create(recipeDto: RecipeDto) {
-    console.log("recipeDto ->", recipeDto);
-
-    /*  let imageId;
-
-    if (recipeDto.image) {
-      const created = await this.prisma.media.create({
-        data: { path: recipeDto.image.path, type: MediaType.IMAGE },
-      });
-
-      imageId = created.id;
-    } */
+    const imageId = await this.mediaService.findOrCreateOne(
+      // @ts-ignore
+      MediaType.IMAGE,
+      recipeDto.image
+    );
 
     const created = await this.prisma.recipe.create({
       data: {
         ...recipeDto,
-        /* image: {
-          connect: {
-            id: imageId,
-          },
-        }, */
-        image: undefined,
+        image: imageId
+          ? {
+              connect: {
+                id: imageId,
+              },
+            }
+          : undefined,
       },
     });
 
@@ -137,15 +137,11 @@ export class RecipeService {
   }
 
   async edit({ id, recipeDto }: { id: number; recipeDto: RecipeDto }) {
-    let imageId;
-
-    if (recipeDto.image) {
-      const created = await this.prisma.media.create({
-        data: { path: recipeDto.image, type: MediaType.IMAGE },
-      });
-
-      imageId = created.id;
-    }
+    const imageId = await this.mediaService.findOrCreateOne(
+      // @ts-ignore
+      MediaType.IMAGE,
+      recipeDto.image
+    );
 
     const edited = await this.prisma.recipe.update({
       where: {

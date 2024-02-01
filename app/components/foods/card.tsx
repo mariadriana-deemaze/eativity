@@ -80,7 +80,9 @@ export const FoodCard = ({
             <AspectRatio w="100%" ratio={16 / 9}>
               <Image
                 source={{
-                  uri: image.path,
+                  uri:
+                    image?.path ||
+                    "https://wallpaperaccess.com/full/317501.jpg",
                 }}
                 alt="image"
               />

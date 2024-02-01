@@ -16,6 +16,8 @@ import { PrismaModule } from "../prisma/prisma.module";
 
 import { DailyLogModule } from "../daily-log/daily-log.module";
 
+import { MediaService } from "../media/media.service";
+
 @Module({
   imports: [
     FoodModule,
@@ -26,7 +28,7 @@ import { DailyLogModule } from "../daily-log/daily-log.module";
     DailyLogModule,
   ],
   controllers: [UserController],
-  providers: [UserService],
+  providers: [UserService, MediaService],
   exports: [UserService],
 })
 export class UserModule {}
