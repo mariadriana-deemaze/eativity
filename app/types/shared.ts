@@ -1,4 +1,3 @@
-
 export interface CompactRecord {
   id: number;
 }
