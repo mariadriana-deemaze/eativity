@@ -31,7 +31,7 @@ export const ImageUploader = ({
     if (result.canceled) {
       setError("User canceled!");
     }
-    
+
     if (!result.canceled) {
       setImageURI(result.assets[0].uri);
       setError(null);
