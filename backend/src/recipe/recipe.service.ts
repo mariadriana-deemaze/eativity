@@ -160,6 +160,9 @@ export class RecipeService {
         fats: recipeDto.fats,
         imageId,
       },
+      include: {
+        image: true,
+      },
     });
 
     this.logger.log(`recipeDto -> ${JSON.stringify(recipeDto)}`);

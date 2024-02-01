@@ -2,7 +2,7 @@ import { useMemo } from "react";
 
 import { Controller, useForm } from "react-hook-form";
 
-import { Button, VStack } from "native-base";
+import { Button, VStack, useToast } from "native-base";
 
 import { TextField } from "../atoms/textField";
 
@@ -15,6 +15,10 @@ import { PatchRecipe, PostRecipe, Recipe } from "../../types";
 import { newRecipeDummy } from "../../utils";
 
 import { ImageUploader } from "../atoms/imageUploader";
+
+import { recipeActions } from "../../stores/recipe/slices";
+
+import { ToastAlert } from "../toastAlert";
 
 const RecipeForm = ({ recipe }: { recipe?: Recipe }) => {
   const editMode = useMemo(() => !!recipe, [recipe]);
@@ -30,11 +34,29 @@ const RecipeForm = ({ recipe }: { recipe?: Recipe }) => {
 
   const dispatch = useAppDispatch();
 
-  const onSubmit = (recipeData: PatchRecipe | PostRecipe) => {
-    console.log("recipe Data ->", recipeData);
+  const toast = useToast();
 
+  const onSubmit = (recipeData: PatchRecipe | PostRecipe) => {
     if (editMode) {
-      dispatch(updateRecipeInfo({ id: recipe.id, recipe: recipeData }));
+      dispatch(updateRecipeInfo({ id: recipe.id, recipe: recipeData }))
+        .then(({ payload }) => {
+          return dispatch(recipeActions.setRecipeInfo(payload as Recipe));
+        })
+        .catch((err) => {
+          return toast.show({
+            id: "updateRecipeError",
+            render: () => {
+              return (
+                <ToastAlert
+                  title="Error!"
+                  description={JSON.stringify(err)}
+                  status="error"
+                  onClose={() => toast.close("updateRecipeError")}
+                />
+              );
+            },
+          });
+        });
     } else {
       dispatch(createNewRecipe({ recipe: recipeData }));
     }

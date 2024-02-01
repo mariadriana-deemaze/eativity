@@ -42,5 +42,5 @@ jobs:
       - name: Run Typescript on ./app folder
         run:  yarn fe:types
 
-      - name: Publish update
-        run: cd app && eas update --auto
+      #- name: Publish update
+      #  run: cd app && eas update --auto

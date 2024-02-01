@@ -33,8 +33,24 @@ const recipeSlice = createSlice({
   name: "recipe",
   initialState,
   reducers: {
-    setRecipeInfo(state) {
-      Object.assign(state, null);
+    setRecipeInfo(state, { payload }: { payload: Recipe }) {
+      const recipeIndex = state.recipes.data.findIndex(
+        (recipe) => recipe.id === payload.id
+      );
+
+      const recipesData = state.recipes.data;
+
+      // Side effect for listing update
+      if (recipeIndex !== -1) recipesData.splice(recipeIndex, 0, payload);
+
+      Object.assign(state, {
+        ...state,
+        recipe: payload,
+        recipes: {
+          ...state.recipes,
+          data: recipesData,
+        },
+      });
     },
     setSearch(state, action) {
       Object.assign(state, {
