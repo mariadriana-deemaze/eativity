@@ -16,7 +16,7 @@ jobs:
           fi
 
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Node
         uses: actions/setup-node@v3
@@ -35,6 +35,9 @@ jobs:
       
       - name: Run ESLint on app folder
         run:  yarn fe:lint
+      
+      - name: Run Pretier on app folder
+        run:  yarn fe:format
 
       #- name: Publish update
       #  run: cd app && eas update --auto
