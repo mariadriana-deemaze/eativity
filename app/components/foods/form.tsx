@@ -11,13 +11,12 @@ import { createNewFood, updateFoodInfo } from "../../stores/food/actions";
 import { useAppDispatch } from "../../stores";
 
 import { Food } from "../../types";
-import { newFoodDummy } from "../../utils";
 
 const FoodForm = ({ food }: { food?: Food }) => {
   const editMode = useMemo(() => !!food, [food]);
 
   const formInstance = useForm<Food>({
-    defaultValues: food || newFoodDummy,
+    defaultValues: food,
   });
 
   const {

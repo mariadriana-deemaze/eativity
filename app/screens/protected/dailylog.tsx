@@ -105,7 +105,7 @@ export const DailyLog = () => {
           backgroundColor={theme.background.primary}
         >
           {Object.entries(log).map(
-            ([key, value]: [key: MealType, MealLog[]]) => (
+            ([key, value]: [key: MealType, value: MealLog[]]) => (
               <DailyLogMealTypeSection
                 key={`section_${key}`}
                 title={key}

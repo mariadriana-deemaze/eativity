@@ -1,4 +1,4 @@
-import { Image } from "./shared";
+import { Image } from ".";
 
 export enum Gender {
   MALE = "MALE",

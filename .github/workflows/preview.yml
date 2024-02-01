@@ -38,6 +38,9 @@ jobs:
       
       - name: Run Pretier on app folder
         run:  yarn fe:format
+      
+      - name: Check types
+        run:  yarn types
 
       #- name: Publish update
       #  run: cd app && eas update --auto
