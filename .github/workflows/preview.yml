@@ -33,14 +33,14 @@ jobs:
       - name: Install Expo App dependencies
         run:  cd app && yarn
       
-      - name: Run ESLint on app folder
+      - name: Run ESLint on ./app folder
         run:  yarn fe:lint
       
-      - name: Run Pretier on app folder
+      - name: Run Prettier on ./app folder
         run:  yarn fe:format
       
-      - name: Check types
-        run:  yarn types
+      - name: Run Typescript on ./app folder
+        run:  yarn fe:types
 
       #- name: Publish update
       #  run: cd app && eas update --auto
