@@ -237,7 +237,7 @@ export const Dashboard = () => {
                     width={index === currentSlide ? "48" : "20"}
                     borderRadius="2xl"
                     source={{
-                      uri: recipe.image,
+                      uri: recipe.image.path,
                     }}
                   />
 

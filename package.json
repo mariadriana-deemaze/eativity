@@ -11,6 +11,7 @@
     "dev:be":"cd backend && yarn start:dev",
     "fe:lint":"cd app && yarn lint",
     "fe:format":"cd app && yarn format",
+    "fe:types":"cd app && yarn types",
     "be:lint":"cd backend && yarn lint",
     "be:format":"cd backend && yarn format",
     "be:e2e": "cd backend && yarn test:e2e"

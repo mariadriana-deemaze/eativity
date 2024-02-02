@@ -41,6 +41,11 @@ enum MealLogType {
   SNACK
 }
 
+enum MediaType {
+  IMAGE
+  VIDEO
+}
+
 model User {
   id              Int             @id @default(autoincrement())
   createdAt       DateTime        @default(now())
@@ -57,17 +62,20 @@ model User {
   plan            Plan?
   foods           Food[]
   recipes         Recipe[]
+  image           Media?          @relation(fields: [imageId], references: [id])
+  imageId         Int?
 }
 
 model RecipeCategory {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
-  image     String
   title     String
   foodId    Int?
   recipe    Recipe?  @relation(fields: [recipeId], references: [id])
   recipeId  Int?
+  image     Media?   @relation(fields: [imageId], references: [id])
+  imageId   Int?
 }
 
 model Food {
@@ -82,11 +90,12 @@ model Food {
   proteins      Int
   fats          Int
   servingSize   Int
-  image         String?
   foodRecipe    FoodRecipe[]
   user          User?        @relation(fields: [userId], references: [id])
   userId        Int?
   meal          MealLog[]
+  image         Media?       @relation(fields: [imageId], references: [id])
+  imageId       Int?
 }
 
 model Recipe {
@@ -101,9 +110,10 @@ model Recipe {
   carbohydrates Int
   proteins      Int
   fats          Int
-  image         String?
   foodRecipe    FoodRecipe[]
   categories    RecipeCategory[]
+  image         Media?           @relation(fields: [imageId], references: [id])
+  imageId       Int?
 }
 
 model FoodRecipe {
@@ -150,4 +160,16 @@ model Plan {
   goal_diff                            GoalDiff
   weekly_training_amount               Int
   average_minutes_per_training_session Int
+}
+
+model Media {
+  id             Int              @id @default(autoincrement())
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @default(now())
+  path           String           @unique
+  type           MediaType
+  recipe         Recipe[]
+  food           Food[]
+  user           User[]
+  RecipeCategory RecipeCategory[]
 }

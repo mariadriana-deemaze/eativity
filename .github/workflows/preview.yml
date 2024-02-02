@@ -1,4 +1,4 @@
-name: Update preview
+name: App build and preview
 on: [pull_request, push]
 
 jobs:
@@ -16,12 +16,12 @@ jobs:
           fi
 
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: 18.x
+          node-version: 21.x
           cache: yarn
 
       - name: Setup EAS
@@ -33,8 +33,14 @@ jobs:
       - name: Install Expo App dependencies
         run:  cd app && yarn
       
-      - name: Run ESLint on app folder
+      - name: Run ESLint on ./app folder
         run:  yarn fe:lint
+      
+      - name: Run Prettier on ./app folder
+        run:  yarn fe:format
+      
+      - name: Run Typescript on ./app folder
+        run:  yarn fe:types
 
-      - name: Publish update
-        run: cd app && eas update --auto
+      #- name: Publish update
+      #  run: cd app && eas update --auto

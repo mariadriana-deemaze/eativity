@@ -221,6 +221,7 @@ export const Recipes: React.FC<RecipesScreenProps> = ({ navigation }) => {
               />
             )}
             onEndReached={loadMoreRecipes}
+            onEndReachedThreshold={0.3}
             ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
             ListEmptyComponent={
               <Text>No matching results for "{search}" term.</Text>

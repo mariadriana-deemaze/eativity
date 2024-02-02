@@ -1,8 +1,8 @@
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 
 import { Controller, useForm } from "react-hook-form";
 
-import { Button, VStack } from "native-base";
+import { Button, VStack, useToast } from "native-base";
 
 import { TextField } from "../atoms/textField";
 
@@ -10,30 +10,55 @@ import { createNewRecipe, updateRecipeInfo } from "../../stores/recipe/actions";
 
 import { useAppDispatch } from "../../stores";
 
-import { Recipe } from "../../types";
+import { PatchRecipe, PostRecipe, Recipe } from "../../types";
 
 import { newRecipeDummy } from "../../utils";
+
+import { ImageUploader } from "../atoms/imageUploader";
+
+import { recipeActions } from "../../stores/recipe/slices";
+
+import { ToastAlert } from "../toastAlert";
 
 const RecipeForm = ({ recipe }: { recipe?: Recipe }) => {
   const editMode = useMemo(() => !!recipe, [recipe]);
 
-  const formInstance = useForm<Recipe>({
-    defaultValues: recipe || newRecipeDummy,
-  });
-
   const {
     control,
     handleSubmit,
+    setValue,
     formState: { isDirty },
-  } = formInstance;
+  } = useForm<PatchRecipe | PostRecipe>({
+    defaultValues: { ...recipe, image: recipe?.image?.path } || newRecipeDummy,
+  });
 
   const dispatch = useAppDispatch();
 
-  const onSubmit = (recipeData: Recipe) => {
+  const toast = useToast();
+
+  const onSubmit = (recipeData: PatchRecipe | PostRecipe) => {
     if (editMode) {
-      dispatch(updateRecipeInfo(recipeData));
+      dispatch(updateRecipeInfo({ id: recipe.id, recipe: recipeData }))
+        .then(({ payload }) => {
+          return dispatch(recipeActions.setRecipeInfo(payload as Recipe));
+        })
+        .catch((err) => {
+          return toast.show({
+            id: "updateRecipeError",
+            render: () => {
+              return (
+                <ToastAlert
+                  title="Error!"
+                  description={JSON.stringify(err)}
+                  status="error"
+                  onClose={() => toast.close("updateRecipeError")}
+                />
+              );
+            },
+          });
+        });
     } else {
-      dispatch(createNewRecipe(recipeData));
+      dispatch(createNewRecipe({ recipe: recipeData }));
     }
   };
 
@@ -131,19 +156,13 @@ const RecipeForm = ({ recipe }: { recipe?: Recipe }) => {
         rules={{ required: true }}
       />
 
-      {/* ADD HERE CAMERA FUNCTIONALITY */}
-      <Controller
-        control={control}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <TextField
-            label="Image"
-            onBlur={onBlur}
-            onChangeText={(value) => onChange(value)}
-            value={value ? String(value) : undefined}
-          />
-        )}
-        name="image"
+      <ImageUploader
+        folder={`recipe`}
+        onChange={(url: string | null) => {
+          setValue("image", url, { shouldDirty: true });
+        }}
       />
+
       <Button
         size="sm"
         colorScheme="green"

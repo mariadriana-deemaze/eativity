@@ -7,7 +7,7 @@ import {
   PatchRecipe,
 } from "../types";
 
-const formatPayload = (recipe: Recipe) => {
+const formatPayload = (recipe: PostRecipe | PatchRecipe) => {
   const formatted: PostRecipe | PatchRecipe = {
     name: recipe.name,
     description: recipe.description,
@@ -54,8 +54,8 @@ export const getRecipeById = async ({
     });
 };
 
-export const createRecipe = async (recipe: Recipe): Promise<Recipe> => {
-  const payload: PostRecipe = formatPayload(recipe);
+export const createRecipe = async (recipe: PostRecipe): Promise<Recipe> => {
+  const payload = formatPayload(recipe);
 
   return await api
     .post(`${API_URL}/recipe/`, payload)
@@ -69,11 +69,14 @@ export const createRecipe = async (recipe: Recipe): Promise<Recipe> => {
     });
 };
 
-export const updateRecipe = async (recipe: Recipe): Promise<Recipe> => {
-  const payload: PatchRecipe = formatPayload(recipe);
+export const updateRecipe = async (
+  entryId: number,
+  recipe: PatchRecipe
+): Promise<Recipe> => {
+  const payload = formatPayload(recipe);
 
   return await api
-    .patch(`${API_URL}/recipe/${recipe.id}`, payload)
+    .patch(`${API_URL}/recipe/${entryId}`, payload)
     .then((resp) => {
       console.log("API resp ->", resp);
       const { data } = resp;

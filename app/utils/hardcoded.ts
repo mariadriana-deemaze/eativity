@@ -6,7 +6,7 @@
 
 import { faker } from "@faker-js/faker";
 
-import { MealLog, MealType, PostRecipe, Recipe } from "../types";
+import { MealLog, MealType, MediaType, PostRecipe, Recipe } from "../types";
 
 export const signUpDefaultDevData = {
   name: "Maria Adriana",
@@ -62,19 +62,20 @@ export const DUMMY_RECOMMENDED_RECIPES: Recipe[] = [
     categories: [
       {
         id: 1,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
         title: "Lunch",
       },
       {
         id: 2,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
         title: "Vegetarian",
       },
     ],
-    image:
-      "https://plus.unsplash.com/premium_photo-1663858367001-89e5c92d1e0e?q=80&w=3715&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    image: {
+      id: 1,
+      type: MediaType.IMAGE,
+      path: "https://plus.unsplash.com/premium_photo-1663858367001-89e5c92d1e0e?q=80&w=3715&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    },
   },
   {
     id: 2,
@@ -86,8 +87,13 @@ export const DUMMY_RECOMMENDED_RECIPES: Recipe[] = [
     proteins: 6.38,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
-    image:
-      "https://images.unsplash.com/photo-1525351484163-7529414344d8?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    image: {
+      id: 2,
+      type: MediaType.IMAGE,
+      path: "https://plus.unsplash.com/premium_photo-1663858367001-89e5c92d1e0e?q=80&w=3715&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    },
   },
   {
     id: 3,
@@ -103,13 +109,16 @@ export const DUMMY_RECOMMENDED_RECIPES: Recipe[] = [
     categories: [
       {
         id: 1,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
         title: "Lunch",
       },
     ],
-    image:
-      "https://images.unsplash.com/photo-1484723091739-30a097e8f929?q=80&w=1547&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    image: {
+      id: 3,
+      type: MediaType.IMAGE,
+      path: "https://plus.unsplash.com/premium_photo-1663858367001-89e5c92d1e0e?q=80&w=3715&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    },
   },
   {
     id: 4,
@@ -122,8 +131,13 @@ export const DUMMY_RECOMMENDED_RECIPES: Recipe[] = [
     proteins: 6.38,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
-    image:
-      "https://plus.unsplash.com/premium_photo-1663858367001-89e5c92d1e0e?q=80&w=3715&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    image: {
+      id: 4,
+      type: MediaType.IMAGE,
+      path: "https://plus.unsplash.com/premium_photo-1663858367001-89e5c92d1e0e?q=80&w=3715&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    },
   },
 ];
 
@@ -146,7 +160,13 @@ export const DUMMY_USER_DAILY_MEALS: MealLog[] = [
       proteins: faker.helpers.rangeToNumber({ min: 0, max: 400 }),
       fats: faker.helpers.rangeToNumber({ min: 0, max: 400 }),
       servingSize: faker.helpers.rangeToNumber({ min: 0, max: 6 }),
-      image: faker.image.urlLoremFlickr({ category: "food" }),
+      image: {
+        id: 1,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        type: MediaType.IMAGE,
+        path: faker.image.urlLoremFlickr({ category: "food" }),
+      },
       barcode: faker.commerce.isbn(),
     },
   },
@@ -168,7 +188,13 @@ export const DUMMY_USER_DAILY_MEALS: MealLog[] = [
       proteins: faker.helpers.rangeToNumber({ min: 0, max: 400 }),
       fats: faker.helpers.rangeToNumber({ min: 0, max: 400 }),
       servingSize: faker.helpers.rangeToNumber({ min: 0, max: 6 }),
-      image: faker.image.urlLoremFlickr({ category: "food" }),
+      image: {
+        id: 2,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        type: MediaType.IMAGE,
+        path: faker.image.urlLoremFlickr({ category: "food" }),
+      },
       barcode: faker.commerce.isbn(),
     },
   },
@@ -190,7 +216,13 @@ export const DUMMY_USER_DAILY_MEALS: MealLog[] = [
       proteins: faker.helpers.rangeToNumber({ min: 0, max: 400 }),
       fats: faker.helpers.rangeToNumber({ min: 0, max: 400 }),
       servingSize: faker.helpers.rangeToNumber({ min: 0, max: 6 }),
-      image: faker.image.urlLoremFlickr({ category: "food" }),
+      image: {
+        id: 3,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        type: MediaType.IMAGE,
+        path: faker.image.urlLoremFlickr({ category: "food" }),
+      },
       barcode: faker.commerce.isbn(),
     },
   },

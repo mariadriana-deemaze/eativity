@@ -1,12 +1,17 @@
 import { Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { Prisma } from "@prisma/client";
+import { MediaType, Prisma } from "@prisma/client";
 import { PrismaService } from "./../prisma/prisma.service";
 import { RecipeDto } from "./dto";
+import { MediaService } from "src/media/media.service";
 
 @Injectable()
 export class RecipeService {
-  constructor(private config: ConfigService, private prisma: PrismaService) {}
+  constructor(
+    private config: ConfigService,
+    private prisma: PrismaService,
+    private mediaService: MediaService
+  ) {}
 
   private readonly logger = new Logger(RecipeService.name);
 
@@ -32,6 +37,7 @@ export class RecipeService {
             id: true,
           },
         },
+        image: true,
       },
       skip: offset && parseInt(offset),
       take: maxResults && parseInt(maxResults),
@@ -63,6 +69,9 @@ export class RecipeService {
       where: {
         id,
       },
+      include: {
+        image: true,
+      },
     });
 
     this.logger.log(`results -> ${JSON.stringify(results)}`);
@@ -75,6 +84,7 @@ export class RecipeService {
   async getMany(args: Prisma.RecipeFindManyArgs) {
     const query: Prisma.RecipeFindManyArgs = {
       ...args,
+      include: { image: true },
       orderBy: { createdAt: "desc" },
     };
 
@@ -99,8 +109,23 @@ export class RecipeService {
   }
 
   async create(recipeDto: RecipeDto) {
+    const imageId = await this.mediaService.findOrCreateOne(
+      // @ts-ignore
+      MediaType.IMAGE,
+      recipeDto.image
+    );
+
     const created = await this.prisma.recipe.create({
-      data: recipeDto,
+      data: {
+        ...recipeDto,
+        image: imageId
+          ? {
+              connect: {
+                id: imageId,
+              },
+            }
+          : undefined,
+      },
     });
 
     this.logger.log(`recipeDto -> ${JSON.stringify(recipeDto)}`);
@@ -112,11 +137,28 @@ export class RecipeService {
   }
 
   async edit({ id, recipeDto }: { id: number; recipeDto: RecipeDto }) {
+    const imageId = await this.mediaService.findOrCreateOne(
+      // @ts-ignore
+      MediaType.IMAGE,
+      recipeDto.image
+    );
+
     const edited = await this.prisma.recipe.update({
       where: {
         id,
       },
-      data: recipeDto,
+      data: {
+        name: recipeDto.name,
+        description: recipeDto.description,
+        proteins: recipeDto.proteins,
+        carbohydrates: recipeDto.carbohydrates,
+        calories: recipeDto.calories,
+        fats: recipeDto.fats,
+        imageId,
+      },
+      include: {
+        image: true,
+      },
     });
 
     this.logger.log(`recipeDto -> ${JSON.stringify(recipeDto)}`);
