@@ -1,6 +1,6 @@
 # Eativity
 
-This is a full-stack TypeScript mobile application developed using React Native and wrapped within the Expo SDK. For the app's user interface, I am utilizing the NativeBase library, while on the backend, I am leveraging ORM Prisma services through a NestJS application.
+This is a now sunsetted exploratory full-stack TypeScript mobile application, using React Native and wrapped within the Expo SDK. For the app's user interface, I am utilizing the NativeBase library, while on the backend, I am leveraging ORM Prisma services through a NestJS application.
 
 ## Tech Stack
 
@@ -23,7 +23,14 @@ To get started with the project, follow these steps:
 
 ## Features
 
-- User authentication
+- User authentication;
+- User onboarding;
+- Get and edit user profile;
+- Get and edit user recipes;
+- Get and edit user foods;
+- Daily consumption log;
+- Mailing;
+(... some are a bit half-baked and not battle tested, as this was only an exploratory hobby project.)
 
 ## Dependencies
 
